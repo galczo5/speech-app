@@ -1,1 +1,27 @@
 /* You can add global styles to this file, and also import other style files */
+html, body {
+  padding: 0;
+  margin: 0;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+app-workspace-background {
+  height: 100vh;
+  width: 100vw;
+  display: block;
+  overflow: hidden;
+  position: relative;
+
+  padding: 50px;
+}
+
+.workspace-area {
+  background: white;
+  position: absolute;
+
+  transition: all .5s;
+  transition-property: width, height;
+}

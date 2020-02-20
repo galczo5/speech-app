@@ -1,0 +1,9 @@
+<div [style.height.px]="height"
+     [style.width.px]="width"
+     [style.left.px]="position.left"
+     [style.top.px]="position.top"
+     class="workspace-area shadow rounded">
+
+  <app-workspace-add-button (increase)="increaseWidth()" orientation="vertical"></app-workspace-add-button>
+  <app-workspace-add-button (increase)="increaseHeight()" orientation="horizontal"></app-workspace-add-button>
+</div>

@@ -1,10 +1,11 @@
 import { Injectable } from '@angular/core';
 import {fromEvent, Observable, Subject, zip} from 'rxjs';
-import {map, take, takeUntil} from 'rxjs/operators';
-import {RelativePosition} from '../../utils/relative-position';
+import {map, take, takeUntil, throttleTime} from 'rxjs/operators';
+import {RelativePosition} from '../utils/relative-position';
+import {angle, pythagorean} from '../utils/math-utils';
 
 @Injectable()
-export class MouseOperationsService {
+export class ResizableBoxMouseActionsService {
 
   private position$: Subject<RelativePosition>;
   private mouseUp$: Observable<RelativePosition>;
@@ -26,7 +27,10 @@ export class MouseOperationsService {
         this.position$ = new Subject<RelativePosition>();
 
         fromEvent(document, 'mousemove')
-          .pipe(takeUntil(this.mouseUp$))
+          .pipe(
+            throttleTime(10),
+            takeUntil(this.mouseUp$)
+          )
           .subscribe((mouseMove: MouseEvent) => {
             const position = new RelativePosition(mouseMove.clientY, mouseMove.clientX);
             this.position$.next(position);
@@ -76,12 +80,4 @@ export class MouseOperationsService {
       );
   }
 
-}
-
-function pythagorean(y: number, x: number): number {
-  return Math.sqrt(Math.pow(y, 2) + Math.pow(x, 2));
-}
-
-function angle(y: number, x: number): number {
-  return Math.atan2(y, x) * 180 / Math.PI;
 }

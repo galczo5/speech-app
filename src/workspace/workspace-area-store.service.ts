@@ -9,7 +9,7 @@ export class WorkspaceAreaStoreService {
 
   private position$ = new ReplaySubject<RelativePosition>(1);
   private zoom$ = new ReplaySubject<number>(1);
-  private rotate$ = new ReplaySubject<number>(1);
+  private rotation$ = new ReplaySubject<number>(1);
 
   setPosition(position: RelativePosition): void {
     this.position$.next(position);
@@ -23,8 +23,16 @@ export class WorkspaceAreaStoreService {
     this.zoom$.next(zoom);
   }
 
-  setRotate(rotate: number): void {
-    this.rotate$.next(rotate);
+  getZoom(): Observable<number> {
+    return this.zoom$.asObservable();
+  }
+
+  setRotation(rotation: number): void {
+    this.rotation$.next(rotation);
+  }
+
+  getRotation(): Observable<number> {
+    return this.rotation$.asObservable();
   }
 
 }

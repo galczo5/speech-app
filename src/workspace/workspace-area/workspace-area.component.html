@@ -9,8 +9,20 @@
   <app-workspace-add-button (increase)="increaseWidth()" orientation="vertical"></app-workspace-add-button>
   <app-workspace-add-button (increase)="increaseHeight()" orientation="horizontal"></app-workspace-add-button>
 
-  <app-resizable-box>
-    <h2 class="m-0 p-0">Any content</h2>
+  <app-resizable-box [initialTop]="50" [initialLeft]="100">
+    <h2 class="m-0 p-0">Text content</h2>
+  </app-resizable-box>
+
+  <app-resizable-box [initialTop]="150" [initialLeft]="100">
+    <input type="text" class="form-control form-control-lg" value="Input test">
+  </app-resizable-box>
+
+  <app-resizable-box [initialTop]="200" [initialLeft]="100">
+    <iframe src="https://giphy.com/embed/eEXxfHQJ0dWOrctI55"
+            width="480"
+            height="243"
+            frameBorder="0"
+            style="pointer-events: none"></iframe>
   </app-resizable-box>
 
 </div>

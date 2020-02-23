@@ -1,12 +1,14 @@
-import {AfterViewInit, ChangeDetectorRef, Component, ElementRef, Inject, OnInit, ViewChild} from '@angular/core';
-import {MouseOperationsService} from '../mouse-operations/mouse-operations.service';
+import {AfterViewInit, ChangeDetectorRef, Component, ElementRef, Inject, Input, OnInit, ViewChild} from '@angular/core';
+import {ResizableBoxMouseActionsService} from '../resizable-box-mouse-actions.service';
 import {DOCUMENT} from '@angular/common';
 import {RelativePosition} from '../../utils/relative-position';
 import {zip} from 'rxjs';
+import {WorkspaceAreaStoreService} from '../../workspace/workspace-area-store.service';
+import {angle, pythagorean} from '../../utils/math-utils';
 
 @Component({
   providers: [
-    MouseOperationsService
+    ResizableBoxMouseActionsService
   ],
   selector: 'app-resizable-box',
   template: `
@@ -22,31 +24,7 @@ import {zip} from 'rxjs';
       </div>
     </div>
   `,
-  styles: [`
-    .grabbing {
-      cursor: grabbing;
-    }
-
-    .resizable-box {
-      position: relative;
-      transform-origin: center;
-      border-width: 2px;
-      border-style: solid;
-      cursor: grab;
-    }
-
-    .resizable-box-handle {
-      cursor: grab;
-      width: 16px;
-      height: 16px;
-      border-width: 5px;
-      border-style: solid;
-      border-radius: 50%;
-      position: absolute;
-      right: -8px;
-      top: -8px;
-    }
-  `]
+  styleUrls: ['./resizable-box.component.css']
 })
 export class ResizableBoxComponent implements OnInit, AfterViewInit {
 
@@ -64,26 +42,48 @@ export class ResizableBoxComponent implements OnInit, AfterViewInit {
 
   rotation = 0;
   scale = 1;
+
+  @Input()
+  initialTop: number;
+
+  @Input()
+  initialLeft: number;
+
   left = 100;
   top = 100;
 
+  private workspaceRotation = 0;
+  private workspaceZoom = 1;
+
   constructor(@Inject(DOCUMENT) private document: Document,
               private changeDetectorRef: ChangeDetectorRef,
-              private mouseOperationsService: MouseOperationsService) { }
+              private mouseActionsService: ResizableBoxMouseActionsService,
+              private workspaceAreaStoreService: WorkspaceAreaStoreService) { }
 
   ngOnInit(): void {
     this.listenForResize();
     this.listenForMove();
+    this.listenForWorkspaceChanges();
+
+    if (this.initialTop) {
+      this.top = this.initialTop;
+    }
+
+    if (this.initialLeft) {
+      this.left = this.initialLeft;
+    }
   }
 
   ngAfterViewInit(): void {
     const { width, height } = this.wrapper.nativeElement.getBoundingClientRect();
-    this.originalSize = Math.sqrt(Math.pow(width, 2) + Math.pow(height, 2));
-    this.originalAngle = Math.atan2(height, width) * 180 / Math.PI;
+    this.originalSize = pythagorean(width, height);
+    this.originalAngle = angle(height, width);
   }
 
   getTransformOrigin(): RelativePosition {
     const rect = this.wrapper.nativeElement.getBoundingClientRect();
+
+    // center of rectangle
     return new RelativePosition(
       rect.y + (rect.height / 2),
       rect.x + (rect.width / 2)
@@ -91,53 +91,68 @@ export class ResizableBoxComponent implements OnInit, AfterViewInit {
   }
 
   getTransform(): string {
-    return `scale(${this.scale}) rotate(${this.rotation}deg)`;
+    return `scale(${this.scale}) rotate(${this.rotation}rad)`;
+  }
+
+  private listenForWorkspaceChanges(): void {
+    this.workspaceAreaStoreService.getRotation()
+      .subscribe(rotation => this.workspaceRotation = rotation);
+
+    this.workspaceAreaStoreService.getZoom()
+      .subscribe(zoom => this.workspaceZoom = zoom);
   }
 
   private listenForMove(): void {
-    this.mouseOperationsService.mouseDown(this.document, this.wrapper.nativeElement)
+    this.mouseActionsService.mouseDown(this.document, this.wrapper.nativeElement)
       .subscribe((origin) => {
         this.moveInProgress = true;
         this.changeDetectorRef.detectChanges();
 
         const originalPosition = new RelativePosition(this.top, this.left);
 
-        this.mouseOperationsService.distanceY(origin)
-          .subscribe(distance => {
-            this.top = originalPosition.top + distance;
+        const distanceY$ = this.mouseActionsService.distanceY(origin);
+        const distanceX$ = this.mouseActionsService.distanceX(origin);
+        zip(distanceY$, distanceX$)
+          .subscribe(([y, x]: [number, number]) => {
+
+            // Use rotation matrix to calculate point after workspace rotation
+            const sin = Math.sin(-this.workspaceRotation);
+            const cos = Math.cos(-this.workspaceRotation);
+
+            const transformedX = (x * cos) - (y * sin);
+            const transformedY = (x * sin) + (y * cos);
+
+            this.top = originalPosition.top + (transformedY / this.workspaceZoom);
+            this.left = originalPosition.left + (transformedX / this.workspaceZoom);
             this.changeDetectorRef.detectChanges();
           });
 
-        this.mouseOperationsService.distanceX(origin)
-          .subscribe(distance => {
-            this.left = originalPosition.left + distance;
-            this.changeDetectorRef.detectChanges();
-          });
-
-        this.mouseOperationsService.mouseUp()
+        this.mouseActionsService.mouseUp()
           .subscribe(() => this.moveInProgress = false);
       });
   }
 
   private listenForResize(): void {
-    this.mouseOperationsService.mouseDown(this.document, this.handle.nativeElement)
+    this.mouseActionsService.mouseDown(this.document, this.handle.nativeElement)
       .subscribe(() => {
         this.resizeInProgress = true;
         this.changeDetectorRef.detectChanges();
 
         const origin = this.getTransformOrigin();
-        const angle$ = this.mouseOperationsService.angle(origin);
-        const distance$ = this.mouseOperationsService.distance(origin);
+        const angle$ = this.mouseActionsService.angle(origin);
+        const distance$ = this.mouseActionsService.distance(origin);
 
         zip(angle$, distance$)
           .subscribe(([angle, distance]: [number, number]) => {
             const originalSizeFromTransformOrigin = this.originalSize / 2;
-            this.rotation = angle + this.originalAngle;
-            this.scale = distance / originalSizeFromTransformOrigin;
+
+            this.rotation = angle + this.originalAngle - this.workspaceRotation;
+            this.scale = (distance / this.workspaceZoom) / originalSizeFromTransformOrigin;
+
             this.changeDetectorRef.detectChanges();
           });
 
-        this.mouseOperationsService.mouseUp()
+        this.mouseActionsService.mouseUp()
           .subscribe(() => this.resizeInProgress = false);
       });
   }

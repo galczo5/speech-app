@@ -24,4 +24,5 @@ app-workspace-background {
 
   transition: all .5s;
   transition-property: width, height;
+  overflow: hidden;
 }

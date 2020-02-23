@@ -3,11 +3,11 @@ import {Subject} from 'rxjs';
 import {takeUntil} from 'rxjs/operators';
 import {DOCUMENT} from '@angular/common';
 import {RelativePosition} from '../../utils/relative-position';
-import {MouseManipulatorService} from '../mouse-manipulator.service';
+import {WorkspaceManipulationService} from '../workspace-manipulation.service';
 import {WorkspaceAreaStoreService} from '../workspace-area-store.service';
 
-const DEFAULT_WIDTH = 800;
-const DEFAULT_HEIGHT = 600;
+const DEFAULT_WIDTH = 1920;
+const DEFAULT_HEIGHT = 1080;
 
 @Component({
   selector: 'app-workspace-area',
@@ -31,7 +31,7 @@ export class WorkspaceAreaComponent implements OnInit, OnDestroy {
 
   constructor(elementRef: ElementRef,
               private changeDetectorRef: ChangeDetectorRef,
-              private manipulatorService: MouseManipulatorService,
+              private manipulatorService: WorkspaceManipulationService,
               private storeService: WorkspaceAreaStoreService,
               @Inject(DOCUMENT) private document: Document) {
     this.nativeElement = elementRef.nativeElement;
@@ -53,7 +53,7 @@ export class WorkspaceAreaComponent implements OnInit, OnDestroy {
       .pipe(takeUntil(this.destroy$))
       .subscribe(delta => {
         this.rotation += delta;
-        this.storeService.setRotate(this.rotation);
+        this.storeService.setRotation(this.rotation);
         this.changeDetectorRef.detectChanges();
       });
 
@@ -71,7 +71,7 @@ export class WorkspaceAreaComponent implements OnInit, OnDestroy {
   }
 
   getTransform(): string {
-    return `rotate(${this.rotation}deg) scale(${this.zoom})`;
+    return `rotate(${this.rotation}rad) scale(${this.zoom})`;
   }
 
   increaseHeight(): void {

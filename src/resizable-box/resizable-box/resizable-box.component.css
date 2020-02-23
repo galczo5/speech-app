@@ -1,0 +1,23 @@
+.grabbing {
+  cursor: grabbing;
+}
+
+.resizable-box {
+  position: relative;
+  transform-origin: center;
+  border-width: 2px;
+  border-style: solid;
+  cursor: grab;
+}
+
+.resizable-box-handle {
+  cursor: grab;
+  width: 16px;
+  height: 16px;
+  border-width: 5px;
+  border-style: solid;
+  border-radius: 50%;
+  position: absolute;
+  right: -8px;
+  top: -8px;
+}

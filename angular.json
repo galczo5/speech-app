@@ -1,6 +1,6 @@
 {
   "$schema": "./node_modules/@angular/cli/lib/config/schema.json",
-  "version": 1, 
+  "version": 1,
   "newProjectRoot": "projects",
   "projects": {
     "speech-app": {
@@ -24,7 +24,9 @@
               "src/assets"
             ],
             "styles": [
-              "src/styles.css"
+              "src/styles.css",
+              "node_modules/bootstrap/dist/css/bootstrap.css",
+              "node_modules/@fortawesome/fontawesome-free/css/all.css"
             ],
             "scripts": []
           },
@@ -119,6 +121,15 @@
           }
         }
       }
-    }},
-  "defaultProject": "speech-app"
+    }
+  },
+  "defaultProject": "speech-app",
+  "schematics": {
+    "@schematics/angular": {
+      "component": {
+        "spec": false,
+        "inlineStyle": true
+      }
+    }
+  }
 }

@@ -7,11 +7,19 @@ import {ResizableBoxModule} from '../resizable-box/resizable-box.module';
 
 
 @NgModule({
-    declarations: [WorkspaceBackgroundComponent, WorkspaceAreaComponent, WorkspaceAddButtonComponent, WorkspaceAddButtonComponent],
-  exports: [WorkspaceBackgroundComponent, WorkspaceAreaComponent],
-    imports: [
-        CommonModule,
-        ResizableBoxModule
-    ]
+  declarations: [
+    WorkspaceBackgroundComponent, 
+    WorkspaceAreaComponent, 
+    WorkspaceAddButtonComponent, 
+    WorkspaceAddButtonComponent
+  ],
+  exports: [
+    WorkspaceBackgroundComponent, 
+    WorkspaceAreaComponent
+  ],
+  imports: [
+    CommonModule,
+    ResizableBoxModule
+  ]
 })
 export class WorkspaceModule { }

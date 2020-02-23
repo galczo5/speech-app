@@ -1,78 +1,77 @@
-import {ChangeDetectorRef, Component, ElementRef, Inject, OnInit} from '@angular/core';
-import {fromEvent} from 'rxjs';
-import {auditTime, takeUntil} from 'rxjs/operators';
+import {ChangeDetectorRef, Component, ElementRef, Inject, OnDestroy, OnInit} from '@angular/core';
+import {Subject} from 'rxjs';
+import {takeUntil} from 'rxjs/operators';
 import {DOCUMENT} from '@angular/common';
-
-export type Position = {
-  top: number,
-  left: number
-};
+import {RelativePosition} from '../../utils/relative-position';
+import {MouseManipulatorService} from '../mouse-manipulator.service';
+import {WorkspaceAreaStoreService} from '../workspace-area-store.service';
 
 const DEFAULT_WIDTH = 800;
 const DEFAULT_HEIGHT = 600;
 
 @Component({
   selector: 'app-workspace-area',
-  templateUrl: './workspace-area.component.html',
-  styles: []
+  templateUrl: './workspace-area.component.html'
 })
-export class WorkspaceAreaComponent implements OnInit {
+export class WorkspaceAreaComponent implements OnInit, OnDestroy {
 
   height = DEFAULT_HEIGHT;
   width = DEFAULT_WIDTH;
 
-  position: Position = {
+  zoom = 1;
+  rotation = 0;
+
+  position: RelativePosition = {
     top: 50,
     left: 50
   };
 
   private readonly nativeElement: HTMLElement;
+  private readonly destroy$: Subject<void> = new Subject<void>();
 
   constructor(elementRef: ElementRef,
               private changeDetectorRef: ChangeDetectorRef,
+              private manipulatorService: MouseManipulatorService,
+              private storeService: WorkspaceAreaStoreService,
               @Inject(DOCUMENT) private document: Document) {
     this.nativeElement = elementRef.nativeElement;
   }
 
   ngOnInit(): void {
+    this.manipulatorService.init(this.document, this.nativeElement, () => this.position);
+    this.storeService.setPosition(this.position);
 
-    fromEvent(this.document, 'wheel')
-      .subscribe((e: any) => {
-        this.position = {
-          top: this.position.top + e.deltaY,
-          left: this.position.left + e.deltaX
-        };
+    this.manipulatorService.zoom()
+      .pipe(takeUntil(this.destroy$))
+      .subscribe(delta => {
+        this.zoom += delta;
+        this.storeService.setZoom(this.zoom);
         this.changeDetectorRef.detectChanges();
       });
 
-    fromEvent(this.nativeElement, 'mousedown')
-      .subscribe((downEvent: MouseEvent) => {
-
-          const original: Position = {
-            top: this.position.top,
-            left: this.position.left
-          };
-
-          const startPosition: Position = {
-            top: downEvent.clientY,
-            left: downEvent.clientX
-          };
-
-          fromEvent(this.document, 'mousemove')
-            .pipe(
-              takeUntil(fromEvent(this.document, 'mouseup')),
-              auditTime(10)
-            )
-            .subscribe((moveEvent: MouseEvent) => {
-              this.position = {
-                left: original.left - (startPosition.left - moveEvent.clientX),
-                top: original.top - (startPosition.top - moveEvent.clientY)
-              };
-              this.changeDetectorRef.detectChanges();
-            });
-
+    this.manipulatorService.rotate()
+      .pipe(takeUntil(this.destroy$))
+      .subscribe(delta => {
+        this.rotation += delta;
+        this.storeService.setRotate(this.rotation);
+        this.changeDetectorRef.detectChanges();
       });
 
+    this.manipulatorService.position()
+      .pipe(takeUntil(this.destroy$))
+      .subscribe(delta => {
+        this.position = new RelativePosition(this.position.top + delta.top, this.position.left + delta.left);
+        this.storeService.setPosition(this.position);
+        this.changeDetectorRef.detectChanges();
+      });
+  }
+
+  ngOnDestroy(): void {
+    this.destroy$.next();
+  }
+
+  getTransform(): string {
+    return `rotate(${this.rotation}deg) scale(${this.zoom})`;
   }
 
   increaseHeight(): void {

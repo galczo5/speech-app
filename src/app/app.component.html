@@ -1,3 +1,87 @@
-<app-workspace-background>
-  <app-workspace-area></app-workspace-area>
-</app-workspace-background>
+<div style="grid-column: 1 / 3">
+  <nav class="navbar navbar-expand-lg navbar-dark bg-dark py-1">
+    <a class="navbar-brand" href="#">
+      <i class="fas fa-bars"></i>
+    </a>
+    <div class="collapse navbar-collapse" id="navbarColor02">
+      <ul class="navbar-nav mr-auto">
+        <li class="nav-item active">
+          <a class="nav-link" href="#">File</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="#">Edit</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="#">Navigate</a>
+        </li>
+      </ul>
+    </div>
+  </nav>
+</div>
+<div>
+  <app-workspace-background>
+    <app-workspace-area></app-workspace-area>
+  </app-workspace-background>
+</div>
+<div class="border-left toolbar">
+  <div class="p-2 d-flex flex-column">
+    <div>
+
+      <div class="bg-light rounded overflow-hidden mb-2">
+        <button class="btn btn-light btn-block text-muted">
+          <i class="fas fa-plus"></i>
+        </button>
+        <button class="btn btn-light btn-block text-muted">
+          <i class="fas fa-photo-video"></i>
+        </button>
+      </div>
+
+      <div class="bg-light rounded overflow-hidden mb-2">
+        <button class="btn btn-light btn-block text-muted">
+          <i class="fas fa-pencil-ruler"></i>
+        </button>
+        <button class="btn btn-block btn-primary">
+          <i class="fas fa-layer-group"></i>
+        </button>
+        <button class="btn btn-light btn-block text-muted">
+          <i class="fas fa-stopwatch"></i>
+        </button>
+        <button class="btn btn-light btn-block text-muted">
+          <i class="fas fa-file"></i>
+        </button>
+      </div>
+
+      <div class="bg-light rounded overflow-hidden mb-2">
+        <button class="btn btn-light btn-block text-muted">
+          <i class="fas fa-ruler-combined"></i>
+        </button>
+        <button class="btn btn-light btn-block text-muted">
+          <i class="fas fa-mouse-pointer"></i>
+        </button>
+        <button class="btn btn-light btn-block text-muted">
+          <i class="fas fa-hand-paper"></i>
+        </button>
+        <button class="btn btn-light btn-block text-muted">
+          <i class="fas fa-crosshairs"></i>
+        </button>
+      </div>
+    </div>
+
+    <div class="flex-fill"></div>
+
+    <div class="bg-secondary rounded py-2">
+      <button class="btn btn-block btn-secondary">
+        <i class="fas fa-play"></i>
+      </button>
+      <button class="btn btn-block btn-secondary">
+        <i class="fas fa-fast-forward"></i>
+      </button>
+      <button class="btn btn-block btn-secondary">
+        <i class="fas fa-fast-backward"></i>
+      </button>
+    </div>
+  </div>
+  <div class="border-left">
+
+  </div>
+</div>

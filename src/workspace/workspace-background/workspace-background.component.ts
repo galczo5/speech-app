@@ -6,7 +6,7 @@ import {Component, HostBinding, OnInit} from '@angular/core';
 })
 export class WorkspaceBackgroundComponent implements OnInit {
 
-  @HostBinding('class.bg-secondary')
+  @HostBinding('class.bg-light')
   readonly darkBackground = true;
 
   constructor() { }

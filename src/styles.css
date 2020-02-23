@@ -9,8 +9,8 @@ html, body {
 }
 
 app-workspace-background {
-  height: 100vh;
-  width: 100vw;
+  height: 100%;
+  width: 100%;
   display: block;
   overflow: hidden;
   position: relative;
@@ -19,10 +19,20 @@ app-workspace-background {
 }
 
 .workspace-area {
-  background: white;
   position: absolute;
-
   transition: all .5s;
   transition-property: width, height;
-  overflow: hidden;
+}
+
+app-root {
+  display: grid;
+  width: 100vw;
+  height: 100vh;
+  grid-template-columns: 1fr 450px;
+  grid-template-rows: auto 1fr;
+}
+
+.toolbar {
+  display: grid;
+  grid-template-columns: auto 1fr;
 }

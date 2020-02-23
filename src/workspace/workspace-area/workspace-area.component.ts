@@ -6,17 +6,11 @@ import {RelativePosition} from '../../utils/relative-position';
 import {WorkspaceManipulationService} from '../workspace-manipulation.service';
 import {WorkspaceAreaStoreService} from '../workspace-area-store.service';
 
-const DEFAULT_WIDTH = 1920;
-const DEFAULT_HEIGHT = 1080;
-
 @Component({
   selector: 'app-workspace-area',
   templateUrl: './workspace-area.component.html'
 })
 export class WorkspaceAreaComponent implements OnInit, OnDestroy {
-
-  height = DEFAULT_HEIGHT;
-  width = DEFAULT_WIDTH;
 
   zoom = 1;
   rotation = 0;
@@ -72,16 +66,6 @@ export class WorkspaceAreaComponent implements OnInit, OnDestroy {
 
   getTransform(): string {
     return `rotate(${this.rotation}rad) scale(${this.zoom})`;
-  }
-
-  increaseHeight(): void {
-    this.height += DEFAULT_HEIGHT;
-    this.changeDetectorRef.detectChanges();
-  }
-
-  increaseWidth(): void {
-    this.width += DEFAULT_WIDTH;
-    this.changeDetectorRef.detectChanges();
   }
 
 }

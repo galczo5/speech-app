@@ -17,8 +17,11 @@ import {angle, pythagorean} from '../../utils/math-utils';
          [style.left.px]="left"
          [style.top.px]="top"
          [class.grabbing]="moveInProgress">
+
       <div #handle class="resizable-box-handle bg-white border-primary"
-           [class.grabbing]="resizeInProgress"></div>
+           [class.grabbing]="resizeInProgress">
+      </div>
+
       <div class="d-flex rounded overflow-hidden">
         <ng-content></ng-content>
       </div>

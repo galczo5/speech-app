@@ -5,14 +5,49 @@
 
   <ng-content></ng-content>
 
-  <app-text-box></app-text-box>
+  <ng-container *ngFor="let box of boxes">
+    <app-text-box *ngIf="box.type === 'TEXT'"
+                  [boxId]="box.id"
+                  [data]="box.data"
+                  [isActive]="box.id === activeBoxId"
+                  [top]="box.top"
+                  [left]="box.left"
+                  (click)="setActiveBox(box.id)"></app-text-box>
+    <app-html-box *ngIf="box.type === 'HTML'"
+                  [boxId]="box.id"
+                  [data]="box.data"
+                  [isActive]="box.id === activeBoxId"
+                  [top]="box.top"
+                  [left]="box.left"
+                  (click)="setActiveBox(box.id)"></app-html-box>
+    <app-image-box *ngIf="box.type === 'IMAGE'"
+                   [boxId]="box.id"
+                   [data]="box.data"
+                   [isActive]="box.id === activeBoxId"
+                   [top]="box.top"
+                   [left]="box.left"
+                   [width]="400"
+                   [height]="'auto'"
+                   (click)="setActiveBox(box.id)"></app-image-box>
+    <app-link-box *ngIf="box.type === 'LINK'"
+                  [boxId]="box.id"
+                  [data]="box.data"
+                  [isActive]="box.id === activeBoxId"
+                  [top]="box.top"
+                  [left]="box.left"
+                  [width]="400"
+                  [height]="'auto'"
+                  (click)="setActiveBox(box.id)"></app-link-box>
+    <app-frame-box *ngIf="box.type === 'FRAME'"
+                  [boxId]="box.id"
+                  [data]="box.data"
+                  [isActive]="box.id === activeBoxId"
+                  [top]="box.top"
+                  [left]="box.left"
+                  [width]="400"
+                  [height]="400"
+                  (click)="setActiveBox(box.id)"></app-frame-box>
+  </ng-container>
 
-  <app-resizable-box [initialTop]="150" [initialLeft]="100">
-    <input type="text" class="form-control form-control-lg" value="Input test">
-  </app-resizable-box>
-
-  <app-resizable-box [initialTop]="200" [initialLeft]="100">
-    <img src="https://media.giphy.com/media/dmZ9oFsuGzfcMlOHC8/giphy.gif" alt="">
-  </app-resizable-box>
 
 </div>

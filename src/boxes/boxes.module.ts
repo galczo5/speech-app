@@ -12,7 +12,11 @@ import { HtmlBoxComponent } from './html-box/html-box.component';
 @NgModule({
   declarations: [TextBoxComponent, ImageBoxComponent, FrameBoxComponent, LinkBoxComponent, HtmlBoxComponent],
   exports: [
-    TextBoxComponent
+    TextBoxComponent,
+    HtmlBoxComponent,
+    ImageBoxComponent,
+    LinkBoxComponent,
+    FrameBoxComponent
   ],
   imports: [
     CommonModule,

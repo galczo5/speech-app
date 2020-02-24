@@ -1,19 +1,26 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, Input, OnInit} from '@angular/core';
+import {BoxComponent} from '../box-component';
+import {HtmlBoxData} from './html-box-data';
 
 @Component({
   selector: 'app-html-box',
   template: `
-    <p>
-      html-box works!
-    </p>
+    <app-resizable-box [isActive]="isActive" [initialTop]="top" [initialLeft]="left">
+      <div [style.width.px]="width"
+           [style.height.px]="height"
+           [innerHTML]="data.html">
+      </div>
+    </app-resizable-box>
   `,
   styles: []
 })
-export class HtmlBoxComponent implements OnInit {
+export class HtmlBoxComponent extends BoxComponent {
 
-  constructor() { }
+  @Input()
+  data: HtmlBoxData;
 
-  ngOnInit(): void {
+  constructor() {
+    super();
   }
 
 }

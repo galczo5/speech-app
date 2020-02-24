@@ -12,13 +12,16 @@ import {angle, pythagorean} from '../../utils/math-utils';
   ],
   selector: 'app-resizable-box',
   template: `
-    <div #wrapper class="d-inline-block resizable-box border-primary rounded"
+    <div #wrapper class="d-inline-block resizable-box"
+         [class.border-primary]="isActive"
+         [class.rounded]="isActive"
+         [class.grabbing]="moveInProgress"
          [style.transform]="getTransform()"
          [style.left.px]="left"
-         [style.top.px]="top"
-         [class.grabbing]="moveInProgress">
+         [style.top.px]="top">
 
       <div #handle class="resizable-box-handle bg-white border-primary"
+           [class.d-none]="!isActive"
            [class.grabbing]="resizeInProgress">
       </div>
 
@@ -37,6 +40,18 @@ export class ResizableBoxComponent implements OnInit, AfterViewInit {
   @ViewChild('wrapper', { read: ElementRef, static: true })
   wrapper: ElementRef;
 
+  @Input()
+  isActive: boolean;
+
+  @Input()
+  initialTop: number;
+
+  @Input()
+  initialLeft: number;
+
+  left: number;
+  top: number;
+
   resizeInProgress = false;
   moveInProgress = false;
 
@@ -45,15 +60,6 @@ export class ResizableBoxComponent implements OnInit, AfterViewInit {
 
   rotation = 0;
   scale = 1;
-
-  @Input()
-  initialTop: number;
-
-  @Input()
-  initialLeft: number;
-
-  left = 100;
-  top = 100;
 
   private workspaceRotation = 0;
   private workspaceZoom = 1;

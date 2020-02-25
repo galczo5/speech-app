@@ -79,7 +79,7 @@ export class WorkspaceAreaComponent implements OnInit, OnDestroy {
     }
   ];
 
-  activeBoxId: string;
+  activeBox: Box;
 
   private readonly nativeElement: HTMLElement;
   private readonly destroy$: Subject<void> = new Subject<void>();
@@ -123,8 +123,8 @@ export class WorkspaceAreaComponent implements OnInit, OnDestroy {
 
     this.activeBoxService.get()
       .pipe(takeUntil(this.destroy$))
-      .subscribe(boxId => {
-        this.activeBoxId = boxId;
+      .subscribe(box => {
+        this.activeBox = box;
         this.changeDetectorRef.detectChanges();
       });
   }
@@ -135,9 +135,5 @@ export class WorkspaceAreaComponent implements OnInit, OnDestroy {
 
   getTransform(): string {
     return `rotate(${this.rotation}rad) scale(${this.zoom})`;
-  }
-
-  setActiveBox(id: string) {
-    this.activeBoxService.set(id);
   }
 }

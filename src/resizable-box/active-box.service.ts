@@ -1,18 +1,19 @@
 import { Injectable } from '@angular/core';
 import {Observable, Subject} from 'rxjs';
+import {Box} from '../boxes/box';
 
 @Injectable({
   providedIn: 'root'
 })
 export class ActiveBoxService {
 
-  private box$: Subject<string> = new Subject<string>();
+  private box$: Subject<Box> = new Subject<Box>();
 
-  set(id: string): void {
-    this.box$.next(id);
+  set(box: Box): void {
+    this.box$.next(box);
   }
 
-  get(): Observable<string> {
+  get(): Observable<Box> {
     return this.box$.asObservable();
   }
 }

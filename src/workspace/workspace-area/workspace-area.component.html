@@ -2,52 +2,8 @@
      [style.top.px]="position.top"
      [style.transform]="getTransform()"
      class="workspace-area">
-
   <ng-content></ng-content>
-
   <ng-container *ngFor="let box of boxes">
-    <app-text-box *ngIf="box.type === 'TEXT'"
-                  [boxId]="box.id"
-                  [data]="box.data"
-                  [isActive]="box.id === activeBoxId"
-                  [top]="box.top"
-                  [left]="box.left"
-                  (click)="setActiveBox(box.id)"></app-text-box>
-    <app-html-box *ngIf="box.type === 'HTML'"
-                  [boxId]="box.id"
-                  [data]="box.data"
-                  [isActive]="box.id === activeBoxId"
-                  [top]="box.top"
-                  [left]="box.left"
-                  (click)="setActiveBox(box.id)"></app-html-box>
-    <app-image-box *ngIf="box.type === 'IMAGE'"
-                   [boxId]="box.id"
-                   [data]="box.data"
-                   [isActive]="box.id === activeBoxId"
-                   [top]="box.top"
-                   [left]="box.left"
-                   [width]="400"
-                   [height]="'auto'"
-                   (click)="setActiveBox(box.id)"></app-image-box>
-    <app-link-box *ngIf="box.type === 'LINK'"
-                  [boxId]="box.id"
-                  [data]="box.data"
-                  [isActive]="box.id === activeBoxId"
-                  [top]="box.top"
-                  [left]="box.left"
-                  [width]="400"
-                  [height]="'auto'"
-                  (click)="setActiveBox(box.id)"></app-link-box>
-    <app-frame-box *ngIf="box.type === 'FRAME'"
-                  [boxId]="box.id"
-                  [data]="box.data"
-                  [isActive]="box.id === activeBoxId"
-                  [top]="box.top"
-                  [left]="box.left"
-                  [width]="400"
-                  [height]="400"
-                  (click)="setActiveBox(box.id)"></app-frame-box>
+    <app-workspace-box [box]="box" [activeBox]="activeBox"></app-workspace-box>
   </ng-container>
-
-
 </div>

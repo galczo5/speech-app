@@ -19,6 +19,8 @@ interface BoxBase {
 
   top: number;
   left: number;
+  width: number | 'auto';
+  height: number | 'auto';
 
   readonly type: BoxType;
 }

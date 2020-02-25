@@ -2,17 +2,16 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { WorkspaceBackgroundComponent } from './workspace-background/workspace-background.component';
 import { WorkspaceAreaComponent } from './workspace-area/workspace-area.component';
-import { WorkspaceAddButtonComponent } from './workspace-add-button/workspace-add-button.component';
 import {ResizableBoxModule} from '../resizable-box/resizable-box.module';
 import {BoxesModule} from '../boxes/boxes.module';
+import { WorkspaceBoxComponent } from './workspace-box/workspace-box.component';
 
 
 @NgModule({
   declarations: [
     WorkspaceBackgroundComponent,
     WorkspaceAreaComponent,
-    WorkspaceAddButtonComponent,
-    WorkspaceAddButtonComponent
+    WorkspaceBoxComponent
   ],
   exports: [
     WorkspaceBackgroundComponent,

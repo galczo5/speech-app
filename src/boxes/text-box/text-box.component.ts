@@ -5,7 +5,12 @@ import {TextBoxData} from './text-box-data';
 @Component({
   selector: 'app-text-box',
   template: `
-    <app-resizable-box [isActive]="isActive" [initialTop]="top" [initialLeft]="left">
+    <app-resizable-box [isActive]="isActive"
+                       [id]="boxId"
+                       [top]="top"
+                       [left]="left"
+                       [scale]="scale"
+                       [rotation]="rotation">
       <div [style.width.px]="width"
            [style.height.px]="height"
            [style.fontSize]="data.fontSize"

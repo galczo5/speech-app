@@ -11,41 +11,55 @@ import {ActiveBoxService} from '../../resizable-box/active-box.service';
                   [isActive]="activeBox && box.id === activeBox.id"
                   [top]="box.top"
                   [left]="box.left"
-                  (click)="setActiveBox(box)"></app-text-box>
+                  [height]="box.height"
+                  [width]="box.width"
+                  [rotation]="box.rotate"
+                  [scale]="box.scale"
+                  (click)="setActiveBox(box, $event)"></app-text-box>
     <app-html-box *ngIf="box.type === 'HTML'"
                   [boxId]="box.id"
                   [data]="box.data"
                   [isActive]="activeBox && box.id === activeBox.id"
                   [top]="box.top"
                   [left]="box.left"
-                  (click)="setActiveBox(box)"></app-html-box>
+                  [height]="box.height"
+                  [width]="box.width"
+                  [rotation]="box.rotate"
+                  [scale]="box.scale"
+                  (click)="setActiveBox(box, $event)"></app-html-box>
     <app-image-box *ngIf="box.type === 'IMAGE'"
                    [boxId]="box.id"
                    [data]="box.data"
                    [isActive]="activeBox && box.id === activeBox.id"
                    [top]="box.top"
                    [left]="box.left"
-                   [width]="400"
-                   [height]="'auto'"
-                   (click)="setActiveBox(box)"></app-image-box>
+                   [height]="box.height"
+                   [width]="box.width"
+                   [rotation]="box.rotate"
+                   [scale]="box.scale"
+                   (click)="setActiveBox(box, $event)"></app-image-box>
     <app-link-box *ngIf="box.type === 'LINK'"
                   [boxId]="box.id"
                   [data]="box.data"
                   [isActive]="activeBox && box.id === activeBox.id"
                   [top]="box.top"
                   [left]="box.left"
-                  [width]="400"
-                  [height]="'auto'"
-                  (click)="setActiveBox(box)"></app-link-box>
+                  [height]="box.height"
+                  [width]="box.width"
+                  [rotation]="box.rotate"
+                  [scale]="box.scale"
+                  (click)="setActiveBox(box, $event)"></app-link-box>
     <app-frame-box *ngIf="box.type === 'FRAME'"
                    [boxId]="box.id"
                    [data]="box.data"
                    [isActive]="activeBox && box.id === activeBox.id"
                    [top]="box.top"
                    [left]="box.left"
-                   [width]="400"
-                   [height]="400"
-                   (click)="setActiveBox(box)"></app-frame-box>
+                   [height]="box.height"
+                   [width]="box.width"
+                   [rotation]="box.rotate"
+                   [scale]="box.scale"
+                   (click)="setActiveBox(box, $event)"></app-frame-box>
   `,
   styles: []
 })
@@ -60,7 +74,8 @@ export class WorkspaceBoxComponent {
   constructor(private activeBoxService: ActiveBoxService) {
   }
 
-  setActiveBox(box: Box) {
+  setActiveBox(box: Box, event: MouseEvent): void {
+    event.stopPropagation();
     this.activeBoxService.set(box);
   }
 

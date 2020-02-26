@@ -5,6 +5,7 @@ import {RelativePosition} from '../../utils/relative-position';
 import {zip} from 'rxjs';
 import {WorkspaceAreaStoreService} from '../../workspace/workspace-area-store.service';
 import {angle, pythagorean} from '../../utils/math-utils';
+import {BoxRepository} from '../../boxes/box-repository';
 
 @Component({
   providers: [
@@ -34,32 +35,35 @@ import {angle, pythagorean} from '../../utils/math-utils';
 })
 export class ResizableBoxComponent implements OnInit, AfterViewInit {
 
+  @Input()
+  readonly id: string;
+
   @ViewChild('handle', { read: ElementRef, static: true })
-  handle: ElementRef;
+  readonly handle: ElementRef;
 
   @ViewChild('wrapper', { read: ElementRef, static: true })
-  wrapper: ElementRef;
+  readonly wrapper: ElementRef;
 
   @Input()
-  isActive: boolean;
+  readonly isActive: boolean;
 
   @Input()
-  initialTop: number;
+  readonly left: number;
 
   @Input()
-  initialLeft: number;
+  readonly top: number;
 
-  left: number;
-  top: number;
+  @Input()
+  readonly rotation: number;
+
+  @Input()
+  readonly scale: number;
 
   resizeInProgress = false;
   moveInProgress = false;
 
-  originalSize: number;
-  originalAngle: number;
-
-  rotation = 0;
-  scale = 1;
+  private originalSize: number;
+  private originalAngle: number;
 
   private workspaceRotation = 0;
   private workspaceZoom = 1;
@@ -67,20 +71,13 @@ export class ResizableBoxComponent implements OnInit, AfterViewInit {
   constructor(@Inject(DOCUMENT) private document: Document,
               private changeDetectorRef: ChangeDetectorRef,
               private mouseActionsService: ResizableBoxMouseActionsService,
-              private workspaceAreaStoreService: WorkspaceAreaStoreService) { }
+              private workspaceAreaStoreService: WorkspaceAreaStoreService,
+              private boxRepository: BoxRepository) { }
 
   ngOnInit(): void {
     this.listenForResize();
     this.listenForMove();
     this.listenForWorkspaceChanges();
-
-    if (this.initialTop) {
-      this.top = this.initialTop;
-    }
-
-    if (this.initialLeft) {
-      this.left = this.initialLeft;
-    }
   }
 
   ngAfterViewInit(): void {
@@ -131,8 +128,10 @@ export class ResizableBoxComponent implements OnInit, AfterViewInit {
             const transformedX = (x * cos) - (y * sin);
             const transformedY = (x * sin) + (y * cos);
 
-            this.top = originalPosition.top + (transformedY / this.workspaceZoom);
-            this.left = originalPosition.left + (transformedX / this.workspaceZoom);
+            const top = originalPosition.top + (transformedY / this.workspaceZoom);
+            const left = originalPosition.left + (transformedX / this.workspaceZoom);
+
+            this.boxRepository.updatePosition(this.id, top, left);
             this.changeDetectorRef.detectChanges();
           });
 
@@ -152,12 +151,13 @@ export class ResizableBoxComponent implements OnInit, AfterViewInit {
         const distance$ = this.mouseActionsService.distance(origin);
 
         zip(angle$, distance$)
-          .subscribe(([angle, distance]: [number, number]) => {
+          .subscribe(([newAngle, distance]: [number, number]) => {
             const originalSizeFromTransformOrigin = this.originalSize / 2;
 
-            this.rotation = angle + this.originalAngle - this.workspaceRotation;
-            this.scale = (distance / this.workspaceZoom) / originalSizeFromTransformOrigin;
+            const rotation = newAngle + this.originalAngle - this.workspaceRotation;
+            const scale = (distance / this.workspaceZoom) / originalSizeFromTransformOrigin;
 
+            this.boxRepository.updateScaleAndAngle(this.id, scale, rotation);
             this.changeDetectorRef.detectChanges();
           });
 

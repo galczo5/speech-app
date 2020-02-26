@@ -3,7 +3,7 @@
 }
 
 .resizable-box {
-  position: relative;
+  position: absolute;
   transform-origin: center;
   border-color: transparent;
   border-width: 2px;

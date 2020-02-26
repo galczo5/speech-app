@@ -7,6 +7,7 @@ import {WorkspaceManipulationService} from '../workspace-manipulation.service';
 import {WorkspaceAreaStoreService} from '../workspace-area-store.service';
 import {Box, BoxType} from '../../boxes/box';
 import {ActiveBoxService} from '../../resizable-box/active-box.service';
+import {BoxRepository} from '../../boxes/box-repository';
 
 @Component({
   selector: 'app-workspace-area',
@@ -22,62 +23,7 @@ export class WorkspaceAreaComponent implements OnInit, OnDestroy {
     left: 50
   };
 
-  boxes: Box[] = [
-    {
-      id: '1',
-      name: 'box-1',
-      type: BoxType.TEXT,
-      top: 100,
-      left: 100,
-      data: { text: 'Lorem ipsum One', fontSize: '24px', background: 'red', padding: '10px 25px', align: 'center' }
-    },
-    {
-      id: '2',
-      name: 'box-2',
-      type: BoxType.TEXT,
-      top: 200,
-      left: 200,
-      data: { text: 'Lorem ipsum Two', style: 'italic', weight: 'bold' }
-    },
-    {
-      id: '3',
-      name: 'box-3',
-      type: BoxType.HTML,
-      top: 200,
-      left: 300,
-      data: { html: '<a href="http://google.pl">Google</a><br/><br><h1>Test</h1>' }
-    },
-    {
-      id: '4',
-      name: 'box-4',
-      type: BoxType.IMAGE,
-      top: 400,
-      left: 300,
-      data: { src: 'https://media.giphy.com/media/6b9QApjUesyOs/giphy.gif' }
-    },
-    {
-      id: '5',
-      name: 'box-4',
-      type: BoxType.LINK,
-      top: 100,
-      left: 300,
-      data: { url: 'https://media.giphy.com/media/6b9QApjUesyOs/giphy.gif', text: 'Super awesome gif' }
-    },
-    {
-      id: '6',
-      name: 'box-4',
-      type: BoxType.FRAME,
-      top: 500,
-      left: 500,
-      data: {
-        url: 'https://www.youtube.com/embed/dQw4w9WgXcQ',
-        attrs: [{
-          name: 'allow',
-          value: 'accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture'
-        }]
-      }
-    }
-  ];
+  boxes: Box[] = [];
 
   activeBox: Box;
 
@@ -89,6 +35,7 @@ export class WorkspaceAreaComponent implements OnInit, OnDestroy {
               private manipulationService: WorkspaceManipulationService,
               private storeService: WorkspaceAreaStoreService,
               private activeBoxService: ActiveBoxService,
+              private boxRepository: BoxRepository,
               @Inject(DOCUMENT) private document: Document) {
     this.nativeElement = elementRef.nativeElement;
   }
@@ -127,13 +74,27 @@ export class WorkspaceAreaComponent implements OnInit, OnDestroy {
         this.activeBox = box;
         this.changeDetectorRef.detectChanges();
       });
+
+    this.boxRepository.getBoxes()
+      .pipe(takeUntil(this.destroy$))
+      .subscribe(boxes => {
+        this.boxes = boxes;
+        this.changeDetectorRef.detectChanges();
+      });
   }
 
   ngOnDestroy(): void {
     this.destroy$.next();
+    this.destroy$.complete();
   }
 
   getTransform(): string {
     return `rotate(${this.rotation}rad) scale(${this.zoom})`;
+  }
+
+  resetActiveBox(event: MouseEvent): void {
+    console.log(BoxType.TEXT, event.offsetY, event.offsetX);
+    this.boxRepository.create(BoxType.TEXT, event.offsetY, event.offsetX);
+    this.activeBoxService.set(null);
   }
 }

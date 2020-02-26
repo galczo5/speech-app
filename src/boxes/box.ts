@@ -12,40 +12,44 @@ export const enum BoxType {
   FRAME = 'FRAME'
 }
 
+export type BoxData = TextBoxData | HtmlBoxData | ImageBoxData | LinkBoxData | FrameBoxData;
+
 interface BoxBase {
   readonly id: string;
   name: string;
-  data: TextBoxData | HtmlBoxData | ImageBoxData | LinkBoxData | FrameBoxData;
+  data: BoxData;
 
   top: number;
   left: number;
   width: number | 'auto';
   height: number | 'auto';
+  rotate: number;
+  scale: number;
 
   readonly type: BoxType;
 }
 
-interface TextBox extends BoxBase {
+export interface TextBox extends BoxBase {
   readonly type: BoxType.TEXT;
   data: TextBoxData;
 }
 
-interface HtmlBox extends BoxBase {
+export interface HtmlBox extends BoxBase {
   readonly type: BoxType.HTML;
   data: HtmlBoxData;
 }
 
-interface ImageBox extends BoxBase {
+export interface ImageBox extends BoxBase {
   readonly type: BoxType.IMAGE;
   data: ImageBoxData;
 }
 
-interface LinkBox extends BoxBase {
+export interface LinkBox extends BoxBase {
   readonly type: BoxType.LINK;
   data: LinkBoxData;
 }
 
-interface FrameBox extends BoxBase {
+export interface FrameBox extends BoxBase {
   readonly type: BoxType.FRAME;
   data: FrameBoxData;
 }

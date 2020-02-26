@@ -5,6 +5,7 @@ html, body {
 }
 
 * {
+  font-family: 'Open Sans';
   box-sizing: border-box;
 }
 
@@ -24,15 +25,75 @@ app-workspace-background {
   transition-property: width, height;
 }
 
+.workspace-area-directions {
+  position: absolute;
+  top: 0;
+  left: 0;
+
+  width: 800px;
+  height: 600px;
+
+  border-width: 1px 0 0 1px;
+  border-style: dashed;
+  opacity: .2;
+}
+
+.workspace-area-directions > span {
+  font-family: monospace;
+  background: black;
+  color: white;
+  font-size: 10px;
+  padding: 3px 8px;
+  position: relative;
+  border-radius: 8px 8px 0 0;
+  top: -23px;
+  left: -1px;
+}
+
 app-root {
   display: grid;
   width: 100vw;
   height: 100vh;
-  grid-template-columns: 1fr 450px;
+  grid-template-columns: auto 1fr;
   grid-template-rows: auto 1fr;
+}
+
+.toolbar-open {
+  width: 400px;
 }
 
 .toolbar {
   display: grid;
   grid-template-columns: auto 1fr;
+}
+
+app-sidebar {
+  height: 100%;
+}
+
+app-sidebar .btn {
+  box-shadow: none !important;
+  border-radius: 0;
+  width: 44px;
+  height: 44px;
+}
+
+
+app-sidebar .btn.active {
+  background-color: #e2e6ea;
+  border-color: #e2e6ea;
+}
+
+app-sidebar .btn + .btn {
+  margin-top: 0;
+}
+
+app-resizable-box,
+app-workspace-box,
+app-text-box,
+app-link-box,
+app-image-box,
+app-html-box,
+app-frame-box {
+  display: contents;
 }

@@ -20,4 +20,10 @@ export abstract class BoxComponent {
   @Input()
   height: number | 'auto';
 
+  @Input()
+  scale: number;
+
+  @Input()
+  rotation: number;
+
 }

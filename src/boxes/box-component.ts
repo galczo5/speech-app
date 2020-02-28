@@ -15,10 +15,10 @@ export abstract class BoxComponent {
   left: number;
 
   @Input()
-  width: number | 'auto';
+  width: number;
 
   @Input()
-  height: number | 'auto';
+  height: number;
 
   @Input()
   scale: number;

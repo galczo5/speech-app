@@ -65,6 +65,13 @@ app-root {
 .toolbar {
   display: grid;
   grid-template-columns: auto 1fr;
+  height: 100%;
+  overflow: auto;
+}
+
+.toolbar-content {
+  height: 100%;
+  overflow: auto;
 }
 
 app-sidebar {

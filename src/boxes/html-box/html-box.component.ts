@@ -5,7 +5,14 @@ import {HtmlBoxData} from './html-box-data';
 @Component({
   selector: 'app-html-box',
   template: `
-    <app-resizable-box [isActive]="isActive" [initialTop]="top" [initialLeft]="left">
+    <app-resizable-box [isActive]="isActive"
+                       [id]="boxId"
+                       [top]="top"
+                       [left]="left"
+                       [scale]="scale"
+                       [rotation]="rotation"
+                       [width]="width"
+                       [height]="height">
       <div [style.width.px]="width"
            [style.height.px]="height"
            [innerHTML]="data.html">

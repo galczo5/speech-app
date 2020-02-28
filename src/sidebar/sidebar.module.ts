@@ -9,6 +9,9 @@ import {DocumentEditorComponent} from './document-editor/document-editor.compone
 import {SidebarComponent} from './sidebar/sidebar.component';
 import {RouterModule} from '@angular/router';
 import { EmptyComponent } from './empty/empty.component';
+import { BoxCatalogItemComponent } from './box-catalog-item/box-catalog-item.component';
+import { BoxCommonDataFormComponent } from './box-common-data-form/box-common-data-form.component';
+import {BoxEditorsModule} from '../box-editors/box-editors.module';
 
 
 @NgModule({
@@ -20,7 +23,9 @@ import { EmptyComponent } from './empty/empty.component';
     KeyframesListComponent,
     DocumentEditorComponent,
     SidebarComponent,
-    EmptyComponent
+    EmptyComponent,
+    BoxCatalogItemComponent,
+    BoxCommonDataFormComponent
   ],
   exports: [
     BoxEditorComponent,
@@ -33,7 +38,8 @@ import { EmptyComponent } from './empty/empty.component';
   ],
   imports: [
     CommonModule,
-    RouterModule
+    RouterModule,
+    BoxEditorsModule
   ]
 })
 export class SidebarModule {

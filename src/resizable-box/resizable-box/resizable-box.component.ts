@@ -1,11 +1,23 @@
-import {AfterViewInit, ChangeDetectorRef, Component, ElementRef, Inject, Input, OnInit, ViewChild} from '@angular/core';
+import {
+  AfterViewInit,
+  ChangeDetectorRef,
+  Component,
+  ElementRef,
+  Inject,
+  Input,
+  OnChanges, OnDestroy,
+  OnInit,
+  Renderer2, SimpleChanges,
+  ViewChild
+} from '@angular/core';
 import {ResizableBoxMouseActionsService} from '../resizable-box-mouse-actions.service';
 import {DOCUMENT} from '@angular/common';
 import {RelativePosition} from '../../utils/relative-position';
-import {zip} from 'rxjs';
+import {Subject, zip} from 'rxjs';
 import {WorkspaceAreaStoreService} from '../../workspace/workspace-area-store.service';
 import {angle, pythagorean} from '../../utils/math-utils';
 import {BoxRepository} from '../../boxes/box-repository';
+import {takeUntil} from 'rxjs/operators';
 
 @Component({
   providers: [
@@ -16,10 +28,7 @@ import {BoxRepository} from '../../boxes/box-repository';
     <div #wrapper class="d-inline-block resizable-box"
          [class.border-primary]="isActive"
          [class.rounded]="isActive"
-         [class.grabbing]="moveInProgress"
-         [style.transform]="getTransform()"
-         [style.left.px]="left"
-         [style.top.px]="top">
+         [class.grabbing]="moveInProgress">
 
       <div #handle class="resizable-box-handle bg-white border-primary"
            [class.d-none]="!isActive"
@@ -33,7 +42,7 @@ import {BoxRepository} from '../../boxes/box-repository';
   `,
   styleUrls: ['./resizable-box.component.css']
 })
-export class ResizableBoxComponent implements OnInit, AfterViewInit {
+export class ResizableBoxComponent implements OnChanges, OnInit, OnDestroy {
 
   @Input()
   readonly id: string;
@@ -46,6 +55,12 @@ export class ResizableBoxComponent implements OnInit, AfterViewInit {
 
   @Input()
   readonly isActive: boolean;
+
+  @Input()
+  readonly width: number;
+
+  @Input()
+  readonly height: number;
 
   @Input()
   readonly left: number;
@@ -68,11 +83,33 @@ export class ResizableBoxComponent implements OnInit, AfterViewInit {
   private workspaceRotation = 0;
   private workspaceZoom = 1;
 
+  private destroy$: Subject<void> = new Subject<void>();
+
   constructor(@Inject(DOCUMENT) private document: Document,
+              elementRef: ElementRef,
               private changeDetectorRef: ChangeDetectorRef,
               private mouseActionsService: ResizableBoxMouseActionsService,
               private workspaceAreaStoreService: WorkspaceAreaStoreService,
-              private boxRepository: BoxRepository) { }
+              private boxRepository: BoxRepository,
+              private renderer2: Renderer2) {
+  }
+
+  ngOnChanges(changes: SimpleChanges): void {
+
+    if (changes.top || changes.left) {
+      this.setPosition(this.top, this.left);
+    }
+
+    if (changes.scale || changes.rotation) {
+      this.setTransform(this.scale, this.rotation);
+    }
+
+    if (changes.height || changes.width) {
+      this.originalSize = pythagorean(this.width, this.height);
+      this.originalAngle = angle(this.height, this.width);
+    }
+
+  }
 
   ngOnInit(): void {
     this.listenForResize();
@@ -80,10 +117,9 @@ export class ResizableBoxComponent implements OnInit, AfterViewInit {
     this.listenForWorkspaceChanges();
   }
 
-  ngAfterViewInit(): void {
-    const { width, height } = this.wrapper.nativeElement.getBoundingClientRect();
-    this.originalSize = pythagorean(width, height);
-    this.originalAngle = angle(height, width);
+  ngOnDestroy(): void {
+    this.destroy$.next();
+    this.destroy$.complete();
   }
 
   getTransformOrigin(): RelativePosition {
@@ -96,20 +132,29 @@ export class ResizableBoxComponent implements OnInit, AfterViewInit {
     );
   }
 
-  getTransform(): string {
-    return `scale(${this.scale}) rotate(${this.rotation}rad)`;
+  private setPosition(top: number, left: number): void {
+    const el = this.wrapper.nativeElement;
+    this.renderer2.setStyle(el, 'top', top + 'px');
+    this.renderer2.setStyle(el, 'left', left + 'px');
+  }
+
+  private setTransform(scale: number, rotation: number): void {
+    this.renderer2.setStyle(this.wrapper.nativeElement, 'transform', `scale(${scale}) rotate(${rotation}rad)`);
   }
 
   private listenForWorkspaceChanges(): void {
     this.workspaceAreaStoreService.getRotation()
+      .pipe(takeUntil(this.destroy$))
       .subscribe(rotation => this.workspaceRotation = rotation);
 
     this.workspaceAreaStoreService.getZoom()
+      .pipe(takeUntil(this.destroy$))
       .subscribe(zoom => this.workspaceZoom = zoom);
   }
 
   private listenForMove(): void {
     this.mouseActionsService.mouseDown(this.document, this.wrapper.nativeElement)
+      .pipe(takeUntil(this.destroy$))
       .subscribe((origin) => {
         this.moveInProgress = true;
         this.changeDetectorRef.detectChanges();
@@ -118,6 +163,10 @@ export class ResizableBoxComponent implements OnInit, AfterViewInit {
 
         const distanceY$ = this.mouseActionsService.distanceY(origin);
         const distanceX$ = this.mouseActionsService.distanceX(origin);
+
+        let top: number = this.top;
+        let left: number = this.left;
+
         zip(distanceY$, distanceX$)
           .subscribe(([y, x]: [number, number]) => {
 
@@ -128,20 +177,27 @@ export class ResizableBoxComponent implements OnInit, AfterViewInit {
             const transformedX = (x * cos) - (y * sin);
             const transformedY = (x * sin) + (y * cos);
 
-            const top = originalPosition.top + (transformedY / this.workspaceZoom);
-            const left = originalPosition.left + (transformedX / this.workspaceZoom);
+            top = originalPosition.top + (transformedY / this.workspaceZoom);
+            left = originalPosition.left + (transformedX / this.workspaceZoom);
 
-            this.boxRepository.updatePosition(this.id, top, left);
+            this.setPosition(top, left);
             this.changeDetectorRef.detectChanges();
           });
 
         this.mouseActionsService.mouseUp()
-          .subscribe(() => this.moveInProgress = false);
+          .subscribe(() => {
+            if (top !== this.top || left !== this.left) {
+              this.boxRepository.updatePosition(this.id, top, left);
+            }
+
+            this.moveInProgress = false;
+          });
       });
   }
 
   private listenForResize(): void {
     this.mouseActionsService.mouseDown(this.document, this.handle.nativeElement)
+      .pipe(takeUntil(this.destroy$))
       .subscribe(() => {
         this.resizeInProgress = true;
         this.changeDetectorRef.detectChanges();
@@ -150,19 +206,28 @@ export class ResizableBoxComponent implements OnInit, AfterViewInit {
         const angle$ = this.mouseActionsService.angle(origin);
         const distance$ = this.mouseActionsService.distance(origin);
 
+        let rotation: number = this.rotation;
+        let scale: number = this.scale;
+
         zip(angle$, distance$)
           .subscribe(([newAngle, distance]: [number, number]) => {
             const originalSizeFromTransformOrigin = this.originalSize / 2;
 
-            const rotation = newAngle + this.originalAngle - this.workspaceRotation;
-            const scale = (distance / this.workspaceZoom) / originalSizeFromTransformOrigin;
+            rotation = newAngle + this.originalAngle - this.workspaceRotation;
+            scale = (distance / this.workspaceZoom) / originalSizeFromTransformOrigin;
 
-            this.boxRepository.updateScaleAndAngle(this.id, scale, rotation);
+            this.setTransform(scale, rotation);
             this.changeDetectorRef.detectChanges();
           });
 
         this.mouseActionsService.mouseUp()
-          .subscribe(() => this.resizeInProgress = false);
+          .subscribe(() => {
+            if (scale !== this.scale || rotation !== this.rotation) {
+              this.boxRepository.updateScaleAndAngle(this.id, scale, rotation);
+            }
+
+            this.resizeInProgress = false;
+          });
       });
   }
 }

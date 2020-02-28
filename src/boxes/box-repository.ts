@@ -2,9 +2,18 @@ import {Box, BoxData, BoxType} from './box';
 import {Observable, ReplaySubject} from 'rxjs';
 import {Injectable} from '@angular/core';
 import {defaultTextBox} from './text-box/default-text-box';
+import {defaultLinkBox} from './link-box/default-link-box';
+import {defaultImageBox} from './image-box/default-image-box';
+import {defaultHtmlBox} from './html-box/default-html-box';
+import {defaultFrameBox} from './frame-box/default-frame-box';
 
 function randomId(): string {
-  return (((1 + Math.random()) * 0x10000) | 0).toString(16).substring(1);
+  const s1 = (((1 + Math.random()) * 0x10000) | 0).toString(16).substring(1);
+  const s2 = (((1 + Math.random()) * 0x10000) | 0).toString(16).substring(1);
+  const s3 = (((1 + Math.random()) * 0x10000) | 0).toString(16).substring(1);
+  const s4 = (((1 + Math.random()) * 0x10000) | 0).toString(16).substring(1);
+  const s5 = (((1 + Math.random()) * 0x10000) | 0).toString(16).substring(1);
+  return s1 + '-' + s2 + '-' + s3 + '-' + s4 + '-' + s5;
 }
 
 @Injectable({
@@ -17,30 +26,7 @@ export class BoxRepository {
 
   constructor() {
     this.boxes = [
-      {
-        id: '1',
-        name: 'box-1',
-        type: BoxType.TEXT,
-        top: 100,
-        left: 100,
-        width: 200,
-        scale: 1,
-        rotate: 0,
-        height: 'auto',
-        data: { text: 'Lorem ipsum One', fontSize: '24px', background: 'red', padding: '10px 25px', align: 'center' }
-      },
-      {
-        id: '2',
-        name: 'box-2',
-        type: BoxType.TEXT,
-        top: 200,
-        left: 200,
-        width: 200,
-        scale: 1,
-        rotate: 0,
-        height: 'auto',
-        data: { text: 'Lorem ipsum Two', style: 'italic', weight: 'bold' }
-      },
+      defaultTextBox('test', 0, 0)
     ];
     this.notifyChanges();
   }
@@ -55,6 +41,16 @@ export class BoxRepository {
 
     if (type === BoxType.TEXT) {
       box = defaultTextBox(id, top, left);
+    } else if (type === BoxType.LINK) {
+      box = defaultLinkBox(id, top, left);
+    } else if (type === BoxType.IMAGE) {
+      box = defaultImageBox(id, top, left);
+    } else if (type === BoxType.HTML) {
+      box = defaultHtmlBox(id, top, left);
+    } else if (type === BoxType.FRAME) {
+      box = defaultFrameBox(id, top, left);
+    } else {
+      throw new Error('unknown box type');
     }
 
     this.boxes.push(box);
@@ -63,47 +59,65 @@ export class BoxRepository {
 
   updateName(id: string, name: string): void {
     const box = this.findBox(id);
-    box.name = name;
-    this.notifyChanges();
+    this.updateBox({
+      ...box,
+      name
+    });
   }
 
   updatePosition(id: string, top: number, left: number): void {
     const box = this.findBox(id);
-    box.top = top;
-    box.left = left;
-    this.notifyChanges();
+    this.updateBox({
+      ...box,
+      top,
+      left
+    });
   }
 
-  updateSize(id: string, height: number | 'auto', width: number | 'auto'): void {
+  updateSize(id: string, height: number, width: number): void {
     const box = this.findBox(id);
-    box.height = height;
-    box.width = width;
-    this.notifyChanges();
+    this.updateBox({
+      ...box,
+      height,
+      width
+    });
   }
 
   updateScaleAndAngle(id: string, scale: number, angle: number): void {
     const box = this.findBox(id);
-    box.scale = scale;
-    box.rotate = angle;
-    this.notifyChanges();
+    this.updateBox({
+      ...box,
+      scale,
+      rotate: angle
+    });
   }
 
   updateData(id: string, type: BoxType, data: BoxData): void {
     const box = this.findBox(id);
-
-    if (box.type === type) {
-      box.data = data;
+    if (box.type !== type) {
+      throw new Error('cannot update box with wrong typed data');
     }
 
-    this.notifyChanges();
+    // Its ok, I'm checking type above
+    // @ts-ignore
+    this.updateBox({
+      ...box,
+      data
+    });
   }
 
   private findBox(id: string): Box {
     return this.boxes.find(b => b.id === id);
   }
 
+  private updateBox(box: Box): void {
+    this.boxes = this.boxes.filter(b => b.id !== box.id);
+    this.boxes.push(box);
+    this.notifyChanges();
+  }
+
   private notifyChanges(): void {
-    this.boxes$.next(this.boxes);
+    this.boxes$.next([...this.boxes]);
   }
 
 }

@@ -4,7 +4,7 @@ import {ImageBoxData} from './image-box/image-box-data';
 import {LinkBoxData} from './link-box/link-box-data';
 import {FrameBoxData} from './frame-box/frame-box-data';
 
-export const enum BoxType {
+export enum BoxType {
   TEXT = 'TEXT',
   HTML = 'HTML',
   IMAGE = 'IMAGE',
@@ -16,42 +16,42 @@ export type BoxData = TextBoxData | HtmlBoxData | ImageBoxData | LinkBoxData | F
 
 interface BoxBase {
   readonly id: string;
-  name: string;
-  data: BoxData;
+  readonly name: string;
+  readonly data: BoxData;
 
-  top: number;
-  left: number;
-  width: number | 'auto';
-  height: number | 'auto';
-  rotate: number;
-  scale: number;
+  readonly top: number;
+  readonly left: number;
+  readonly width: number;
+  readonly height: number;
+  readonly rotate: number;
+  readonly scale: number;
 
   readonly type: BoxType;
 }
 
 export interface TextBox extends BoxBase {
   readonly type: BoxType.TEXT;
-  data: TextBoxData;
+  readonly data: TextBoxData;
 }
 
 export interface HtmlBox extends BoxBase {
   readonly type: BoxType.HTML;
-  data: HtmlBoxData;
+  readonly data: HtmlBoxData;
 }
 
 export interface ImageBox extends BoxBase {
   readonly type: BoxType.IMAGE;
-  data: ImageBoxData;
+  readonly data: ImageBoxData;
 }
 
 export interface LinkBox extends BoxBase {
   readonly type: BoxType.LINK;
-  data: LinkBoxData;
+  readonly data: LinkBoxData;
 }
 
 export interface FrameBox extends BoxBase {
   readonly type: BoxType.FRAME;
-  data: FrameBoxData;
+  readonly data: FrameBoxData;
 }
 
 export type Box = TextBox | HtmlBox | ImageBox | LinkBox | FrameBox;

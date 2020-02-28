@@ -3,12 +3,12 @@ import {BoxType, TextBox} from '../box';
 export function defaultTextBox(id: string, top: number, left: number): TextBox {
   return {
     id,
-    name: 'New text content',
+    name: 'Text: ' + id,
     type: BoxType.TEXT,
     top,
     left,
     width: 400,
-    height: 'auto',
+    height: 400,
     scale: 1,
     rotate: 0,
     data: {

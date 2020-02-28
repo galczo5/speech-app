@@ -1,13 +1,14 @@
-import {ChangeDetectorRef, Component, OnInit} from '@angular/core';
+import {ChangeDetectorRef, Component, ElementRef, OnDestroy, OnInit} from '@angular/core';
 import {NavigationEnd, Router} from '@angular/router';
-import {filter} from 'rxjs/operators';
+import {filter, takeUntil} from 'rxjs/operators';
 import {SidebarStateService} from '../sidebar-state.service';
+import {fromEvent, Subject} from 'rxjs';
 
 @Component({
   selector: 'app-sidebar',
   templateUrl: './sidebar.component.html'
 })
-export class SidebarComponent implements OnInit {
+export class SidebarComponent implements OnInit, OnDestroy {
 
   routes = {
     BOX_CREATE: 'box/create',
@@ -18,8 +19,11 @@ export class SidebarComponent implements OnInit {
     DOCUMENT: 'document'
   };
 
+  private destroy$: Subject<void> = new Subject<void>();
+
   constructor(private router: Router,
               private sidebarStateService: SidebarStateService,
+              private elementRef: ElementRef,
               private changeDetectorRef: ChangeDetectorRef) {}
 
   private url = '';
@@ -38,6 +42,15 @@ export class SidebarComponent implements OnInit {
         this.sidebarStateService.set(sidebarOpen);
         this.changeDetectorRef.detectChanges();
       });
+
+    fromEvent(this.elementRef.nativeElement, 'wheel')
+      .pipe(takeUntil(this.destroy$))
+      .subscribe((event: Event) => event.stopPropagation());
+  }
+
+  ngOnDestroy(): void {
+    this.destroy$.next();
+    this.destroy$.complete();
   }
 
   isActive(url: string): boolean {

@@ -22,16 +22,17 @@ export class WorkspaceManipulationService {
 
   private destroy$: Subject<void> = new Subject<void>();
 
-  init(document: Document,
+  init(backgroundElement: HTMLElement,
        nativeElement: HTMLElement,
        positionGetter: () => RelativePosition): void {
+
     if (this.initialized) {
       throw new Error('MouseManipulatorService already initialized');
     }
 
-    this.keyboardListener(document);
-    this.wheelListener(document);
-    this.mouseDownListener(document, nativeElement, positionGetter);
+    this.keyboardListener(backgroundElement);
+    this.wheelListener(backgroundElement);
+    this.mouseDownListener(backgroundElement, nativeElement, positionGetter);
   }
 
   destroy(): void {
@@ -50,12 +51,12 @@ export class WorkspaceManipulationService {
     return this.rotateDelta$.asObservable();
   }
 
-  private keyboardListener(document: Document) {
-    fromEvent(document, 'keydown')
+  private keyboardListener(backgroundElement: HTMLElement) {
+    fromEvent(backgroundElement, 'keydown')
       .pipe(takeUntil(this.destroy$))
       .subscribe((event: KeyboardEvent) => {
         this.mouseMode = this.getMouseMode(event);
-        fromEvent(document, 'keyup')
+        fromEvent(backgroundElement, 'keyup')
           .pipe(take(1))
           .subscribe(() => this.mouseMode = MouseManipulatorMode.MOVE);
       });
@@ -69,8 +70,8 @@ export class WorkspaceManipulationService {
     }
   }
 
-  private wheelListener(document: Document) {
-    fromEvent(document, 'wheel')
+  private wheelListener(backgroundElement: HTMLElement) {
+    fromEvent(backgroundElement, 'wheel')
       .pipe(
         throttleTime(10),
         takeUntil(this.destroy$)
@@ -88,7 +89,7 @@ export class WorkspaceManipulationService {
       });
   }
 
-  private mouseDownListener(document: Document, nativeElement: HTMLElement, positionGetter: () => RelativePosition) {
+  private mouseDownListener(backgroundElement: HTMLElement, nativeElement: HTMLElement, positionGetter: () => RelativePosition) {
     // fromEvent(nativeElement, 'mousedown')
     //   .pipe(takeUntil(this.destroy$))
     //   .subscribe((downEvent: MouseEvent) => {
@@ -96,9 +97,9 @@ export class WorkspaceManipulationService {
     //     const startPosition = new RelativePosition(downEvent.clientY, downEvent.clientX);
     //     const position = positionGetter();
     //
-    //     fromEvent(document, 'mousemove')
+    //     fromEvent(backgroundElement, 'mousemove')
     //       .pipe(
-    //         takeUntil(fromEvent(document, 'mouseup')),
+    //         takeUntil(fromEvent(backgroundElement, 'mouseup')),
     //         auditTime(10)
     //       )
     //       .subscribe((moveEvent: MouseEvent) => {

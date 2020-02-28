@@ -1,4 +1,4 @@
-import {ChangeDetectorRef, Component, ElementRef, Inject, OnDestroy, OnInit} from '@angular/core';
+import {ChangeDetectorRef, Component, ElementRef, Inject, Input, OnDestroy, OnInit} from '@angular/core';
 import {Subject} from 'rxjs';
 import {takeUntil} from 'rxjs/operators';
 import {DOCUMENT} from '@angular/common';
@@ -8,12 +8,16 @@ import {WorkspaceAreaStoreService} from '../workspace-area-store.service';
 import {Box, BoxType} from '../../boxes/box';
 import {ActiveBoxService} from '../../resizable-box/active-box.service';
 import {BoxRepository} from '../../boxes/box-repository';
+import {AddBoxService} from '../add-box.service';
 
 @Component({
   selector: 'app-workspace-area',
   templateUrl: './workspace-area.component.html'
 })
 export class WorkspaceAreaComponent implements OnInit, OnDestroy {
+
+  @Input()
+  workspace: HTMLElement;
 
   zoom = 1;
   rotation = 0;
@@ -24,8 +28,9 @@ export class WorkspaceAreaComponent implements OnInit, OnDestroy {
   };
 
   boxes: Box[] = [];
-
   activeBox: Box;
+
+  typeOfBoxToAdd: BoxType;
 
   private readonly nativeElement: HTMLElement;
   private readonly destroy$: Subject<void> = new Subject<void>();
@@ -36,12 +41,13 @@ export class WorkspaceAreaComponent implements OnInit, OnDestroy {
               private storeService: WorkspaceAreaStoreService,
               private activeBoxService: ActiveBoxService,
               private boxRepository: BoxRepository,
+              private addBoxService: AddBoxService,
               @Inject(DOCUMENT) private document: Document) {
     this.nativeElement = elementRef.nativeElement;
   }
 
   ngOnInit(): void {
-    this.manipulationService.init(this.document, this.nativeElement, () => this.position);
+    this.manipulationService.init(this.workspace, this.nativeElement, () => this.position);
     this.storeService.setPosition(this.position);
 
     this.manipulationService.zoom()
@@ -81,6 +87,10 @@ export class WorkspaceAreaComponent implements OnInit, OnDestroy {
         this.boxes = boxes;
         this.changeDetectorRef.detectChanges();
       });
+
+    this.addBoxService.getBoxType()
+      .pipe(takeUntil(this.destroy$))
+      .subscribe(type => this.typeOfBoxToAdd = type);
   }
 
   ngOnDestroy(): void {
@@ -93,8 +103,15 @@ export class WorkspaceAreaComponent implements OnInit, OnDestroy {
   }
 
   resetActiveBox(event: MouseEvent): void {
-    console.log(BoxType.TEXT, event.offsetY, event.offsetX);
-    this.boxRepository.create(BoxType.TEXT, event.offsetY, event.offsetX);
-    this.activeBoxService.set(null);
+    if (this.typeOfBoxToAdd) {
+      this.boxRepository.create(this.typeOfBoxToAdd, event.offsetY, event.offsetX);
+      this.addBoxService.setBoxType(null);
+    } else {
+      this.activeBoxService.set(null);
+    }
+  }
+
+  trackFn(index: number, box: Box) {
+    return box.id;
   }
 }

@@ -1,17 +1,18 @@
-import {Component, HostBinding, OnInit} from '@angular/core';
+import {Component, ElementRef, HostBinding, OnInit} from '@angular/core';
 
 @Component({
   selector: 'app-workspace-background',
   templateUrl: './workspace-background.component.html'
 })
-export class WorkspaceBackgroundComponent implements OnInit {
+export class WorkspaceBackgroundComponent {
 
   @HostBinding('class.bg-light')
   readonly darkBackground = true;
 
-  constructor() { }
+  constructor(private elementRef: ElementRef) { }
 
-  ngOnInit(): void {
+  getElement(): HTMLElement {
+    return this.elementRef.nativeElement;
   }
 
 }

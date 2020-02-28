@@ -6,7 +6,14 @@ import {DomSanitizer, SafeUrl} from '@angular/platform-browser';
 @Component({
   selector: 'app-frame-box',
   template: `
-    <app-resizable-box [isActive]="isActive" [initialTop]="top" [initialLeft]="left">
+    <app-resizable-box [isActive]="isActive"
+                       [id]="boxId"
+                       [top]="top"
+                       [left]="left"
+                       [scale]="scale"
+                       [rotation]="rotation"
+                       [width]="width"
+                       [height]="height">
       <iframe #frameElement [src]="safeUrl" [width]="width" [height]="height"></iframe>
     </app-resizable-box>
   `,

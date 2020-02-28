@@ -24,12 +24,12 @@
   <div class="border-right">
     <app-sidebar></app-sidebar>
   </div>
-  <div *ngIf="sidebarOpen" class="p-3">
+  <div *ngIf="sidebarOpen" class="p-3 toolbar-content">
     <router-outlet></router-outlet>
   </div>
 </div>
 <div>
-  <app-workspace-background>
-    <app-workspace-area></app-workspace-area>
+  <app-workspace-background #workspace>
+    <app-workspace-area [workspace]="workspace.getElement()"></app-workspace-area>
   </app-workspace-background>
 </div>

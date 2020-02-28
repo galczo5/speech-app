@@ -7,7 +7,7 @@
   <div class="workspace-area-directions border-dark">
     <span>0x0</span>
   </div>
-  <ng-container *ngFor="let box of boxes">
+  <ng-container *ngFor="let box of boxes; trackBy: trackFn">
     <app-workspace-box [box]="box" [activeBox]="activeBox"></app-workspace-box>
   </ng-container>
 </div>

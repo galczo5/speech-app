@@ -10,7 +10,9 @@ import {TextBoxData} from './text-box-data';
                        [top]="top"
                        [left]="left"
                        [scale]="scale"
-                       [rotation]="rotation">
+                       [rotation]="rotation"
+                       [width]="width"
+                       [height]="height">
       <div [style.width.px]="width"
            [style.height.px]="height"
            [style.fontSize]="data.fontSize"

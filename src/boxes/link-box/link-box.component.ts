@@ -5,7 +5,14 @@ import {LinkBoxData} from './link-box-data';
 @Component({
   selector: 'app-link-box',
   template: `
-    <app-resizable-box [isActive]="isActive" [initialTop]="top" [initialLeft]="left">
+    <app-resizable-box [isActive]="isActive"
+                       [id]="boxId"
+                       [top]="top"
+                       [left]="left"
+                       [scale]="scale"
+                       [rotation]="rotation"
+                       [width]="width"
+                       [height]="height">
       <a [href]="data.url"
          [style.width.px]="width"
          [style.height.px]="height"

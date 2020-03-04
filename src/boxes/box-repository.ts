@@ -92,7 +92,7 @@ export class BoxRepository {
     });
   }
 
-  updateData(id: string, type: BoxType, data: BoxData): void {
+  updateData<T extends BoxData>(id: string, type: BoxType, data: T): void {
     const box = this.findBox(id);
     if (box.type !== type) {
       throw new Error('cannot update box with wrong typed data');

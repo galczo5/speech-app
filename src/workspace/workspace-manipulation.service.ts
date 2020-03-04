@@ -22,7 +22,8 @@ export class WorkspaceManipulationService {
 
   private destroy$: Subject<void> = new Subject<void>();
 
-  init(backgroundElement: HTMLElement,
+  init(document: Document,
+       backgroundElement: HTMLElement,
        nativeElement: HTMLElement,
        positionGetter: () => RelativePosition): void {
 
@@ -30,7 +31,7 @@ export class WorkspaceManipulationService {
       throw new Error('MouseManipulatorService already initialized');
     }
 
-    this.keyboardListener(backgroundElement);
+    this.keyboardListener(document);
     this.wheelListener(backgroundElement);
     this.mouseDownListener(backgroundElement, nativeElement, positionGetter);
   }
@@ -51,12 +52,12 @@ export class WorkspaceManipulationService {
     return this.rotateDelta$.asObservable();
   }
 
-  private keyboardListener(backgroundElement: HTMLElement) {
-    fromEvent(backgroundElement, 'keydown')
+  private keyboardListener(document: Document) {
+    fromEvent(document, 'keydown')
       .pipe(takeUntil(this.destroy$))
       .subscribe((event: KeyboardEvent) => {
         this.mouseMode = this.getMouseMode(event);
-        fromEvent(backgroundElement, 'keyup')
+        fromEvent(document, 'keyup')
           .pipe(take(1))
           .subscribe(() => this.mouseMode = MouseManipulatorMode.MOVE);
       });

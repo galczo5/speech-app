@@ -47,7 +47,7 @@ export class WorkspaceAreaComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
-    this.manipulationService.init(this.workspace, this.nativeElement, () => this.position);
+    this.manipulationService.init(this.document, this.workspace, this.nativeElement, () => this.position);
     this.storeService.setPosition(this.position);
 
     this.manipulationService.zoom()

@@ -11,7 +11,11 @@ import { HtmlBoxEditorComponent } from './html-box-editor/html-box-editor.compon
 @NgModule({
   declarations: [FrameBoxEditorComponent, TextBoxEditorComponent, ImageBoxEditorComponent, LinkBoxEditorComponent, HtmlBoxEditorComponent],
   exports: [
-    TextBoxEditorComponent
+    TextBoxEditorComponent,
+    LinkBoxEditorComponent,
+    ImageBoxEditorComponent,
+    HtmlBoxEditorComponent,
+    FrameBoxEditorComponent
   ],
   imports: [
     CommonModule

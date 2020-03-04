@@ -9,6 +9,10 @@ import {takeUntil} from 'rxjs/operators';
   template: `
     <app-box-common-data-form [activeBox]="activeBox"></app-box-common-data-form>
     <app-text-box-editor *ngIf="activeBox && activeBox.type === BoxType.TEXT" [activeBox]="activeBox"></app-text-box-editor>
+    <app-link-box-editor *ngIf="activeBox && activeBox.type === BoxType.LINK" [activeBox]="activeBox"></app-link-box-editor>
+    <app-image-box-editor *ngIf="activeBox && activeBox.type === BoxType.IMAGE" [activeBox]="activeBox"></app-image-box-editor>
+    <app-html-box-editor *ngIf="activeBox && activeBox.type === BoxType.HTML" [activeBox]="activeBox"></app-html-box-editor>
+    <app-frame-box-editor *ngIf="activeBox && activeBox.type === BoxType.FRAME" [activeBox]="activeBox"></app-frame-box-editor>
   `
 })
 export class BoxEditorComponent implements OnInit, OnDestroy {

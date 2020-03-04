@@ -1,19 +1,31 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, Input, OnInit} from '@angular/core';
+import {FrameBox, LinkBox} from '../../boxes/box';
+import {BoxRepository} from '../../boxes/box-repository';
+import {FrameBoxData} from '../../boxes/frame-box/frame-box-data';
 
 @Component({
   selector: 'app-frame-box-editor',
   template: `
-    <p>
-      frame-box-editor works!
-    </p>
+    <div class="form-group">
+      <label for="">Url:</label>
+      <input type="text" class="form-control" (keyup)="updateUrl($event)" [value]="activeBox.data.url">
+    </div>
   `,
   styles: []
 })
-export class FrameBoxEditorComponent implements OnInit {
+export class FrameBoxEditorComponent {
 
-  constructor() { }
+  @Input()
+  activeBox: FrameBox;
 
-  ngOnInit(): void {
+  constructor(private boxRepository: BoxRepository) {
+  }
+
+  updateUrl(event: any): void {
+    this.boxRepository.updateData<FrameBoxData>(this.activeBox.id, this.activeBox.type, {
+      ...this.activeBox.data,
+      url: event.target.value
+    });
   }
 
 }

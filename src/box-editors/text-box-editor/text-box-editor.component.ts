@@ -1,6 +1,7 @@
 import {Component, Input} from '@angular/core';
 import {TextBox} from '../../boxes/box';
 import {BoxRepository} from '../../boxes/box-repository';
+import {TextBoxData} from '../../boxes/text-box/text-box-data';
 
 @Component({
   selector: 'app-text-box-editor',
@@ -70,56 +71,56 @@ export class TextBoxEditorComponent {
   }
 
   updateText(event: any): void {
-    this.boxRepository.updateData(this.activeBox.id, this.activeBox.type, {
+    this.boxRepository.updateData<TextBoxData>(this.activeBox.id, this.activeBox.type, {
       ...this.activeBox.data,
       text: event.target.value
     });
   }
 
   updateFontSize(event: any): void {
-    this.boxRepository.updateData(this.activeBox.id, this.activeBox.type, {
+    this.boxRepository.updateData<TextBoxData>(this.activeBox.id, this.activeBox.type, {
       ...this.activeBox.data,
       fontSize: event.target.value
     });
   }
 
   updatePadding(event: any): void {
-    this.boxRepository.updateData(this.activeBox.id, this.activeBox.type, {
+    this.boxRepository.updateData<TextBoxData>(this.activeBox.id, this.activeBox.type, {
       ...this.activeBox.data,
       padding: event.target.value
     });
   }
 
   updateAlign(event: any): void {
-    this.boxRepository.updateData(this.activeBox.id, this.activeBox.type, {
+    this.boxRepository.updateData<TextBoxData>(this.activeBox.id, this.activeBox.type, {
       ...this.activeBox.data,
       align: event.target.value
     });
   }
 
   updateStyle(event: any): void {
-    this.boxRepository.updateData(this.activeBox.id, this.activeBox.type, {
+    this.boxRepository.updateData<TextBoxData>(this.activeBox.id, this.activeBox.type, {
       ...this.activeBox.data,
       style: event.target.value
     });
   }
 
   updateWeight(event: any): void {
-    this.boxRepository.updateData(this.activeBox.id, this.activeBox.type, {
+    this.boxRepository.updateData<TextBoxData>(this.activeBox.id, this.activeBox.type, {
       ...this.activeBox.data,
       weight: event.target.value
     });
   }
 
   updateColor(event: any): void {
-    this.boxRepository.updateData(this.activeBox.id, this.activeBox.type, {
+    this.boxRepository.updateData<TextBoxData>(this.activeBox.id, this.activeBox.type, {
       ...this.activeBox.data,
       color: event.target.value
     });
   }
 
   updateBackground(event: any): void {
-    this.boxRepository.updateData(this.activeBox.id, this.activeBox.type, {
+    this.boxRepository.updateData<TextBoxData>(this.activeBox.id, this.activeBox.type, {
       ...this.activeBox.data,
       background: event.target.value
     });

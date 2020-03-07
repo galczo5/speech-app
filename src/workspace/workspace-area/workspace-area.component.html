@@ -1,7 +1,5 @@
-<div [style.left.px]="position.left"
-     [style.top.px]="position.top"
-     [style.transform]="getTransform()"
-     (click)="resetActiveBox($event)"
+<div [style.transform]="getTransform()"
+     (click)="onClickEvent($event)"
      class="workspace-area">
   <ng-content></ng-content>
   <div class="workspace-area-directions border-dark">

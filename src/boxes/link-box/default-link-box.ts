@@ -1,6 +1,6 @@
 import {BoxType, LinkBox, TextBox} from '../box';
 
-export function defaultLinkBox(id: string, top: number, left: number): LinkBox {
+export function defaultLinkBox(id: string, top: number, left: number, scale: number, rotate: number): LinkBox {
   return {
     id,
     name: 'Link: ' + id,
@@ -9,9 +9,15 @@ export function defaultLinkBox(id: string, top: number, left: number): LinkBox {
     left,
     width: 200,
     height: 50,
-    scale: 1,
-    rotate: 0,
+    scale,
+    rotate,
     data: {
+      background: 'transparent',
+      color: 'black',
+      fontSize: '24px',
+      padding: '0px 0px 0px 0px',
+      style: 'normal',
+      weight: 'normal',
       url: 'http://speach.app',
       text: 'speach.app'
     }

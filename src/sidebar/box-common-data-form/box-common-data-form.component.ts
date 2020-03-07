@@ -2,7 +2,7 @@ import {Component, Input, OnInit} from '@angular/core';
 import {Box} from '../../boxes/box';
 import {BoxRepository} from '../../boxes/box-repository';
 import {Subject} from 'rxjs';
-import {debounce, debounceTime} from 'rxjs/operators';
+import {debounceTime} from 'rxjs/operators';
 
 @Component({
   selector: 'app-box-common-data-form',
@@ -13,40 +13,42 @@ import {debounce, debounceTime} from 'rxjs/operators';
         <input class="form-control" type="text" [value]="activeBox.name" (keyup)="updateName($event)">
       </div>
       <div class="form-group">
-        <label for="">Size:</label>
         <div class="row align-items-center">
           <div class="col">
+            <label for="">Width:</label>
             <input class="form-control" type="text" [value]="activeBox.width" (keyup)="updateWidth($event)">
           </div>
-          <div class="col-auto p-0 text-muted">
-            <i class="fas fa-times"></i>
-          </div>
           <div class="col">
+            <label for="">Height:</label>
             <input class="form-control" type="text" [value]="activeBox.height" (keyup)="updateHeight($event)">
           </div>
         </div>
       </div>
       <div class="form-group">
-        <label for="">Position:</label>
         <div class="row align-items-center">
           <div class="col">
+            <label for="">Pos. X:</label>
             <input class="form-control" type="text" [value]="activeBox.left" (keyup)="updateLeft($event)">
           </div>
-          <div class="col-auto p-0 text-muted">
-            <i class="fas fa-times"></i>
-          </div>
           <div class="col">
+            <label for="">Pos. Y:</label>
             <input class="form-control" type="text" [value]="activeBox.top" (keyup)="updateTop($event)">
           </div>
         </div>
       </div>
-      <div class="form-group">
-        <label for="">Zoom:</label>
-        <input class="form-control" type="text" [value]="activeBox.scale" (keyup)="updateScale($event)">
-      </div>
-      <div class="form-group">
-        <label for="">Rotation:</label>
-        <input class="form-control" type="text" [value]="activeBox.rotate" (keyup)="updateRotation($event)">
+      <div class="row">
+        <div class="col">
+          <div class="form-group">
+            <label for="">Zoom:</label>
+            <input class="form-control" type="text" [value]="activeBox.scale" (keyup)="updateScale($event)">
+          </div>
+        </div>
+        <div class="col">
+          <div class="form-group">
+            <label for="">Rotation:</label>
+            <input class="form-control" type="text" [value]="activeBox.rotate" (keyup)="updateRotation($event)">
+          </div>
+        </div>
       </div>
     </div>
   `,

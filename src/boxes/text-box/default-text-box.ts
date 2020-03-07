@@ -1,6 +1,6 @@
 import {BoxType, TextBox} from '../box';
 
-export function defaultTextBox(id: string, top: number, left: number): TextBox {
+export function defaultTextBox(id: string, top: number, left: number, scale: number, rotate: number): TextBox {
   return {
     id,
     name: 'Text: ' + id,
@@ -8,10 +8,16 @@ export function defaultTextBox(id: string, top: number, left: number): TextBox {
     top,
     left,
     width: 400,
-    height: 400,
-    scale: 1,
-    rotate: 0,
+    height: 150,
+    scale,
+    rotate,
     data: {
+      background: 'transparent',
+      color: 'black',
+      weight: 'normal',
+      style: 'normal',
+      align: 'left',
+      padding: '0px 0px 0px 0px',
       // tslint:disable-next-line:max-line-length
       text: 'Lorem ipsum dolor sit amet enim. Etiam ullamcorper. Suspendisse a pellentesque dui, non felis. Maecenas malesuada elit lectus felis, malesuada ultricies. Curabitur et ligula.',
       fontSize: '24px'

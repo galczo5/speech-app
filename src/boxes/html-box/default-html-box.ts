@@ -1,6 +1,6 @@
 import {BoxType, HtmlBox} from '../box';
 
-export function defaultHtmlBox(id: string, top: number, left: number): HtmlBox {
+export function defaultHtmlBox(id: string, top: number, left: number, scale: number, rotate: number): HtmlBox {
   return {
     id,
     name: 'HTML: ' + id,
@@ -9,8 +9,8 @@ export function defaultHtmlBox(id: string, top: number, left: number): HtmlBox {
     left,
     width: 400,
     height: 200,
-    scale: 1,
-    rotate: 0,
+    scale,
+    rotate,
     data: {
       html: `
         <h1>Html content</h1>

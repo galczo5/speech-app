@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import {fromEvent, Observable, Subject} from 'rxjs';
-import {take, takeUntil, throttleTime} from 'rxjs/operators';
+import {auditTime, take, takeUntil, throttleTime} from 'rxjs/operators';
 import {MouseManipulatorMode} from './mouse-manipulator-mode';
 import {RelativePosition} from '../utils/relative-position';
 
@@ -74,11 +74,10 @@ export class WorkspaceManipulationService {
   private wheelListener(backgroundElement: HTMLElement) {
     fromEvent(backgroundElement, 'wheel')
       .pipe(
-        throttleTime(10),
+        throttleTime(5),
         takeUntil(this.destroy$)
       )
       .subscribe((e: any) => {
-
         if (this.mouseMode === MouseManipulatorMode.MOVE) {
           this.positionDelta$.next(new RelativePosition(e.deltaY * SCROLL_FACTOR, e.deltaX * SCROLL_FACTOR));
         } else if (this.mouseMode === MouseManipulatorMode.ZOOM) {
@@ -86,7 +85,6 @@ export class WorkspaceManipulationService {
         } else if (this.mouseMode === MouseManipulatorMode.ROTATE) {
           this.rotateDelta$.next(e.deltaY * ROTATE_FACTOR);
         }
-
       });
   }
 

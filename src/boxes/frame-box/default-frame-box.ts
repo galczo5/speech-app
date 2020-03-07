@@ -1,6 +1,6 @@
 import {BoxType, FrameBox, HtmlBox} from '../box';
 
-export function defaultFrameBox(id: string, top: number, left: number): FrameBox {
+export function defaultFrameBox(id: string, top: number, left: number, scale: number, rotate: number): FrameBox {
   return {
     id,
     name: 'Frame: ' + id,
@@ -9,8 +9,8 @@ export function defaultFrameBox(id: string, top: number, left: number): FrameBox
     left,
     width: 400,
     height: 300,
-    scale: 1,
-    rotate: 0,
+    scale,
+    rotate,
     data: {
       url: 'https://www.youtube.com/embed/dQw4w9WgXcQ',
       attrs: [

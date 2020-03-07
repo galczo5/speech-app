@@ -5,5 +5,5 @@ export interface FrameAttr {
 
 export interface FrameBoxData {
   url: string;
-  attrs?: Array<FrameAttr>;
+  attrs: Array<FrameAttr>;
 }

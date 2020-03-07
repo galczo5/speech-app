@@ -38,6 +38,10 @@ import {takeUntil} from 'rxjs/operators';
       <div class="d-flex rounded overflow-hidden">
         <ng-content></ng-content>
       </div>
+
+      <div class="position-marker text-muted">
+        <span>+</span>
+      </div>
     </div>
   `,
   styleUrls: ['./resizable-box.component.css']
@@ -134,8 +138,8 @@ export class ResizableBoxComponent implements OnChanges, OnInit, OnDestroy {
 
   private setPosition(top: number, left: number): void {
     const el = this.wrapper.nativeElement;
-    this.renderer2.setStyle(el, 'top', top + 'px');
-    this.renderer2.setStyle(el, 'left', left + 'px');
+    this.renderer2.setStyle(el, 'top', (top - this.height / 2) + 'px');
+    this.renderer2.setStyle(el, 'left', (left - this.width / 2) + 'px');
   }
 
   private setTransform(scale: number, rotation: number): void {

@@ -1,6 +1,9 @@
-import {Component, Input} from '@angular/core';
-import {Box} from '../../boxes/box';
+import {Component, Input, OnDestroy, OnInit} from '@angular/core';
+import {Box, BoxType} from '../../boxes/box';
 import {ActiveBoxService} from '../../resizable-box/active-box.service';
+import {AddBoxService} from '../add-box.service';
+import {Subject} from 'rxjs';
+import {takeUntil} from 'rxjs/operators';
 
 @Component({
   selector: 'app-workspace-box',
@@ -63,7 +66,7 @@ import {ActiveBoxService} from '../../resizable-box/active-box.service';
   `,
   styles: []
 })
-export class WorkspaceBoxComponent {
+export class WorkspaceBoxComponent implements OnInit, OnDestroy {
 
   @Input()
   box: Box;
@@ -71,12 +74,29 @@ export class WorkspaceBoxComponent {
   @Input()
   activeBox: Box;
 
-  constructor(private activeBoxService: ActiveBoxService) {
+  private destroy$: Subject<void> = new Subject<void>();
+  private selectedBoxType: BoxType;
+
+  constructor(private activeBoxService: ActiveBoxService,
+              private addBoxService: AddBoxService) {
+  }
+
+  ngOnInit(): void {
+    this.addBoxService.getBoxType()
+      .pipe(takeUntil(this.destroy$))
+      .subscribe(boxType => this.selectedBoxType = boxType);
+  }
+
+  ngOnDestroy(): void {
+    this.destroy$.next();
+    this.destroy$.complete();
   }
 
   setActiveBox(box: Box, event: MouseEvent): void {
-    event.stopPropagation();
-    this.activeBoxService.set(box);
+    if (!this.selectedBoxType) {
+      event.stopPropagation();
+      this.activeBoxService.set(box);
+    }
   }
 
 }

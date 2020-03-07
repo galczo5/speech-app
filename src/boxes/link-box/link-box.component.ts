@@ -13,7 +13,7 @@ import {LinkBoxData} from './link-box-data';
                        [rotation]="rotation"
                        [width]="width"
                        [height]="height">
-      <a [href]="data.url"
+      <a [attr.data-href]="data.url"
          [style.width.px]="width"
          [style.height.px]="height"
          [style.fontSize]="data.fontSize"

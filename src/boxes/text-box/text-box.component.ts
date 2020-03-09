@@ -1,6 +1,7 @@
 import {Component, Input} from '@angular/core';
 import {BoxComponent} from '../box-component';
 import {TextBoxData} from './text-box-data';
+import {BoxRepository} from '../box-repository';
 
 @Component({
   selector: 'app-text-box',
@@ -12,7 +13,10 @@ import {TextBoxData} from './text-box-data';
                        [scale]="scale"
                        [rotation]="rotation"
                        [width]="width"
-                       [height]="height">
+                       [height]="height"
+                       (positionChanged)="updatePosition($event)"
+                       (rotationChanged)="updateRotation($event)"
+                       (scaleChanged)="updateScale($event)">
       <div [style.width.px]="width"
            [style.height.px]="height"
            [style.fontSize]="data.fontSize"
@@ -33,8 +37,8 @@ export class TextBoxComponent extends BoxComponent {
   @Input()
   data: TextBoxData;
 
-  constructor() {
-    super();
+  constructor(boxRepository: BoxRepository) {
+    super(boxRepository);
   }
 
 }

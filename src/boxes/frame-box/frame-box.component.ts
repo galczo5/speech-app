@@ -2,6 +2,7 @@ import {Component, ElementRef, Input, OnInit, Renderer2, ViewChild} from '@angul
 import {BoxComponent} from '../box-component';
 import {FrameBoxData} from './frame-box-data';
 import {DomSanitizer, SafeUrl} from '@angular/platform-browser';
+import {BoxRepository} from '../box-repository';
 
 @Component({
   selector: 'app-frame-box',
@@ -13,8 +14,11 @@ import {DomSanitizer, SafeUrl} from '@angular/platform-browser';
                        [scale]="scale"
                        [rotation]="rotation"
                        [width]="width"
-                       [height]="height">
-      <iframe #frameElement [src]="safeUrl" [width]="width" [height]="height"></iframe>
+                       [height]="height"
+                       (positionChanged)="updatePosition($event)"
+                       (rotationChanged)="updateRotation($event)"
+                       (scaleChanged)="updateScale($event)">
+      <iframe style="pointer-events: none;" #frameElement [src]="safeUrl" [width]="width" [height]="height"></iframe>
     </app-resizable-box>
   `,
   styles: []
@@ -29,9 +33,10 @@ export class FrameBoxComponent extends BoxComponent implements OnInit {
 
   safeUrl: SafeUrl;
 
-  constructor(private sanitizer: DomSanitizer,
+  constructor(boxRepository: BoxRepository,
+              private sanitizer: DomSanitizer,
               private renderer: Renderer2) {
-    super();
+    super(boxRepository);
   }
 
   ngOnInit(): void {

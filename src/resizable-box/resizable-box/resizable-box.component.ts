@@ -2,11 +2,11 @@ import {
   AfterViewInit,
   ChangeDetectorRef,
   Component,
-  ElementRef,
+  ElementRef, EventEmitter,
   Inject,
   Input,
   OnChanges, OnDestroy,
-  OnInit,
+  OnInit, Output,
   Renderer2, SimpleChanges,
   ViewChild
 } from '@angular/core';
@@ -16,7 +16,6 @@ import {RelativePosition} from '../../utils/relative-position';
 import {Subject, zip} from 'rxjs';
 import {WorkspaceAreaStoreService} from '../../workspace/workspace-area-store.service';
 import {angle, pythagorean} from '../../utils/math-utils';
-import {BoxRepository} from '../../boxes/box-repository';
 import {takeUntil} from 'rxjs/operators';
 
 @Component({
@@ -78,6 +77,15 @@ export class ResizableBoxComponent implements OnChanges, OnInit, OnDestroy {
   @Input()
   readonly scale: number;
 
+  @Output()
+  readonly positionChanged: EventEmitter<RelativePosition> = new EventEmitter<RelativePosition>();
+
+  @Output()
+  readonly scaleChanged: EventEmitter<number> = new EventEmitter<number>();
+
+  @Output()
+  readonly rotationChanged: EventEmitter<number> = new EventEmitter<number>();
+
   resizeInProgress = false;
   moveInProgress = false;
 
@@ -94,12 +102,10 @@ export class ResizableBoxComponent implements OnChanges, OnInit, OnDestroy {
               private changeDetectorRef: ChangeDetectorRef,
               private mouseActionsService: ResizableBoxMouseActionsService,
               private workspaceAreaStoreService: WorkspaceAreaStoreService,
-              private boxRepository: BoxRepository,
               private renderer2: Renderer2) {
   }
 
   ngOnChanges(changes: SimpleChanges): void {
-
     if (changes.top || changes.left) {
       this.setPosition(this.top, this.left);
     }
@@ -191,7 +197,7 @@ export class ResizableBoxComponent implements OnChanges, OnInit, OnDestroy {
         this.mouseActionsService.mouseUp()
           .subscribe(() => {
             if (top !== this.top || left !== this.left) {
-              this.boxRepository.updatePosition(this.id, top, left);
+              this.positionChanged.emit(new RelativePosition(top, left));
             }
 
             this.moveInProgress = false;
@@ -227,7 +233,8 @@ export class ResizableBoxComponent implements OnChanges, OnInit, OnDestroy {
         this.mouseActionsService.mouseUp()
           .subscribe(() => {
             if (scale !== this.scale || rotation !== this.rotation) {
-              this.boxRepository.updateScaleAndAngle(this.id, scale, rotation);
+              this.scaleChanged.emit(scale);
+              this.rotationChanged.emit(rotation);
             }
 
             this.resizeInProgress = false;

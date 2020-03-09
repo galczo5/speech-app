@@ -1,10 +1,11 @@
 import { Injectable } from '@angular/core';
-import {fromEvent, Observable, Subject} from 'rxjs';
-import {auditTime, take, takeUntil, throttleTime} from 'rxjs/operators';
+import {fromEvent, Observable, of, Subject} from 'rxjs';
+import {auditTime, mergeMap, repeat, take, takeLast, takeUntil, throttleTime, window} from 'rxjs/operators';
 import {MouseManipulatorMode} from './mouse-manipulator-mode';
 import {RelativePosition} from '../utils/relative-position';
+import {animationFrame} from 'rxjs/internal/scheduler/animationFrame';
 
-const SCROLL_FACTOR = 0.5;
+const SCROLL_FACTOR = 0.8;
 const ZOOM_FACTOR = 0.002;
 const ROTATE_FACTOR = 0.001;
 
@@ -74,8 +75,7 @@ export class WorkspaceManipulationService {
   private wheelListener(backgroundElement: HTMLElement) {
     fromEvent(backgroundElement, 'wheel')
       .pipe(
-        throttleTime(5),
-        takeUntil(this.destroy$)
+        throttleTime(0, animationFrame)
       )
       .subscribe((e: any) => {
         if (this.mouseMode === MouseManipulatorMode.MOVE) {

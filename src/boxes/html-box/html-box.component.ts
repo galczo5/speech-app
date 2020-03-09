@@ -1,6 +1,7 @@
 import {Component, Input, OnInit} from '@angular/core';
 import {BoxComponent} from '../box-component';
 import {HtmlBoxData} from './html-box-data';
+import {BoxRepository} from '../box-repository';
 
 @Component({
   selector: 'app-html-box',
@@ -12,7 +13,10 @@ import {HtmlBoxData} from './html-box-data';
                        [scale]="scale"
                        [rotation]="rotation"
                        [width]="width"
-                       [height]="height">
+                       [height]="height"
+                       (positionChanged)="updatePosition($event)"
+                       (rotationChanged)="updateRotation($event)"
+                       (scaleChanged)="updateScale($event)">
       <div [style.width.px]="width"
            [style.height.px]="height"
            [innerHTML]="data.html">
@@ -26,8 +30,8 @@ export class HtmlBoxComponent extends BoxComponent {
   @Input()
   data: HtmlBoxData;
 
-  constructor() {
-    super();
+  constructor(boxRepository: BoxRepository) {
+    super(boxRepository);
   }
 
 }

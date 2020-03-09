@@ -1,6 +1,7 @@
 import {Component, Input, OnInit} from '@angular/core';
 import {BoxComponent} from '../box-component';
 import {LinkBoxData} from './link-box-data';
+import {BoxRepository} from '../box-repository';
 
 @Component({
   selector: 'app-link-box',
@@ -12,7 +13,10 @@ import {LinkBoxData} from './link-box-data';
                        [scale]="scale"
                        [rotation]="rotation"
                        [width]="width"
-                       [height]="height">
+                       [height]="height"
+                       (positionChanged)="updatePosition($event)"
+                       (rotationChanged)="updateRotation($event)"
+                       (scaleChanged)="updateScale($event)">
       <a [attr.data-href]="data.url"
          [style.width.px]="width"
          [style.height.px]="height"
@@ -33,8 +37,8 @@ export class LinkBoxComponent extends BoxComponent {
   @Input()
   data: LinkBoxData;
 
-  constructor() {
-    super();
+  constructor(boxRepository: BoxRepository) {
+    super(boxRepository);
   }
 
 }

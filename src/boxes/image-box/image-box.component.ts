@@ -2,6 +2,7 @@ import {Component, Input, OnInit} from '@angular/core';
 import {BoxComponent} from '../box-component';
 import {ImageBoxData} from './image-box-data';
 import {DomSanitizer, SafeUrl} from '@angular/platform-browser';
+import {BoxRepository} from '../box-repository';
 
 @Component({
   selector: 'app-image-box',
@@ -13,7 +14,10 @@ import {DomSanitizer, SafeUrl} from '@angular/platform-browser';
                        [scale]="scale"
                        [rotation]="rotation"
                        [width]="width"
-                       [height]="height">
+                       [height]="height"
+                       (positionChanged)="updatePosition($event)"
+                       (rotationChanged)="updateRotation($event)"
+                       (scaleChanged)="updateScale($event)">
       <img [src]="getSanitizedSrc()"
            [style.width.px]="width"
            [style.height.px]="height"
@@ -27,8 +31,8 @@ export class ImageBoxComponent extends BoxComponent {
   @Input()
   data: ImageBoxData;
 
-  constructor(private sanitizer: DomSanitizer) {
-    super();
+  constructor(boxRepository: BoxRepository, private sanitizer: DomSanitizer) {
+    super(boxRepository);
   }
 
   getSanitizedSrc(): SafeUrl {

@@ -113,7 +113,7 @@ export class WorkspaceAreaComponent implements OnInit, OnDestroy {
 
   onClick(y: number, x: number): void {
     if (this.typeOfBoxToAdd) {
-      this.boxRepository.create(this.typeOfBoxToAdd, y, x);
+      this.boxRepository.create(this.typeOfBoxToAdd, y, x, 1 / this.zoom, -this.rotation);
       this.addBoxService.setBoxType(null);
     } else {
       this.activeBoxService.set(null);
@@ -160,7 +160,14 @@ export class WorkspaceAreaComponent implements OnInit, OnDestroy {
     this.manipulationService.zoom()
       .pipe(takeUntil(this.destroy$))
       .subscribe(delta => {
-        const zoom = Math.max(this.zoom + delta, 0.1);
+        const MAX_ZOOM = 10;
+        const MIN_ZOOM = 0.1;
+
+        const zoom = Math.min(
+          Math.max(this.zoom + delta, MIN_ZOOM),
+          MAX_ZOOM
+        );
+
         this.storeService.setZoom(zoom);
       });
 

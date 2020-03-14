@@ -104,14 +104,14 @@ export class BoxCommonDataFormComponent {
   updateScale(event: any): void {
     this.executor$.next(() => {
       const scale = Number(event.target.value);
-      this.boxRepository.updateScaleAndAngle(this.activeBox.id, scale, this.activeBox.rotate);
+      this.boxRepository.updateScale(this.activeBox.id, scale);
     });
   }
 
   updateRotation(event: any): void {
     this.executor$.next(() => {
       const rotation = Number(event.target.value);
-      this.boxRepository.updateScaleAndAngle(this.activeBox.id, this.activeBox.scale, rotation);
+      this.boxRepository.updateAngle(this.activeBox.id, rotation);
     });
   }
 

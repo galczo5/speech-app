@@ -26,11 +26,8 @@ export class BoxRepository {
 
   constructor() {
     this.boxes = [
-      defaultTextBox('text', 0, 0, 1, 0),
-      defaultLinkBox('link', 100, 0, 1, 0),
-      defaultImageBox('image', 300, 0, 1, 0),
-      defaultHtmlBox('html', 650, 0, 1, 0),
-      defaultFrameBox('frame', 1000, 0, 1, 0)
+      defaultTextBox('text', 100, 0, 1, 0),
+      defaultImageBox('image', 450, 0, 1, 0)
     ];
 
     this.notifyChanges();

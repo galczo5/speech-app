@@ -26,8 +26,7 @@ app-workspace-area {
 
 .workspace-area {
   position: absolute;
-  transition: all .5s;
-  transition-property: width, height;
+  will-change: transform;
 }
 
 .workspace-area-directions {

@@ -8,7 +8,7 @@ export function defaultTextBox(id: string, top: number, left: number, scale: num
     top,
     left,
     width: 400,
-    height: 150,
+    height: 200,
     scale,
     rotate,
     data: {

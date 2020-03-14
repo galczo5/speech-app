@@ -1,25 +1,10 @@
-<div [style.transform]="getTransform()"
-     (click)="onClickEvent($event)"
+<div #element (click)="onClickEvent($event)"
      class="workspace-area">
-  <ng-content></ng-content>
-  <div class="workspace-area-directions border-dark">
-    <span>0x0</span>
-  </div>
-  <ng-container *ngFor="let box of boxes; trackBy: trackFn">
-    <app-workspace-box [box]="box" [activeBox]="activeBox"></app-workspace-box>
-  </ng-container>
-
-  <app-resizable-box [width]="800"
-                     [height]="600"
-                     [left]="400"
-                     [top]="300"
-                     [scale]="1"
-                     [rotation]="0"
-                     [isActive]="true"
-                     [id]="'keyframe'">
-
-    <div class="border-primary" style="border: 3px solid black; width: 800px; height: 600px;"></div>
-
-  </app-resizable-box>
-
+    <ng-content></ng-content>
+    <div class="workspace-area-directions border-dark">
+      <span>0x0</span>
+    </div>
+    <ng-container *ngFor="let box of boxes; trackBy: trackFn">
+      <app-workspace-box [box]="box" [activeBox]="activeBox"></app-workspace-box>
+    </ng-container>
 </div>

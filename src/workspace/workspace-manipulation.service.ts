@@ -1,13 +1,13 @@
 import { Injectable } from '@angular/core';
-import {fromEvent, Observable, of, Subject} from 'rxjs';
-import {auditTime, mergeMap, repeat, take, takeLast, takeUntil, throttleTime, window} from 'rxjs/operators';
+import {fromEvent, Observable, Subject} from 'rxjs';
+import {take, takeUntil, throttleTime} from 'rxjs/operators';
 import {MouseManipulatorMode} from './mouse-manipulator-mode';
 import {RelativePosition} from '../utils/relative-position';
 import {animationFrame} from 'rxjs/internal/scheduler/animationFrame';
 
 const SCROLL_FACTOR = 0.8;
-const ZOOM_FACTOR = 0.002;
-const ROTATE_FACTOR = 0.001;
+const ZOOM_FACTOR = 0.003;
+const ROTATE_FACTOR = 0.003;
 
 @Injectable({
   providedIn: 'root'
@@ -24,9 +24,7 @@ export class WorkspaceManipulationService {
   private destroy$: Subject<void> = new Subject<void>();
 
   init(document: Document,
-       backgroundElement: HTMLElement,
-       nativeElement: HTMLElement,
-       positionGetter: () => RelativePosition): void {
+       backgroundElement: HTMLElement): void {
 
     if (this.initialized) {
       throw new Error('MouseManipulatorService already initialized');
@@ -34,7 +32,6 @@ export class WorkspaceManipulationService {
 
     this.keyboardListener(document);
     this.wheelListener(backgroundElement);
-    this.mouseDownListener(backgroundElement, nativeElement, positionGetter);
   }
 
   destroy(): void {
@@ -79,37 +76,16 @@ export class WorkspaceManipulationService {
       )
       .subscribe((e: any) => {
         if (this.mouseMode === MouseManipulatorMode.MOVE) {
-          this.positionDelta$.next(new RelativePosition(e.deltaY * SCROLL_FACTOR, e.deltaX * SCROLL_FACTOR));
+          const top = Math.round(e.deltaY * SCROLL_FACTOR);
+          const left = Math.round(e.deltaX * SCROLL_FACTOR);
+          this.positionDelta$.next(new RelativePosition(top, left));
         } else if (this.mouseMode === MouseManipulatorMode.ZOOM) {
-          this.zoomDelta$.next(e.deltaY * ZOOM_FACTOR);
+          const zoom = Math.round(e.deltaY * ZOOM_FACTOR * 100) / 100;
+          this.zoomDelta$.next(zoom);
         } else if (this.mouseMode === MouseManipulatorMode.ROTATE) {
-          this.rotateDelta$.next(e.deltaY * ROTATE_FACTOR);
+          const rotation = Math.round(e.deltaY * ROTATE_FACTOR * 100) / 100;
+          this.rotateDelta$.next(rotation);
         }
       });
-  }
-
-  private mouseDownListener(backgroundElement: HTMLElement, nativeElement: HTMLElement, positionGetter: () => RelativePosition) {
-    // fromEvent(nativeElement, 'mousedown')
-    //   .pipe(takeUntil(this.destroy$))
-    //   .subscribe((downEvent: MouseEvent) => {
-    //
-    //     const startPosition = new RelativePosition(downEvent.clientY, downEvent.clientX);
-    //     const position = positionGetter();
-    //
-    //     fromEvent(backgroundElement, 'mousemove')
-    //       .pipe(
-    //         takeUntil(fromEvent(backgroundElement, 'mouseup')),
-    //         auditTime(10)
-    //       )
-    //       .subscribe((moveEvent: MouseEvent) => {
-    //         const delta = new RelativePosition(
-    //           position.top + startPosition.top - moveEvent.clientY,
-    //           position.left + startPosition.left - moveEvent.clientX
-    //         );
-    //
-    //         this.positionDelta$.next(delta);
-    //       });
-    //
-    //   });
   }
 }

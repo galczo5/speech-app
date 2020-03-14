@@ -15,7 +15,7 @@ import {DOCUMENT} from '@angular/common';
 import {RelativePosition} from '../../utils/relative-position';
 import {Subject, zip} from 'rxjs';
 import {WorkspaceAreaStoreService} from '../../workspace/workspace-area-store.service';
-import {angle, pythagorean} from '../../utils/math-utils';
+import {angle, pythagorean, rotatePoint} from '../../utils/math-utils';
 import {takeUntil} from 'rxjs/operators';
 
 @Component({
@@ -179,16 +179,10 @@ export class ResizableBoxComponent implements OnChanges, OnInit, OnDestroy {
 
         zip(distanceY$, distanceX$)
           .subscribe(([y, x]: [number, number]) => {
+            const rotatedPoint = rotatePoint(-this.workspaceRotation, { y, x });
 
-            // Use rotation matrix to calculate point after workspace rotation
-            const sin = Math.sin(-this.workspaceRotation);
-            const cos = Math.cos(-this.workspaceRotation);
-
-            const transformedX = (x * cos) - (y * sin);
-            const transformedY = (x * sin) + (y * cos);
-
-            top = originalPosition.top + (transformedY / this.workspaceZoom);
-            left = originalPosition.left + (transformedX / this.workspaceZoom);
+            top = originalPosition.top + (rotatedPoint.y / this.workspaceZoom);
+            left = originalPosition.left + (rotatedPoint.x / this.workspaceZoom);
 
             this.setPosition(top, left);
             this.changeDetectorRef.detectChanges();

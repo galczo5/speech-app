@@ -8,6 +8,8 @@ import {RelativePosition} from '../../utils/relative-position';
 import {AreaSize, AreaSizeService} from '../../workspace/area-size.service';
 import {KeyframesRepositoryService} from '../../keyframes/keyframes-repository.service';
 import {Keyframe} from '../../keyframes/keyframe';
+import {ActiveBoxService} from '../../resizable-box/active-box.service';
+import {Box} from '../../boxes/box';
 
 @Component({
   selector: 'app-sidebar',
@@ -29,6 +31,7 @@ export class SidebarComponent implements OnInit, OnDestroy {
 
   private keyframes: Array<Keyframe> = [];
   private keyframeIndex = 0;
+  private activeBox: Box;
 
   constructor(private router: Router,
               private sidebarStateService: SidebarStateService,
@@ -36,6 +39,7 @@ export class SidebarComponent implements OnInit, OnDestroy {
               private areaStoreService: WorkspaceAreaStoreService,
               private areaSizeService: AreaSizeService,
               private keyframesRepositoryService: KeyframesRepositoryService,
+              private activeBoxService: ActiveBoxService,
               private changeDetectorRef: ChangeDetectorRef) {}
 
   private url = '';
@@ -66,6 +70,10 @@ export class SidebarComponent implements OnInit, OnDestroy {
     this.keyframesRepositoryService.getKeyframes()
       .pipe(takeUntil(this.destroy$))
       .subscribe(keyframes => this.keyframes = keyframes);
+
+    this.activeBoxService.get()
+      .pipe(takeUntil(this.destroy$))
+      .subscribe(activeBox => this.activeBox = activeBox);
   }
 
   ngOnDestroy(): void {
@@ -83,52 +91,28 @@ export class SidebarComponent implements OnInit, OnDestroy {
   }
 
   centerView(): void {
+    this.areaStoreService.setZoom(1);
+    this.areaStoreService.setRotation(0);
 
-    const htmlElement = document.querySelector('.workspace-area') as HTMLElement;
-    htmlElement.style['transition'] = 'transform .2s';
-
-    setTimeout(() => {
-      this.areaStoreService.setZoom(1);
-      this.areaStoreService.setRotation(0);
-
-      const position = new RelativePosition(this.areaSize.height / 2, this.areaSize.width / 2);
-      this.areaStoreService.setPosition(position);
-
-      setTimeout(() => {
-        htmlElement.style['transition'] = '';
-      }, 600);
-    });
+    const position = new RelativePosition(this.areaSize.height / 2, this.areaSize.width / 2);
+    this.areaStoreService.setPosition(position);
   }
 
   nextKeyframe(): void {
     this.keyframeIndex = (this.keyframeIndex + 1) % this.keyframes.length;
     const frame = this.keyframes[this.keyframeIndex];
 
-    console.log(frame);
-
-    const htmlElement = document.querySelector('.workspace-area') as HTMLElement;
-    htmlElement.style['transition'] = 'transform ' + frame.transitionTime + 'ms';
-
-    setTimeout(() => {
-      this.areaStoreService.setZoom(frame.scale);
-      this.areaStoreService.setRotation(frame.rotation);
-      this.areaStoreService.setPosition(new RelativePosition(frame.top, frame.left));
-      setTimeout(() => htmlElement.style['transition'] = '', frame.transitionTime + 100);
-    });
+    this.areaStoreService.setZoom(frame.scale);
+    this.areaStoreService.setRotation(frame.rotation);
+    this.areaStoreService.setPosition(new RelativePosition(frame.top, frame.left));
   }
 
   prevKeyframe(): void {
     this.keyframeIndex = (this.keyframeIndex - 1) % this.keyframes.length;
     const frame = this.keyframes[this.keyframeIndex];
 
-    const htmlElement = document.querySelector('.workspace-area') as HTMLElement;
-    htmlElement.style['transition'] = 'transform ' + frame.transitionTime + 'ms';
-
-    setTimeout(() => {
-      this.areaStoreService.setZoom(frame.scale);
-      this.areaStoreService.setRotation(frame.rotation);
-      this.areaStoreService.setPosition(new RelativePosition(frame.top, frame.left));
-      setTimeout(() => htmlElement.style['transition'] = '', frame.transitionTime + 100);
-    });
+    this.areaStoreService.setZoom(frame.scale);
+    this.areaStoreService.setRotation(frame.rotation);
+    this.areaStoreService.setPosition(new RelativePosition(frame.top, frame.left));
   }
 }

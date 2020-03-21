@@ -1,6 +1,6 @@
 import {Injectable} from '@angular/core';
 import {fromEvent, Observable, Subject} from 'rxjs';
-import {take, takeUntil, tap, throttleTime} from 'rxjs/operators';
+import {map, take, takeUntil, tap, throttleTime} from 'rxjs/operators';
 import {MouseManipulatorMode} from './mouse-manipulator-mode';
 import {RelativePosition} from '../utils/relative-position';
 import {animationFrame} from 'rxjs/internal/scheduler/animationFrame';
@@ -22,6 +22,7 @@ export class WorkspaceManipulationService {
   private rotateDelta$: Subject<number> = new Subject<number>();
 
   private destroy$: Subject<void> = new Subject<void>();
+  private mouseDown$: Subject<Observable<RelativePosition>> = new Subject<Observable<RelativePosition>>();
 
   init(document: Document,
        backgroundElement: HTMLElement): void {
@@ -32,10 +33,15 @@ export class WorkspaceManipulationService {
 
     this.keyboardListener(document);
     this.wheelListener(backgroundElement);
+    this.mouseListener(backgroundElement);
   }
 
   destroy(): void {
     this.destroy$.next();
+  }
+
+  mouseDown(): Observable<Observable<RelativePosition>> {
+    return this.mouseDown$.asObservable();
   }
 
   position(): Observable<RelativePosition> {
@@ -48,6 +54,33 @@ export class WorkspaceManipulationService {
 
   rotate(): Observable<number> {
     return this.rotateDelta$.asObservable();
+  }
+
+  private mouseListener(backgroundElement: HTMLElement): void {
+    fromEvent(backgroundElement, 'mousedown')
+      .pipe(takeUntil(this.destroy$))
+      .subscribe((mouseDown: MouseEvent) => {
+        mouseDown.preventDefault();
+        mouseDown.stopPropagation();
+
+        const mouseMove$ = this.mouseMoveListener(backgroundElement, mouseDown);
+        this.mouseDown$.next(mouseMove$);
+      });
+  }
+
+  private mouseMoveListener(backgroundElement: HTMLElement, mouseDown: MouseEvent): Observable<RelativePosition> {
+    const mouseUp$ = fromEvent(backgroundElement, 'mouseup');
+    return fromEvent(backgroundElement, 'mousemove')
+      .pipe(
+        takeUntil(mouseUp$),
+        takeUntil(this.destroy$),
+        map((mouseMove: MouseEvent) => {
+          return new RelativePosition(
+            mouseDown.clientY - mouseMove.clientY,
+            mouseDown.clientX - mouseMove.clientX
+          );
+        })
+      );
   }
 
   private keyboardListener(document: Document): void {

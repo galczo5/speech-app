@@ -1,5 +1,5 @@
 import {ChangeDetectorRef, Component, ElementRef, Inject, Input, OnDestroy, OnInit, Renderer2, ViewChild} from '@angular/core';
-import {fromEvent, interval, Subject} from 'rxjs';
+import {fromEvent, interval, Observable, Subject} from 'rxjs';
 import {distinctUntilChanged, takeUntil} from 'rxjs/operators';
 import {DOCUMENT} from '@angular/common';
 import {RelativePosition} from '../../utils/relative-position';
@@ -69,6 +69,7 @@ export class WorkspaceAreaComponent implements OnInit, OnDestroy {
     this.clickListener();
     this.areaSizeListener();
     this.activeKeyframeListener();
+    this.mouseMoveListener();
   }
 
   ngOnDestroy(): void {
@@ -243,5 +244,18 @@ export class WorkspaceAreaComponent implements OnInit, OnDestroy {
     );
 
     this.zoom = zoom;
+  }
+
+  private mouseMoveListener(): void {
+    this.manipulationService.mouseDown()
+      .pipe(takeUntil(this.destroy$))
+      .subscribe(delta$ => {
+        const startPosition = this.position;
+        delta$.subscribe((delta: RelativePosition) => {
+          this.storeService.setPosition(
+            new RelativePosition(startPosition.y - delta.y, startPosition.x - delta.x)
+          );
+        });
+      });
   }
 }

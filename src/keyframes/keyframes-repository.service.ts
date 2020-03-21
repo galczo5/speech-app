@@ -15,9 +15,9 @@ export class KeyframesRepositoryService {
 
   create(y: number, x: number, scale: number, rotation: number): void {
     this.keyframes.push({
-      id: this.keyframes.length.toString(),
+      id: new Date().getTime().toString(),
       name: `Keyframe ${this.keyframes.length + 1}`,
-      transitionTime: 1000,
+      transitionTime: 500,
       y,
       x,
       scale,
@@ -68,12 +68,46 @@ export class KeyframesRepositoryService {
   }
 
   moveUp(id: string): void {
+    for (let i = 0; i < this.keyframes.length; i++) {
+      if (this.keyframes[i].id !== id) {
+        continue;
+      }
 
+      if (i < this.keyframes.length - 1) {
+        const frame = this.keyframes[i];
+        this.keyframes[i] = this.keyframes[i + 1];
+        this.keyframes[i + 1] = frame;
+        break;
+      }
+
+    }
+
+    this.notifyChanges();
   }
 
   moveDown(id: string): void {
+    for (let i = 0; i < this.keyframes.length; i++) {
+      if (this.keyframes[i].id !== id) {
+        continue;
+      }
 
+      if (i > 0) {
+        const frame = this.keyframes[i];
+        this.keyframes[i] = this.keyframes[i - 1];
+        this.keyframes[i - 1] = frame;
+        break;
+      }
+
+    }
+
+    this.notifyChanges();
   }
+
+  remove(id: string): void {
+    this.keyframes = this.keyframes.filter(f => f.id !== id);
+    this.notifyChanges();
+  }
+
 
   getKeyframes(): Observable<Array<Keyframe>> {
     return this.keyframes$.asObservable();

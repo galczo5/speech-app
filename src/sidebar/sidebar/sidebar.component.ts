@@ -10,6 +10,9 @@ import {KeyframesRepositoryService} from '../../keyframes/keyframes-repository.s
 import {Keyframe} from '../../keyframes/keyframe';
 import {ActiveBoxService} from '../../resizable-box/active-box.service';
 import {Box} from '../../boxes/box';
+import {TransitionService} from '../../transition/transition.service';
+import {ActiveKeyframeService} from '../../keyframes/active-keyframe.service';
+import {WorkspaceAreaTransitionService} from '../../workspace/workspace-area-transition.service';
 
 @Component({
   selector: 'app-sidebar',
@@ -40,6 +43,8 @@ export class SidebarComponent implements OnInit, OnDestroy {
               private areaSizeService: AreaSizeService,
               private keyframesRepositoryService: KeyframesRepositoryService,
               private activeBoxService: ActiveBoxService,
+              private transitionService: WorkspaceAreaTransitionService,
+              private activeKeyframeService: ActiveKeyframeService,
               private changeDetectorRef: ChangeDetectorRef) {}
 
   private url = '';
@@ -91,28 +96,22 @@ export class SidebarComponent implements OnInit, OnDestroy {
   }
 
   centerView(): void {
-    this.areaStoreService.setZoom(1);
-    this.areaStoreService.setRotation(0);
-
-    const position = new RelativePosition(this.areaSize.height / 2, this.areaSize.width / 2);
-    this.areaStoreService.setPosition(position);
+    this.transitionService.withTransition(500, () => {
+      this.areaStoreService.setZoom(1);
+      this.areaStoreService.setRotation(0);
+      this.areaStoreService.setPosition(
+        new RelativePosition(this.areaSize.height / 2, this.areaSize.width / 2)
+      );
+    });
   }
 
   nextKeyframe(): void {
     this.keyframeIndex = (this.keyframeIndex + 1) % this.keyframes.length;
-    const frame = this.keyframes[this.keyframeIndex];
-
-    this.areaStoreService.setZoom(frame.scale);
-    this.areaStoreService.setRotation(frame.rotation);
-    this.areaStoreService.setPosition(new RelativePosition(frame.top, frame.left));
+    this.activeKeyframeService.set(this.keyframes[this.keyframeIndex]);
   }
 
   prevKeyframe(): void {
     this.keyframeIndex = (this.keyframeIndex - 1) % this.keyframes.length;
-    const frame = this.keyframes[this.keyframeIndex];
-
-    this.areaStoreService.setZoom(frame.scale);
-    this.areaStoreService.setRotation(frame.rotation);
-    this.areaStoreService.setPosition(new RelativePosition(frame.top, frame.left));
+    this.activeKeyframeService.set(this.keyframes[this.keyframeIndex]);
   }
 }

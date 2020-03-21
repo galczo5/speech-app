@@ -6,7 +6,7 @@ import {RelativePosition} from '../utils/relative-position';
 import {animationFrame} from 'rxjs/internal/scheduler/animationFrame';
 
 const SCROLL_FACTOR = 0.8;
-const ZOOM_FACTOR = 0.003;
+const ZOOM_FACTOR = 0.005;
 const ROTATE_FACTOR = 0.003;
 
 @Injectable({

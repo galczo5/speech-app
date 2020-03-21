@@ -27,6 +27,7 @@ app-workspace-area {
 .workspace-area {
   position: absolute;
   will-change: transform;
+  transition: none;
 }
 
 .workspace-area-directions {

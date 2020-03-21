@@ -10,12 +10,12 @@ import {SidebarModule} from '../sidebar/sidebar.module';
   declarations: [
     AppComponent
   ],
-  imports: [
-    BrowserModule,
-    AppRoutingModule,
-    WorkspaceModule,
-    SidebarModule
-  ],
+    imports: [
+        BrowserModule,
+        AppRoutingModule,
+        WorkspaceModule,
+        SidebarModule
+    ],
   providers: [],
   bootstrap: [AppComponent]
 })

@@ -16,6 +16,7 @@ export class KeyframesRepositoryService {
   create(top: number, left: number, scale: number, rotation: number): void {
     this.keyframes.push({
       id: this.keyframes.length.toString(),
+      name: `Keyframe ${this.keyframes.length + 1}`,
       transitionTime: 1000,
       top,
       left,
@@ -26,8 +27,67 @@ export class KeyframesRepositoryService {
     this.notifyChanges();
   }
 
+  updateName(id: string, name: string): void {
+    const keyframe = this.keyframes.find(k => k.id === id);
+    this.updateKeyframe({
+      ...keyframe,
+      name
+    });
+
+    this.notifyChanges();
+  }
+
+  updateTransitionTime(id: string, transitionTime: number): void {
+    const keyframe = this.keyframes.find(k => k.id === id);
+    this.updateKeyframe({
+      ...keyframe,
+      transitionTime
+    });
+
+    this.notifyChanges();
+  }
+
+  update(id: string, top: number, left: number, scale: number, rotation: number): void {
+
+    for (let i = 0; i < this.keyframes.length; i++) {
+      if (this.keyframes[i].id !== id) {
+        continue;
+      }
+
+      this.keyframes[i] = {
+        ...this.keyframes[i],
+        top,
+        left,
+        scale,
+        rotation
+      };
+
+    }
+
+    this.notifyChanges();
+  }
+
+  moveUp(id: string): void {
+
+  }
+
+  moveDown(id: string): void {
+
+  }
+
   getKeyframes(): Observable<Array<Keyframe>> {
     return this.keyframes$.asObservable();
+  }
+
+  private updateKeyframe(keyframe: Keyframe): void {
+    for (let i = 0; i < this.keyframes.length; i++) {
+
+      if (this.keyframes[i].id !== keyframe.id) {
+        continue;
+      }
+
+      this.keyframes[i] = keyframe;
+    }
   }
 
   private notifyChanges(): void {

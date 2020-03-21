@@ -12,6 +12,7 @@ import { EmptyComponent } from './empty/empty.component';
 import { BoxCatalogItemComponent } from './box-catalog-item/box-catalog-item.component';
 import { BoxCommonDataFormComponent } from './box-common-data-form/box-common-data-form.component';
 import {BoxEditorsModule} from '../box-editors/box-editors.module';
+import { KeyframesListItemComponent } from './keyframes-list-item/keyframes-list-item.component';
 
 
 @NgModule({
@@ -25,7 +26,8 @@ import {BoxEditorsModule} from '../box-editors/box-editors.module';
     SidebarComponent,
     EmptyComponent,
     BoxCatalogItemComponent,
-    BoxCommonDataFormComponent
+    BoxCommonDataFormComponent,
+    KeyframesListItemComponent
   ],
   exports: [
     BoxEditorComponent,

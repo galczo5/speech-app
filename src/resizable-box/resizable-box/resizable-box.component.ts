@@ -26,12 +26,13 @@ import {takeUntil} from 'rxjs/operators';
   template: `
     <div #wrapper class="d-inline-block resizable-box"
          [class.border-primary]="isActive"
-         [class.rounded]="isActive"
          [class.grabbing]="moveInProgress">
 
-      <div #handle class="resizable-box-handle bg-white border-primary"
+      <div #handle class="resizable-box-handle text-white bg-primary align-items-center justify-content-center"
            [class.d-none]="!isActive"
+           [class.d-flex]="isActive"
            [class.grabbing]="resizeInProgress">
+        <i class="fas fa-undo"></i>
       </div>
 
       <div class="d-flex rounded overflow-hidden">

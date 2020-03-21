@@ -18,7 +18,7 @@ export function angle(y: number, x: number): number {
   return Math.atan2(y, x);
 }
 
-export function distance(a: Point, b: Point): Point {
+export function distanceBetweenTwoPoints(a: Point, b: Point): Point {
   return {
     y: a.y - b.y,
     x: a.x - b.x

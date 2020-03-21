@@ -10,10 +10,13 @@ import {ActiveBoxService} from '../../resizable-box/active-box.service';
 import {BoxRepository} from '../../boxes/box-repository';
 import {AddBoxService} from '../add-box.service';
 import {AreaSize, AreaSizeService} from '../area-size.service';
-import {distance, minmax, Point, Position, rotatePoint, scalePoint} from '../../utils/math-utils';
+import {distanceBetweenTwoPoints, minmax, Point, Position, rotatePoint, scalePoint} from '../../utils/math-utils';
+import {ActiveKeyframeService} from '../../keyframes/active-keyframe.service';
+import {TransitionService} from '../../transition/transition.service';
+import {WorkspaceAreaTransitionService} from '../workspace-area-transition.service';
 
-const MAX_ZOOM = 10;
-const MIN_ZOOM = 0.1;
+const MAX_ZOOM = 5;
+const MIN_ZOOM = 0.5;
 
 @Component({
   selector: 'app-workspace-area',
@@ -50,12 +53,16 @@ export class WorkspaceAreaComponent implements OnInit, OnDestroy {
               private boxRepository: BoxRepository,
               private addBoxService: AddBoxService,
               private areaSizeService: AreaSizeService,
+              private activeKeyframeService: ActiveKeyframeService,
+              private transitionService: TransitionService,
+              private workspaceAreaTransitionService: WorkspaceAreaTransitionService,
               private renderer: Renderer2,
               @Inject(DOCUMENT) private document: Document) {
     this.nativeElement = elementRef.nativeElement;
   }
 
   ngOnInit(): void {
+    this.workspaceAreaTransitionService.setWorkspaceAreaElement(this.element.nativeElement);
     this.manipulationService.init(this.document, this.workspace);
     this.storeService.setPosition(this.position);
 
@@ -102,21 +109,14 @@ export class WorkspaceAreaComponent implements OnInit, OnDestroy {
       .pipe(takeUntil(this.destroy$))
       .subscribe(areaSize => this.areaSize = areaSize);
 
-    fromEvent(this.document, 'keydown')
+    this.activeKeyframeService.get()
       .pipe(takeUntil(this.destroy$))
-      .subscribe((event: KeyboardEvent) => {
-        if (event.key === 'ArrowLeft') {
-          this.storeService.setPosition(new RelativePosition(this.position.top, this.position.left - 5));
-        }
-        if (event.key === 'ArrowRight') {
-          this.storeService.setPosition(new RelativePosition(this.position.top, this.position.left + 5));
-        }
-        if (event.key === 'ArrowUp') {
-          this.storeService.setPosition(new RelativePosition(this.position.top - 5, this.position.left));
-        }
-        if (event.key === 'ArrowDown') {
-          this.storeService.setPosition(new RelativePosition(this.position.top + 5, this.position.left));
-        }
+      .subscribe(frame => {
+        this.transitionService.withTransition(this.element.nativeElement, frame.transitionTime, () => {
+          this.storeService.setZoom(frame.scale);
+          this.storeService.setRotation(frame.rotation);
+          this.storeService.setPosition(new RelativePosition(frame.top, frame.left));
+        });
       });
   }
 
@@ -192,8 +192,12 @@ export class WorkspaceAreaComponent implements OnInit, OnDestroy {
         const center = this.getCenter();
         const point = rotatePoint(rotation - this.rotation, center, this.position.getPoint());
 
-        const diff: Point = distance(point, center);
-        this.position = new RelativePosition(this.position.top - diff.y, this.position.left - diff.x);
+        const diff: Point = distanceBetweenTwoPoints(point, center);
+
+        this.storeService.setPosition(
+          new RelativePosition(this.position.top - diff.y, this.position.left - diff.x)
+        );
+
         this.rotation = rotation;
         this.setTransform();
       });
@@ -218,13 +222,15 @@ export class WorkspaceAreaComponent implements OnInit, OnDestroy {
           return;
         }
 
-        const distanceFromCenter = distance(this.getCenter(), this.position.getPoint());
+        const distanceFromCenter = distanceBetweenTwoPoints(this.getCenter(), this.position.getPoint());
         const scaledDownDistanceFromCenter = scalePoint(distanceFromCenter, 1 / this.zoom);
         const scaledUpDistanceFromCenter = scalePoint(scaledDownDistanceFromCenter, zoomDiff);
 
-        this.position = new RelativePosition(
-          this.position.top - scaledUpDistanceFromCenter.y,
-          this.position.left - scaledUpDistanceFromCenter.x
+        this.storeService.setPosition(
+          new RelativePosition(
+            this.position.top - scaledUpDistanceFromCenter.y,
+            this.position.left - scaledUpDistanceFromCenter.x
+          )
         );
 
         this.zoom = zoom;

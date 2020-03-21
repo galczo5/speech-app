@@ -5,29 +5,36 @@ import {takeUntil} from 'rxjs/operators';
 import {Keyframe} from '../../keyframes/keyframe';
 import {WorkspaceAreaStoreService} from '../../workspace/workspace-area-store.service';
 import {RelativePosition} from '../../utils/relative-position';
+import {ActiveKeyframeService} from '../../keyframes/active-keyframe.service';
 
 @Component({
   selector: 'app-keyframes-list',
   template: `
-    <button class="btn btn-primary btn-block mb-2" (click)="addKeyframe()">
-      <i class="fas fa-plus mr-1"></i>
-      Add keyframe
-    </button>
-    <div *ngFor="let keyframe of keyframes" class="p-3 border rounded mb-2">
-      <div style="font-size: 10px" class="text-muted">
-        <span>
-          X, Y: {{ keyframe.left }}, {{ keyframe.top }}
-        </span>
-        <br>
-        <span>
-          Rotation: {{ keyframe.rotation }}
-        </span>
-        <br>
-        <span>
-          Zoom: {{ keyframe.scale }}
-        </span>
+    <div class="d-flex justify-content-between">
+      <button class="btn btn-primary" (click)="addKeyframe()">
+        <i class="fas fa-plus mr-1"></i> New
+      </button>
+      <div class="d-flex">
+        <button class="btn btn-light text-muted mr-2">
+          <i class="fas fa-trash"></i>
+        </button>
+        <div class="btn-group mr-2">
+          <button class="btn btn-light text-muted">
+            <i class="fas fa-arrow-up"></i>
+          </button>
+          <button class="btn btn-light text-muted">
+            <i class="fas fa-arrow-down"></i>
+          </button>
+        </div>
+        <button class="btn btn-light text-muted">
+          <i class="fas fa-check"></i>
+        </button>
       </div>
     </div>
+    <hr>
+    <app-keyframes-list-item *ngFor="let keyframe of keyframes; trackBy: trackFn"
+                             [keyframe]="keyframe"
+                             [isActive]="activeKeyframe && activeKeyframe.id === keyframe.id"></app-keyframes-list-item>
   `
 })
 export class KeyframesListComponent implements OnInit, OnDestroy {
@@ -38,10 +45,13 @@ export class KeyframesListComponent implements OnInit, OnDestroy {
   private workspaceRotation = 0;
   private workspaceZoom = 1;
 
+  private activeKeyframe: Keyframe;
+
   private destroy$: Subject<void> = new Subject<void>();
 
   constructor(private repositoryService: KeyframesRepositoryService,
               private areaStoreService: WorkspaceAreaStoreService,
+              private activeKeyframeService: ActiveKeyframeService,
               private changeDetectorRef: ChangeDetectorRef) {
   }
 
@@ -64,6 +74,13 @@ export class KeyframesListComponent implements OnInit, OnDestroy {
     this.areaStoreService.getZoom()
       .pipe(takeUntil(this.destroy$))
       .subscribe(zoom => this.workspaceZoom = zoom);
+
+    this.activeKeyframeService.get()
+      .pipe(takeUntil(this.destroy$))
+      .subscribe(keyframe => {
+        this.activeKeyframe = keyframe;
+        this.changeDetectorRef.detectChanges();
+      });
   }
 
   ngOnDestroy(): void {
@@ -78,6 +95,10 @@ export class KeyframesListComponent implements OnInit, OnDestroy {
       this.workspaceZoom,
       this.workspaceRotation
     );
+  }
+
+  trackFn(index: number, keyframe: Keyframe): string {
+    return keyframe.id;
   }
 
 }

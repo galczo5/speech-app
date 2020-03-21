@@ -14,7 +14,7 @@ import {DOCUMENT} from '@angular/common';
 import {RelativePosition} from '../../utils/relative-position';
 import {Subject, zip} from 'rxjs';
 import {WorkspaceAreaStoreService} from '../../workspace/workspace-area-store.service';
-import {angle, pythagorean, rotatePoint} from '../../utils/math-utils';
+import {angle, pythagorean, rotatePoint, roundRad} from '../../utils/math-utils';
 import {takeUntil} from 'rxjs/operators';
 
 @Component({
@@ -184,6 +184,9 @@ export class ResizableBoxComponent implements OnChanges, OnInit, OnDestroy {
             y = originalPosition.y + (rotatedPoint.y / this.workspaceZoom);
             x = originalPosition.x + (rotatedPoint.x / this.workspaceZoom);
 
+            y = Math.round(y);
+            x = Math.round(x);
+
             this.setPosition(y, x);
             this.changeDetectorRef.detectChanges();
           });
@@ -218,7 +221,10 @@ export class ResizableBoxComponent implements OnChanges, OnInit, OnDestroy {
             const originalSizeFromTransformOrigin = this.originalSize / 2;
 
             rotation = newAngle + this.originalAngle - this.workspaceRotation;
+            rotation = roundRad(rotation);
             scale = (distance / this.workspaceZoom) / originalSizeFromTransformOrigin;
+
+            scale = Math.round(scale * 100) / 100;
 
             this.setTransform(scale, rotation);
             this.changeDetectorRef.detectChanges();

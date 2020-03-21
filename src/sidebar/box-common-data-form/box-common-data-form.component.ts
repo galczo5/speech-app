@@ -3,6 +3,7 @@ import {Box} from '../../boxes/box';
 import {BoxRepository} from '../../boxes/box-repository';
 import {Subject} from 'rxjs';
 import {debounceTime} from 'rxjs/operators';
+import {degToRad, radToDeg} from '../../utils/math-utils';
 
 @Component({
   selector: 'app-box-common-data-form',
@@ -46,7 +47,7 @@ import {debounceTime} from 'rxjs/operators';
         <div class="col">
           <div class="form-group">
             <label for="">Rotation:</label>
-            <input class="form-control" type="text" [value]="activeBox.rotate" (keyup)="updateRotation($event)">
+            <input class="form-control" type="text" [value]="toDeg(activeBox.rotate)" (keyup)="updateRotation($event)">
           </div>
         </div>
       </div>
@@ -65,6 +66,10 @@ export class BoxCommonDataFormComponent {
     this.executor$
       .pipe(debounceTime(500))
       .subscribe(x => x());
+  }
+
+  toDeg(rad: number): number {
+    return radToDeg(rad);
   }
 
   updateName(event: any): void {
@@ -111,7 +116,7 @@ export class BoxCommonDataFormComponent {
   updateRotation(event: any): void {
     this.executor$.next(() => {
       const rotation = Number(event.target.value);
-      this.boxRepository.updateAngle(this.activeBox.id, rotation);
+      this.boxRepository.updateAngle(this.activeBox.id, degToRad(rotation));
     });
   }
 

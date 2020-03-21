@@ -10,7 +10,7 @@ import {ActiveBoxService} from '../../resizable-box/active-box.service';
 import {BoxRepository} from '../../boxes/box-repository';
 import {AddBoxService} from '../add-box.service';
 import {AreaSize, AreaSizeService} from '../area-size.service';
-import {distanceBetweenTwoPoints, minmax, Point, rotatePoint, scalePoint} from '../../utils/math-utils';
+import {distanceBetweenTwoPoints, minmax, Point, rotatePoint, roundRad, scalePoint} from '../../utils/math-utils';
 import {ActiveKeyframeService} from '../../keyframes/active-keyframe.service';
 import {TransitionService} from '../../transition/transition.service';
 import {WorkspaceAreaTransitionService} from '../workspace-area-transition.service';
@@ -188,7 +188,7 @@ export class WorkspaceAreaComponent implements OnInit, OnDestroy {
     this.manipulationService.rotate()
       .pipe(takeUntil(this.destroy$))
       .subscribe(delta => {
-        const rotation = this.rotation + delta;
+        const rotation = roundRad(this.rotation + delta);
         this.storeService.setRotation(rotation);
       });
 

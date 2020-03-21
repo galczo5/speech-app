@@ -45,9 +45,23 @@ export function rotatePoint(rotation: number, point: Point, origin: Point = { x:
   };
 }
 
-export function minmax(value: number, min: number, max: number) {
+export function minmax(value: number, min: number, max: number): number {
   return Math.max(
     Math.min(value, max),
     min
   );
+}
+
+export function degToRad(deg: number): number {
+  return deg * (Math.PI / 180);
+}
+
+export function radToDeg(rad: number): number {
+  return (rad * 180) / Math.PI;
+}
+
+export function roundRad(rad: number): number {
+  const rounded = Math.round(radToDeg(rad) * 100) / 100;
+  const deg = rounded % 360;
+  return degToRad(deg);
 }

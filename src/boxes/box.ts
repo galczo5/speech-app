@@ -19,8 +19,8 @@ interface BoxBase {
   readonly name: string;
   readonly data: BoxData;
 
-  readonly top: number;
-  readonly left: number;
+  readonly y: number;
+  readonly x: number;
   readonly width: number;
   readonly height: number;
   readonly rotate: number;

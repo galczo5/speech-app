@@ -1,9 +1,18 @@
-import { Injectable } from '@angular/core';
+import {Injectable} from '@angular/core';
 import {Observable, ReplaySubject} from 'rxjs';
+import {Point, Size} from '../utils/math-utils';
 
-export interface AreaSize {
-  width: number;
-  height: number;
+export class AreaSize implements Size {
+  constructor(public readonly height: number,
+              public readonly width: number) {
+  }
+
+  getCenter(): Point {
+    return {
+      y: this.height / 2,
+      x: this.width / 2
+    };
+  }
 }
 
 @Injectable({

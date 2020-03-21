@@ -40,12 +40,11 @@ import {ActiveKeyframeService} from '../../keyframes/active-keyframe.service';
 export class KeyframesListComponent implements OnInit, OnDestroy {
 
   keyframes: Array<Keyframe> = [];
+  activeKeyframe: Keyframe;
 
   private workspacePosition: RelativePosition;
   private workspaceRotation = 0;
   private workspaceZoom = 1;
-
-  private activeKeyframe: Keyframe;
 
   private destroy$: Subject<void> = new Subject<void>();
 
@@ -90,8 +89,8 @@ export class KeyframesListComponent implements OnInit, OnDestroy {
 
   addKeyframe(): void {
     this.repositoryService.create(
-      this.workspacePosition.top,
-      this.workspacePosition.left,
+      this.workspacePosition.y,
+      this.workspacePosition.x,
       this.workspaceZoom,
       this.workspaceRotation
     );

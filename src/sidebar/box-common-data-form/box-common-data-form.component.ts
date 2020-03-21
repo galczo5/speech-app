@@ -28,11 +28,11 @@ import {debounceTime} from 'rxjs/operators';
         <div class="row align-items-center">
           <div class="col">
             <label for="">Pos. X:</label>
-            <input class="form-control" type="text" [value]="activeBox.left" (keyup)="updateLeft($event)">
+            <input class="form-control" type="text" [value]="activeBox.x" (keyup)="updateLeft($event)">
           </div>
           <div class="col">
             <label for="">Pos. Y:</label>
-            <input class="form-control" type="text" [value]="activeBox.top" (keyup)="updateTop($event)">
+            <input class="form-control" type="text" [value]="activeBox.y" (keyup)="updateTop($event)">
           </div>
         </div>
       </div>
@@ -89,15 +89,15 @@ export class BoxCommonDataFormComponent {
 
   updateLeft(event: any): void {
     this.executor$.next(() => {
-      const left = Number(event.target.value);
-      this.boxRepository.updatePosition(this.activeBox.id, this.activeBox.top, left);
+      const x = Number(event.target.value);
+      this.boxRepository.updatePosition(this.activeBox.id, this.activeBox.y, x);
     });
   }
 
   updateTop(event: any): void {
     this.executor$.next(() => {
-      const top = Number(event.target.value);
-      this.boxRepository.updatePosition(this.activeBox.id, top, this.activeBox.left);
+      const y = Number(event.target.value);
+      this.boxRepository.updatePosition(this.activeBox.id, y, this.activeBox.x);
     });
   }
 

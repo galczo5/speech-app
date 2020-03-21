@@ -13,13 +13,13 @@ export class KeyframesRepositoryService {
   constructor() {
   }
 
-  create(top: number, left: number, scale: number, rotation: number): void {
+  create(y: number, x: number, scale: number, rotation: number): void {
     this.keyframes.push({
       id: this.keyframes.length.toString(),
       name: `Keyframe ${this.keyframes.length + 1}`,
       transitionTime: 1000,
-      top,
-      left,
+      y,
+      x,
       scale,
       rotation
     });
@@ -47,7 +47,7 @@ export class KeyframesRepositoryService {
     this.notifyChanges();
   }
 
-  update(id: string, top: number, left: number, scale: number, rotation: number): void {
+  update(id: string, y: number, x: number, scale: number, rotation: number): void {
 
     for (let i = 0; i < this.keyframes.length; i++) {
       if (this.keyframes[i].id !== id) {
@@ -56,8 +56,8 @@ export class KeyframesRepositoryService {
 
       this.keyframes[i] = {
         ...this.keyframes[i],
-        top,
-        left,
+        y,
+        x,
         scale,
         rotation
       };

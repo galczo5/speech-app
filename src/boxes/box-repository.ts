@@ -37,20 +37,20 @@ export class BoxRepository {
     return this.boxes$.asObservable();
   }
 
-  create(type: BoxType, top: number, left: number, scale: number, rotation: number): void {
+  create(type: BoxType, y: number, x: number, scale: number, rotation: number): void {
     const id = randomId();
     let box: Box;
 
     if (type === BoxType.TEXT) {
-      box = defaultTextBox(id, top, left, scale, rotation);
+      box = defaultTextBox(id, y, x, scale, rotation);
     } else if (type === BoxType.LINK) {
-      box = defaultLinkBox(id, top, left, scale, rotation);
+      box = defaultLinkBox(id, y, x, scale, rotation);
     } else if (type === BoxType.IMAGE) {
-      box = defaultImageBox(id, top, left, scale, rotation);
+      box = defaultImageBox(id, y, x, scale, rotation);
     } else if (type === BoxType.HTML) {
-      box = defaultHtmlBox(id, top, left, scale, rotation);
+      box = defaultHtmlBox(id, y, x, scale, rotation);
     } else if (type === BoxType.FRAME) {
-      box = defaultFrameBox(id, top, left, scale, rotation);
+      box = defaultFrameBox(id, y, x, scale, rotation);
     } else {
       throw new Error('unknown box type');
     }
@@ -67,12 +67,12 @@ export class BoxRepository {
     });
   }
 
-  updatePosition(id: string, top: number, left: number): void {
+  updatePosition(id: string, y: number, x: number): void {
     const box = this.findBox(id);
     this.updateBox({
       ...box,
-      top,
-      left
+      y,
+      x
     });
   }
 

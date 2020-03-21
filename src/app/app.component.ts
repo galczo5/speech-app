@@ -1,6 +1,6 @@
-import {ChangeDetectorRef, Component, HostBinding, OnDestroy, OnInit} from '@angular/core';
+import {ChangeDetectorRef, Component, ElementRef, HostBinding, OnDestroy, OnInit} from '@angular/core';
 import {SidebarStateService} from '../sidebar/sidebar-state.service';
-import {Subject} from 'rxjs';
+import {fromEvent, Subject} from 'rxjs';
 import {takeUntil} from 'rxjs/operators';
 
 @Component({
@@ -14,7 +14,8 @@ export class AppComponent implements OnInit, OnDestroy {
 
   private destroy$: Subject<void> = new Subject<void>();
 
-  constructor(private sidebarStateService: SidebarStateService,
+  constructor(private elementRef: ElementRef,
+              private sidebarStateService: SidebarStateService,
               private changeDetectorRef: ChangeDetectorRef) {
   }
 
@@ -24,6 +25,14 @@ export class AppComponent implements OnInit, OnDestroy {
       .subscribe(state => {
         this.sidebarOpen = state;
         this.changeDetectorRef.detectChanges();
+      });
+
+    fromEvent(this.elementRef.nativeElement, 'wheel')
+      .pipe(takeUntil(this.destroy$))
+      .subscribe((event: MouseEvent) => {
+        event.stopImmediatePropagation();
+        event.stopPropagation();
+        event.preventDefault();
       });
   }
 

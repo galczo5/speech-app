@@ -10,7 +10,7 @@ import {ActiveBoxService} from '../../resizable-box/active-box.service';
 import {BoxRepository} from '../../boxes/box-repository';
 import {AddBoxService} from '../add-box.service';
 import {AreaSize, AreaSizeService} from '../area-size.service';
-import {distanceBetweenTwoPoints, minmax, Point, Position, rotatePoint, scalePoint} from '../../utils/math-utils';
+import {distanceBetweenTwoPoints, minmax, Point, rotatePoint, scalePoint} from '../../utils/math-utils';
 import {ActiveKeyframeService} from '../../keyframes/active-keyframe.service';
 import {TransitionService} from '../../transition/transition.service';
 import {WorkspaceAreaTransitionService} from '../workspace-area-transition.service';
@@ -43,7 +43,7 @@ export class WorkspaceAreaComponent implements OnInit, OnDestroy {
   private readonly nativeElement: HTMLElement;
   private readonly destroy$: Subject<void> = new Subject<void>();
 
-  private areaSize: AreaSize = {width: 0, height: 0};
+  private areaSize: AreaSize = new AreaSize(0, 0);
 
   constructor(elementRef: ElementRef,
               private changeDetectorRef: ChangeDetectorRef,
@@ -54,7 +54,6 @@ export class WorkspaceAreaComponent implements OnInit, OnDestroy {
               private addBoxService: AddBoxService,
               private areaSizeService: AreaSizeService,
               private activeKeyframeService: ActiveKeyframeService,
-              private transitionService: TransitionService,
               private workspaceAreaTransitionService: WorkspaceAreaTransitionService,
               private renderer: Renderer2,
               @Inject(DOCUMENT) private document: Document) {
@@ -62,62 +61,14 @@ export class WorkspaceAreaComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
-    this.workspaceAreaTransitionService.setWorkspaceAreaElement(this.element.nativeElement);
-    this.manipulationService.init(this.document, this.workspace);
-    this.storeService.setPosition(this.position);
-
+    this.initWorkspaceArea();
     this.zoomListener();
     this.rotationListener();
     this.positionListener();
-
-    this.activeBoxService.get()
-      .pipe(takeUntil(this.destroy$))
-      .subscribe(box => {
-        this.activeBox = box;
-        this.changeDetectorRef.detectChanges();
-      });
-
-    this.boxRepository.getBoxes()
-      .pipe(takeUntil(this.destroy$))
-      .subscribe(boxes => {
-        this.boxes = boxes;
-        this.changeDetectorRef.detectChanges();
-      });
-
-    this.addBoxService.getBoxType()
-      .pipe(takeUntil(this.destroy$))
-      .subscribe(type => this.typeOfBoxToAdd = type);
-
-    fromEvent(this.nativeElement, 'click')
-      .pipe(takeUntil(this.destroy$))
-      .subscribe((event: MouseEvent) => {
-        const y = event.offsetY - this.position.top;
-        const x = event.offsetX - this.position.left;
-        this.onClick(y, x);
-      });
-
-    interval(1000)
-      .pipe(takeUntil(this.destroy$))
-      .subscribe(() => {
-        this.areaSizeService.setSize({
-          height: this.nativeElement.offsetHeight,
-          width: this.nativeElement.offsetWidth
-        });
-      });
-
-    this.areaSizeService.getSize()
-      .pipe(takeUntil(this.destroy$))
-      .subscribe(areaSize => this.areaSize = areaSize);
-
-    this.activeKeyframeService.get()
-      .pipe(takeUntil(this.destroy$))
-      .subscribe(frame => {
-        this.transitionService.withTransition(this.element.nativeElement, frame.transitionTime, () => {
-          this.storeService.setZoom(frame.scale);
-          this.storeService.setRotation(frame.rotation);
-          this.storeService.setPosition(new RelativePosition(frame.top, frame.left));
-        });
-      });
+    this.boxListener();
+    this.clickListener();
+    this.areaSizeListener();
+    this.activeKeyframeListener();
   }
 
   ngOnDestroy(): void {
@@ -127,7 +78,7 @@ export class WorkspaceAreaComponent implements OnInit, OnDestroy {
 
   getTransform(): string {
     return `
-      translate3d(${this.position.left}px ,${this.position.top}px, 0)
+      translate3d(${this.position.x}px ,${this.position.y}px, 0)
       rotate(${this.rotation}rad)
       scale(${this.zoom})
     `;
@@ -151,22 +102,77 @@ export class WorkspaceAreaComponent implements OnInit, OnDestroy {
     }
   }
 
-  trackFn(index: number, box: Box) {
+  trackFn(index: number, box: Box): string {
     return box.id;
   }
 
-  private getCenter(): Point {
-    return {
-      y: (this.areaSize.height / 2),
-      x: (this.areaSize.width / 2)
-    };
+  private initWorkspaceArea(): void {
+    this.workspaceAreaTransitionService.setWorkspaceAreaElement(this.element.nativeElement);
+    this.manipulationService.init(this.document, this.workspace);
+    this.storeService.setPosition(this.position);
+  }
+
+  private boxListener(): void {
+    this.activeBoxService.get()
+      .pipe(takeUntil(this.destroy$))
+      .subscribe(box => {
+        this.activeBox = box;
+        this.changeDetectorRef.detectChanges();
+      });
+
+    this.boxRepository.getBoxes()
+      .pipe(takeUntil(this.destroy$))
+      .subscribe(boxes => {
+        this.boxes = boxes;
+        this.changeDetectorRef.detectChanges();
+      });
+
+    this.addBoxService.getBoxType()
+      .pipe(takeUntil(this.destroy$))
+      .subscribe(type => this.typeOfBoxToAdd = type);
+  }
+
+  private activeKeyframeListener(): void {
+    this.activeKeyframeService.get()
+      .pipe(takeUntil(this.destroy$))
+      .subscribe(frame => {
+        this.workspaceAreaTransitionService.withTransition(frame.transitionTime, () => {
+          this.storeService.setZoom(frame.scale);
+          this.storeService.setRotation(frame.rotation);
+          this.storeService.setPosition(new RelativePosition(frame.y, frame.x));
+        });
+      });
+  }
+
+  private areaSizeListener(): void {
+    interval(1000)
+      .pipe(takeUntil(this.destroy$))
+      .subscribe(() => {
+        const height = this.nativeElement.offsetHeight;
+        const width = this.nativeElement.offsetWidth;
+        this.areaSizeService.setSize(new AreaSize(height, width));
+      });
+
+    this.areaSizeService.getSize()
+      .pipe(takeUntil(this.destroy$))
+      .subscribe(areaSize => this.areaSize = areaSize);
+  }
+
+  private clickListener(): void {
+    fromEvent(this.nativeElement, 'click')
+      .pipe(takeUntil(this.destroy$))
+      .subscribe((event: MouseEvent) => {
+        const y = event.offsetY - this.position.y;
+        const x = event.offsetX - this.position.x;
+        this.onClick(y, x);
+      });
   }
 
   private positionListener(): void {
     this.manipulationService.position()
       .pipe(takeUntil(this.destroy$))
       .subscribe(delta => {
-        const position = new RelativePosition(this.position.top + delta.top, this.position.left + delta.left);
+        const position = new RelativePosition(this.position.y + delta.y, this.position.x + delta.x);
         this.storeService.setPosition(position);
       });
 
@@ -189,18 +195,19 @@ export class WorkspaceAreaComponent implements OnInit, OnDestroy {
     this.storeService.getRotation()
       .pipe(takeUntil(this.destroy$))
       .subscribe(rotation => {
-        const center = this.getCenter();
-        const point = rotatePoint(rotation - this.rotation, center, this.position.getPoint());
-
-        const diff: Point = distanceBetweenTwoPoints(point, center);
-
-        this.storeService.setPosition(
-          new RelativePosition(this.position.top - diff.y, this.position.left - diff.x)
-        );
-
-        this.rotation = rotation;
+        this.calculateNewRotation(rotation);
         this.setTransform();
       });
+  }
+
+  private calculateNewRotation(rotation: number): void {
+    const center = this.areaSize.getCenter();
+    const point = rotatePoint(rotation - this.rotation, center, this.position.getPoint());
+    const diff = distanceBetweenTwoPoints(point, center);
+    const position = distanceBetweenTwoPoints(this.position.getPoint(), diff);
+
+    this.storeService.setPosition(RelativePosition.fromPoint(position));
+    this.rotation = rotation;
   }
 
   private zoomListener(): void {
@@ -218,23 +225,23 @@ export class WorkspaceAreaComponent implements OnInit, OnDestroy {
       )
       .subscribe(zoom => {
         const zoomDiff = zoom - this.zoom;
-        if (!zoomDiff) {
-          return;
-        }
-
-        const distanceFromCenter = distanceBetweenTwoPoints(this.getCenter(), this.position.getPoint());
-        const scaledDownDistanceFromCenter = scalePoint(distanceFromCenter, 1 / this.zoom);
-        const scaledUpDistanceFromCenter = scalePoint(scaledDownDistanceFromCenter, zoomDiff);
-
-        this.storeService.setPosition(
-          new RelativePosition(
-            this.position.top - scaledUpDistanceFromCenter.y,
-            this.position.left - scaledUpDistanceFromCenter.x
-          )
-        );
-
-        this.zoom = zoom;
+        this.calculateNewZoom(zoomDiff, zoom);
         this.setTransform();
       });
+  }
+
+  private calculateNewZoom(zoomDiff: number, zoom: number): void {
+    const distanceFromCenter = distanceBetweenTwoPoints(this.areaSize.getCenter(), this.position.getPoint());
+    const scaledDownDistanceFromCenter = scalePoint(distanceFromCenter, 1 / this.zoom);
+    const scaledUpDistanceFromCenter = scalePoint(scaledDownDistanceFromCenter, zoomDiff);
+
+    this.storeService.setPosition(
+      new RelativePosition(
+        this.position.y - scaledUpDistanceFromCenter.y,
+        this.position.x - scaledUpDistanceFromCenter.x
+      )
+    );
+
+    this.zoom = zoom;
   }
 }

@@ -8,8 +8,8 @@ import {BoxRepository} from '../box-repository';
   template: `
     <app-resizable-box [isActive]="isActive"
                        [id]="boxId"
-                       [top]="top"
-                       [left]="left"
+                       [y]="y"
+                       [x]="x"
                        [scale]="scale"
                        [rotation]="rotation"
                        [width]="width"

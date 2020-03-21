@@ -1,12 +1,12 @@
 import {BoxType, ImageBox } from '../box';
 
-export function defaultImageBox(id: string, top: number, left: number, scale: number, rotate: number): ImageBox {
+export function defaultImageBox(id: string, y: number, x: number, scale: number, rotate: number): ImageBox {
   return {
     id,
     name: 'Image: ' + id,
     type: BoxType.IMAGE,
-    top,
-    left,
+    y,
+    x,
     width: 400,
     height: 300,
     scale,

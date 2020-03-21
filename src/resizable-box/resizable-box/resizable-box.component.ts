@@ -1,5 +1,4 @@
 import {
-  AfterViewInit,
   ChangeDetectorRef,
   Component,
   ElementRef, EventEmitter,
@@ -67,10 +66,10 @@ export class ResizableBoxComponent implements OnChanges, OnInit, OnDestroy {
   readonly height: number;
 
   @Input()
-  readonly left: number;
+  readonly x: number;
 
   @Input()
-  readonly top: number;
+  readonly y: number;
 
   @Input()
   readonly rotation: number;
@@ -107,8 +106,8 @@ export class ResizableBoxComponent implements OnChanges, OnInit, OnDestroy {
   }
 
   ngOnChanges(changes: SimpleChanges): void {
-    if (changes.top || changes.left) {
-      this.setPosition(this.top, this.left);
+    if (changes.y || changes.x) {
+      this.setPosition(this.y, this.x);
     }
 
     if (changes.scale || changes.rotation) {
@@ -143,10 +142,10 @@ export class ResizableBoxComponent implements OnChanges, OnInit, OnDestroy {
     );
   }
 
-  private setPosition(top: number, left: number): void {
+  private setPosition(y: number, x: number): void {
     const el = this.wrapper.nativeElement;
-    this.renderer2.setStyle(el, 'top', (top - this.height / 2) + 'px');
-    this.renderer2.setStyle(el, 'left', (left - this.width / 2) + 'px');
+    this.renderer2.setStyle(el, 'top', (y - this.height / 2) + 'px');
+    this.renderer2.setStyle(el, 'left', (x - this.width / 2) + 'px');
   }
 
   private setTransform(scale: number, rotation: number): void {
@@ -170,29 +169,29 @@ export class ResizableBoxComponent implements OnChanges, OnInit, OnDestroy {
         this.moveInProgress = true;
         this.changeDetectorRef.detectChanges();
 
-        const originalPosition = new RelativePosition(this.top, this.left);
+        const originalPosition = new RelativePosition(this.y, this.x);
 
         const distanceY$ = this.mouseActionsService.distanceY(origin);
         const distanceX$ = this.mouseActionsService.distanceX(origin);
 
-        let top: number = this.top;
-        let left: number = this.left;
+        let y: number = this.y;
+        let x: number = this.x;
 
         zip(distanceY$, distanceX$)
-          .subscribe(([y, x]: [number, number]) => {
-            const rotatedPoint = rotatePoint(-this.workspaceRotation, { y, x });
+          .subscribe(([newY, newX]: [number, number]) => {
+            const rotatedPoint = rotatePoint(-this.workspaceRotation, { y: newY, x: newX });
 
-            top = originalPosition.top + (rotatedPoint.y / this.workspaceZoom);
-            left = originalPosition.left + (rotatedPoint.x / this.workspaceZoom);
+            y = originalPosition.y + (rotatedPoint.y / this.workspaceZoom);
+            x = originalPosition.x + (rotatedPoint.x / this.workspaceZoom);
 
-            this.setPosition(top, left);
+            this.setPosition(y, x);
             this.changeDetectorRef.detectChanges();
           });
 
         this.mouseActionsService.mouseUp()
           .subscribe(() => {
-            if (top !== this.top || left !== this.left) {
-              this.positionChanged.emit(new RelativePosition(top, left));
+            if (y !== this.y || x !== this.x) {
+              this.positionChanged.emit(new RelativePosition(y, x));
             }
 
             this.moveInProgress = false;

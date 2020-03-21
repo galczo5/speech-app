@@ -51,14 +51,14 @@ export class ResizableBoxMouseActionsService {
   distanceX(fromPosition: RelativePosition): Observable<number> {
     return this.position$
       .pipe(
-        map(actualPosition => actualPosition.left - fromPosition.left)
+        map(actualPosition => actualPosition.x - fromPosition.x)
       );
   }
 
   distanceY(fromPosition: RelativePosition): Observable<number> {
     return this.position$
       .pipe(
-        map(actualPosition => actualPosition.top - fromPosition.top)
+        map(actualPosition => actualPosition.y - fromPosition.y)
       );
   }
 

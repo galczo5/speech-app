@@ -9,8 +9,8 @@ import {BoxRepository} from '../box-repository';
   template: `
     <app-resizable-box [isActive]="isActive"
                        [id]="boxId"
-                       [top]="top"
-                       [left]="left"
+                       [y]="y"
+                       [x]="x"
                        [scale]="scale"
                        [rotation]="rotation"
                        [width]="width"
@@ -18,7 +18,8 @@ import {BoxRepository} from '../box-repository';
                        (positionChanged)="updatePosition($event)"
                        (rotationChanged)="updateRotation($event)"
                        (scaleChanged)="updateScale($event)">
-      <iframe style="pointer-events: none;" #frameElement [src]="safeUrl" [width]="width" [height]="height"></iframe>
+      <iframe style="pointer-events: none;" #frameElement [src]="safeUrl" [width]="width"
+              [height]="height"></iframe>
     </app-resizable-box>
   `,
   styles: []

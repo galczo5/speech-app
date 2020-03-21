@@ -1,12 +1,12 @@
 import {BoxType, LinkBox, TextBox} from '../box';
 
-export function defaultLinkBox(id: string, top: number, left: number, scale: number, rotate: number): LinkBox {
+export function defaultLinkBox(id: string, y: number, x: number, scale: number, rotate: number): LinkBox {
   return {
     id,
     name: 'Link: ' + id,
     type: BoxType.LINK,
-    top,
-    left,
+    y: y,
+    x: x,
     width: 200,
     height: 50,
     scale,

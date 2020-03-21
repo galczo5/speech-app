@@ -1,12 +1,12 @@
 import {BoxType, HtmlBox} from '../box';
 
-export function defaultHtmlBox(id: string, top: number, left: number, scale: number, rotate: number): HtmlBox {
+export function defaultHtmlBox(id: string, y: number, x: number, scale: number, rotate: number): HtmlBox {
   return {
     id,
     name: 'HTML: ' + id,
     type: BoxType.HTML,
-    top,
-    left,
+    y,
+    x,
     width: 400,
     height: 200,
     scale,

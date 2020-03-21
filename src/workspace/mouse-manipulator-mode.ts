@@ -1,5 +1,7 @@
 export enum MouseManipulatorMode {
-  MOVE,
+  VERTICAL_SCROLL,
   ZOOM,
-  ROTATE
+  ROTATE,
+  HORIZONTAL_SCROLL,
+  DEFAULT = VERTICAL_SCROLL
 }

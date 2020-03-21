@@ -11,10 +11,10 @@ export abstract class BoxComponent {
   isActive: boolean;
 
   @Input()
-  top: number;
+  y: number;
 
   @Input()
-  left: number;
+  x: number;
 
   @Input()
   width: number;
@@ -32,7 +32,7 @@ export abstract class BoxComponent {
   }
 
   updatePosition(position: RelativePosition): void {
-    this.boxRepository.updatePosition(this.boxId, position.top, position.left);
+    this.boxRepository.updatePosition(this.boxId, position.y, position.x);
   }
 
   updateRotation(rotation: number): void {

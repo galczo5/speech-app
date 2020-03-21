@@ -1,12 +1,12 @@
 import {BoxType, TextBox} from '../box';
 
-export function defaultTextBox(id: string, top: number, left: number, scale: number, rotate: number): TextBox {
+export function defaultTextBox(id: string, y: number, x: number, scale: number, rotate: number): TextBox {
   return {
     id,
     name: 'Text: ' + id,
     type: BoxType.TEXT,
-    top,
-    left,
+    y,
+    x,
     width: 400,
     height: 200,
     scale,

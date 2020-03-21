@@ -47,7 +47,7 @@ export class KeyframesListItemComponent {
   keyframe: Keyframe;
 
   @Input()
-  isActive: boolean;
+  isActive: boolean = false;
 
   constructor(private areaStoreService: WorkspaceAreaStoreService,
               private activeKeyframeService: ActiveKeyframeService,

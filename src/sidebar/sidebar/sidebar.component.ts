@@ -10,7 +10,6 @@ import {KeyframesRepositoryService} from '../../keyframes/keyframes-repository.s
 import {Keyframe} from '../../keyframes/keyframe';
 import {ActiveBoxService} from '../../resizable-box/active-box.service';
 import {Box} from '../../boxes/box';
-import {TransitionService} from '../../transition/transition.service';
 import {ActiveKeyframeService} from '../../keyframes/active-keyframe.service';
 import {WorkspaceAreaTransitionService} from '../../workspace/workspace-area-transition.service';
 

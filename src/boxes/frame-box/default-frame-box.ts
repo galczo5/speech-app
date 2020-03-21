@@ -1,12 +1,12 @@
 import {BoxType, FrameBox, HtmlBox} from '../box';
 
-export function defaultFrameBox(id: string, top: number, left: number, scale: number, rotate: number): FrameBox {
+export function defaultFrameBox(id: string, y: number, x: number, scale: number, rotate: number): FrameBox {
   return {
     id,
     name: 'Frame: ' + id,
     type: BoxType.FRAME,
-    top,
-    left,
+    y,
+    x,
     width: 400,
     height: 300,
     scale,

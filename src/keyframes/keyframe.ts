@@ -1,8 +1,8 @@
 export interface Keyframe {
   id: string;
   name: string;
-  top: number;
-  left: number;
+  y: number;
+  x: number;
   scale: number;
   rotation: number;
 

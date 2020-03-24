@@ -24,10 +24,10 @@ import {ActiveBoxService} from '../../resizable-box/active-box.service';
         <div>ID: {{ box.id }}</div>
         <div>
           <span class="mr-2">
-            X, Y: {{ rounded(box.left) }}, {{ rounded(box.y) }}
+            X, Y: {{ rounded(box.x) }}, {{ rounded(box.y) }}
           </span>
           <span>
-            W, H: {{ rounded(box.width) }}, {{ rounded(box.x) }}
+            W, H: {{ rounded(box.width) }}, {{ rounded(box.height) }}
           </span>
         </div>
       </div>

@@ -9,10 +9,10 @@ import {DocumentEditorComponent} from './document-editor/document-editor.compone
 import {SidebarComponent} from './sidebar/sidebar.component';
 import {RouterModule} from '@angular/router';
 import { EmptyComponent } from './empty/empty.component';
-import { BoxCatalogItemComponent } from './box-catalog-item/box-catalog-item.component';
-import { BoxCommonDataFormComponent } from './box-common-data-form/box-common-data-form.component';
+import { BoxCatalogItemComponent } from './box-catalog/box-catalog-item.component';
+import { BoxCommonDataFormComponent } from './box-editor/box-common-data-form.component';
 import {BoxEditorsModule} from '../box-editors/box-editors.module';
-import { KeyframesListItemComponent } from './keyframes-list-item/keyframes-list-item.component';
+import { KeyframesListItemComponent } from './keyframes-list/keyframes-list-item.component';
 
 
 @NgModule({

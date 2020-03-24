@@ -32,9 +32,11 @@ import {ActiveKeyframeService} from '../../keyframes/active-keyframe.service';
       </div>
     </div>
     <hr>
-    <app-keyframes-list-item *ngFor="let keyframe of keyframes; trackBy: trackFn"
-                             [keyframe]="keyframe"
-                             [isActive]="activeKeyframe && activeKeyframe.id === keyframe.id"></app-keyframes-list-item>
+    <ng-container *ngFor="let keyframe of keyframes; trackBy: trackFn"
+        [class.active]="activeKeyframe && keyframe.id === activeKeyframe.id">
+      <app-keyframes-list-item [keyframe]="keyframe"
+                               [isActive]="activeKeyframe && activeKeyframe.id === keyframe.id"></app-keyframes-list-item>
+    </ng-container>
   `
 })
 export class KeyframesListComponent implements OnInit, OnDestroy {

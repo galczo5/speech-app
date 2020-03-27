@@ -14,6 +14,9 @@ import {BoxRepository} from '../box-repository';
                        [rotation]="rotation"
                        [width]="width"
                        [height]="height"
+                       [zIndex]="zIndex"
+                       [highlighted]="highlighted"
+                       [hidden]="hidden"
                        (positionChanged)="updatePosition($event)"
                        (rotationChanged)="updateRotation($event)"
                        (scaleChanged)="updateScale($event)">
@@ -35,7 +38,16 @@ import {BoxRepository} from '../box-repository';
 export class LinkBoxComponent extends BoxComponent {
 
   @Input()
-  data: LinkBoxData;
+  readonly data: LinkBoxData;
+
+  @Input()
+  readonly zIndex: number;
+
+  @Input()
+  readonly highlighted: boolean;
+
+  @Input()
+  readonly hidden: boolean;
 
   constructor(boxRepository: BoxRepository) {
     super(boxRepository);

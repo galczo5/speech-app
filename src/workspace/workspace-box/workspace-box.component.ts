@@ -4,6 +4,9 @@ import {ActiveBoxService} from '../../resizable-box/active-box.service';
 import {AddBoxService} from '../add-box.service';
 import {Subject} from 'rxjs';
 import {takeUntil} from 'rxjs/operators';
+import {LayerIndexMapService} from "../../layers/layer-index-map.service";
+import {LayerVisibilityMapService} from "../../layers/layer-visibility-map.service";
+import {LayerHighlightMapService} from "../../layers/layer-highlight-map.service";
 
 @Component({
   selector: 'app-workspace-box',
@@ -18,6 +21,9 @@ import {takeUntil} from 'rxjs/operators';
                   [width]="box.width"
                   [rotation]="box.rotate"
                   [scale]="box.scale"
+                  [zIndex]="getIndex()"
+                  [highlighted]="isHighlighted()"
+                  [hidden]="!isVisible()"
                   (click)="setActiveBox(box, $event)"></app-text-box>
     <app-html-box *ngIf="box.type === 'HTML'"
                   [boxId]="box.id"
@@ -29,6 +35,9 @@ import {takeUntil} from 'rxjs/operators';
                   [width]="box.width"
                   [rotation]="box.rotate"
                   [scale]="box.scale"
+                  [zIndex]="getIndex()"
+                  [highlighted]="isHighlighted()"
+                  [hidden]="!isVisible()"
                   (click)="setActiveBox(box, $event)"></app-html-box>
     <app-image-box *ngIf="box.type === 'IMAGE'"
                    [boxId]="box.id"
@@ -40,6 +49,9 @@ import {takeUntil} from 'rxjs/operators';
                    [width]="box.width"
                    [rotation]="box.rotate"
                    [scale]="box.scale"
+                   [zIndex]="getIndex()"
+                   [highlighted]="isHighlighted()"
+                   [hidden]="!isVisible()"
                    (click)="setActiveBox(box, $event)"></app-image-box>
     <app-link-box *ngIf="box.type === 'LINK'"
                   [boxId]="box.id"
@@ -48,9 +60,13 @@ import {takeUntil} from 'rxjs/operators';
                   [y]="box.y"
                   [x]="box.x"
                   [height]="box.height"
-                  [width]="box.width"
+                  [width]="box.width"[highlighted]="isHighlighted()"
+                  [hidden]="!isVisible()"
                   [rotation]="box.rotate"
                   [scale]="box.scale"
+                  [zIndex]="getIndex()"
+                  [highlighted]="isHighlighted()"
+                  [hidden]="!isVisible()"
                   (click)="setActiveBox(box, $event)"></app-link-box>
     <app-frame-box *ngIf="box.type === 'FRAME'"
                    [boxId]="box.id"
@@ -62,6 +78,9 @@ import {takeUntil} from 'rxjs/operators';
                    [width]="box.width"
                    [rotation]="box.rotate"
                    [scale]="box.scale"
+                   [zIndex]="getIndex()"
+                   [highlighted]="isHighlighted()"
+                   [hidden]="!isVisible()"
                    (click)="setActiveBox(box, $event)"></app-frame-box>
   `,
   styles: []
@@ -78,7 +97,10 @@ export class WorkspaceBoxComponent implements OnInit, OnDestroy {
   private selectedBoxType: BoxType;
 
   constructor(private activeBoxService: ActiveBoxService,
-              private addBoxService: AddBoxService) {
+              private addBoxService: AddBoxService,
+              private indexMapService: LayerIndexMapService,
+              private visibilityMapService: LayerVisibilityMapService,
+              private highlightMapService: LayerHighlightMapService) {
   }
 
   ngOnInit(): void {
@@ -97,6 +119,18 @@ export class WorkspaceBoxComponent implements OnInit, OnDestroy {
       event.stopPropagation();
       this.activeBoxService.set(box);
     }
+  }
+
+  getIndex(): number {
+    return this.indexMapService.getIndex(this.box.layerId);
+  }
+
+  isVisible(): boolean {
+    return this.visibilityMapService.isVisible(this.box.layerId);
+  }
+
+  isHighlighted(): boolean {
+    return this.highlightMapService.isHighlighted(this.box.layerId);
   }
 
 }

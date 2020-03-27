@@ -21,6 +21,7 @@ export function defaultTextBox(id: string, y: number, x: number, scale: number, 
       // tslint:disable-next-line:max-line-length
       text: 'Lorem ipsum dolor sit amet enim. Etiam ullamcorper. Suspendisse a pellentesque dui, non felis. Maecenas malesuada elit lectus felis, malesuada ultricies. Curabitur et ligula.',
       fontSize: '24px'
-    }
+    },
+    layerId: null
   };
 }

@@ -1,9 +1,11 @@
-import {Component, Input, OnInit} from '@angular/core';
+import {ChangeDetectorRef, Component, Input, OnInit} from '@angular/core';
 import {Box} from '../../boxes/box';
 import {BoxRepository} from '../../boxes/box-repository';
 import {Subject} from 'rxjs';
-import {debounceTime} from 'rxjs/operators';
+import {debounceTime, takeUntil} from 'rxjs/operators';
 import {degToRad, radToDeg} from '../../utils/math-utils';
+import {LayersRepositoryService} from '../../layers/layers-repository.service';
+import {Layer} from '../../layers/layer';
 
 @Component({
   selector: 'app-box-common-data-form',
@@ -12,6 +14,17 @@ import {degToRad, radToDeg} from '../../utils/math-utils';
       <div class="form-group">
         <label for="">Name:</label>
         <input class="form-control" type="text" [value]="activeBox.name" (keyup)="updateName($event)">
+      </div>
+      <div class="form-group">
+        <label for="">Layer:</label>
+        <select class="form-control" (change)="updateLayer($event)">
+          <option [value]="null">---</option>
+          <option *ngFor="let layer of layers"
+                  [value]="layer.id"
+                  [selected]="layer.id === activeBox.layerId">
+            {{ layer.name }}
+          </option>
+        </select>
       </div>
       <div class="form-group">
         <div class="row align-items-center">
@@ -55,17 +68,35 @@ import {degToRad, radToDeg} from '../../utils/math-utils';
   `,
   styles: []
 })
-export class BoxCommonDataFormComponent {
+export class BoxCommonDataFormComponent implements OnInit {
 
   @Input()
   activeBox: Box;
 
-  private executor$: Subject<() => void> = new Subject<() => void>();
+  layers: Array<Layer> = [];
 
-  constructor(private boxRepository: BoxRepository) {
+  private readonly executor$: Subject<() => void> = new Subject<() => void>();
+  private readonly destroy$: Subject<void> = new Subject<void>();
+
+  constructor(private boxRepository: BoxRepository,
+              private layersRepositoryService: LayersRepositoryService,
+              private changeDetectorRef: ChangeDetectorRef) {
+  }
+
+  ngOnInit(): void {
     this.executor$
-      .pipe(debounceTime(500))
+      .pipe(
+        debounceTime(500),
+        takeUntil(this.destroy$)
+      )
       .subscribe(x => x());
+
+    this.layersRepositoryService.getLayers()
+      .pipe(takeUntil(this.destroy$))
+      .subscribe(layers => {
+        this.layers = layers;
+        this.changeDetectorRef.detectChanges();
+      });
   }
 
   toDeg(rad: number): number {
@@ -76,6 +107,10 @@ export class BoxCommonDataFormComponent {
     this.executor$.next(() => {
       this.boxRepository.updateName(this.activeBox.id, event.target.value);
     });
+  }
+
+  updateLayer(event: any): void {
+    this.boxRepository.updateLayer(this.activeBox.id, event.target.value);
   }
 
   updateWidth(event: any): void {

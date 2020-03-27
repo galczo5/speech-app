@@ -77,6 +77,15 @@ export class ResizableBoxComponent implements OnChanges, OnInit, OnDestroy {
   @Input()
   readonly scale: number;
 
+  @Input()
+  readonly zIndex: number;
+
+  @Input()
+  readonly highlighted: boolean;
+
+  @Input()
+  readonly hidden: boolean;
+
   @Output()
   readonly positionChanged: EventEmitter<RelativePosition> = new EventEmitter<RelativePosition>();
 
@@ -115,8 +124,29 @@ export class ResizableBoxComponent implements OnChanges, OnInit, OnDestroy {
     }
 
     if (changes.height || changes.width) {
-      this.originalSize = pythagorean(this.width, this.height);
+      this.originalSize = pythagorean(this.height, this.width);
       this.originalAngle = angle(this.height, this.width);
+    }
+
+    if (changes.zIndex) {
+      this.renderer2.setStyle(this.wrapper.nativeElement, 'z-index', this.zIndex);
+    }
+
+    if (changes.highlighted) {
+      if (this.highlighted) {
+        this.renderer2.addClass(this.wrapper.nativeElement, 'highlighted');
+      } else {
+        this.renderer2.removeClass(this.wrapper.nativeElement, 'highlighted');
+      }
+    }
+
+    if (changes.hidden) {
+      console.log(this.hidden)
+      if (this.hidden) {
+        this.renderer2.addClass(this.wrapper.nativeElement, 'hidden');
+      } else {
+        this.renderer2.removeClass(this.wrapper.nativeElement, 'hidden');
+      }
     }
 
   }

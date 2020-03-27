@@ -67,6 +67,14 @@ export class BoxRepository {
     });
   }
 
+  updateLayer(id: string, layerId: string): void {
+    const box = this.findBox(id);
+    this.updateBox({
+      ...box,
+      layerId
+    });
+  }
+
   updatePosition(id: string, y: number, x: number): void {
     const box = this.findBox(id);
     this.updateBox({

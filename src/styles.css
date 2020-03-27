@@ -88,12 +88,11 @@ app-sidebar .btn {
   border-radius: 0;
   width: 44px;
   height: 44px;
+  color: rgba(240, 240, 240, .9);
 }
 
-
 app-sidebar .btn.active {
-  background-color: #e2e6ea;
-  border-color: #e2e6ea;
+  background-color: rgba(0, 0, 0, .5);
 }
 
 app-sidebar .btn + .btn {
@@ -109,3 +108,13 @@ app-html-box,
 app-frame-box {
   display: contents;
 }
+
+app-resizable-box .highlighted {
+  border: 2px solid var(--warning) !important;
+  box-shadow: 0 0 5px var(--warning);
+}
+
+app-resizable-box .hidden {
+  display: none !important;
+}
+

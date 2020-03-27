@@ -14,6 +14,9 @@ import {BoxRepository} from '../box-repository';
                        [rotation]="rotation"
                        [width]="width"
                        [height]="height"
+                       [zIndex]="zIndex"
+                       [highlighted]="highlighted"
+                       [hidden]="hidden"
                        (positionChanged)="updatePosition($event)"
                        (rotationChanged)="updateRotation($event)"
                        (scaleChanged)="updateScale($event)">
@@ -28,7 +31,16 @@ import {BoxRepository} from '../box-repository';
 export class HtmlBoxComponent extends BoxComponent {
 
   @Input()
-  data: HtmlBoxData;
+  readonly data: HtmlBoxData;
+
+  @Input()
+  readonly zIndex: number;
+
+  @Input()
+  readonly highlighted: boolean;
+
+  @Input()
+  readonly hidden: boolean;
 
   constructor(boxRepository: BoxRepository) {
     super(boxRepository);

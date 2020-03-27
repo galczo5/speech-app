@@ -1,4 +1,4 @@
-import {BoxType, FrameBox, HtmlBox} from '../box';
+import {BoxType, FrameBox} from '../box';
 
 export function defaultFrameBox(id: string, y: number, x: number, scale: number, rotate: number): FrameBox {
   return {
@@ -16,6 +16,7 @@ export function defaultFrameBox(id: string, y: number, x: number, scale: number,
       attrs: [
         { name: 'allow', value: 'accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture' }
       ]
-    }
+    },
+    layerId: null
   };
 }

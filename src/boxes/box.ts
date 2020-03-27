@@ -27,6 +27,7 @@ interface BoxBase {
   readonly scale: number;
 
   readonly type: BoxType;
+  readonly layerId: string | null;
 }
 
 export interface TextBox extends BoxBase {

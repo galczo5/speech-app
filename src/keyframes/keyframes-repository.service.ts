@@ -38,33 +38,22 @@ export class KeyframesRepositoryService {
   }
 
   updateTransitionTime(id: string, transitionTime: number): void {
-    const keyframe = this.keyframes.find(k => k.id === id);
+    const keyframe = this.findKeyframe(id);
     this.updateKeyframe({
       ...keyframe,
       transitionTime
     });
-
-    this.notifyChanges();
   }
 
   update(id: string, y: number, x: number, scale: number, rotation: number): void {
-
-    for (let i = 0; i < this.keyframes.length; i++) {
-      if (this.keyframes[i].id !== id) {
-        continue;
-      }
-
-      this.keyframes[i] = {
-        ...this.keyframes[i],
-        y,
-        x,
-        scale,
-        rotation
-      };
-
-    }
-
-    this.notifyChanges();
+    const keyframe = this.findKeyframe(id);
+    this.updateKeyframe({
+      ...keyframe,
+      y,
+      x,
+      scale,
+      rotation
+    });
   }
 
   moveUp(id: string): void {
@@ -122,6 +111,10 @@ export class KeyframesRepositoryService {
 
       this.keyframes[i] = keyframe;
     }
+  }
+
+  private findKeyframe(id: string): Keyframe {
+    return this.keyframes.find(k => k.id === id);
   }
 
   private notifyChanges(): void {

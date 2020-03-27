@@ -14,6 +14,8 @@ import {distanceBetweenTwoPoints, minmax, Point, rotatePoint, roundRad, scalePoi
 import {ActiveKeyframeService} from '../../keyframes/active-keyframe.service';
 import {TransitionService} from '../../transition/transition.service';
 import {WorkspaceAreaTransitionService} from '../workspace-area-transition.service';
+import {LayersRepositoryService} from "../../layers/layers-repository.service";
+import {Layer} from "../../layers/layer";
 
 const MAX_ZOOM = 5;
 const MIN_ZOOM = 0.5;
@@ -40,6 +42,9 @@ export class WorkspaceAreaComponent implements OnInit, OnDestroy {
 
   typeOfBoxToAdd: BoxType;
 
+  layers: Layer[] = [];
+
+  private moveInProgress: boolean = true;
   private readonly nativeElement: HTMLElement;
   private readonly destroy$: Subject<void> = new Subject<void>();
 
@@ -55,6 +60,7 @@ export class WorkspaceAreaComponent implements OnInit, OnDestroy {
               private areaSizeService: AreaSizeService,
               private activeKeyframeService: ActiveKeyframeService,
               private workspaceAreaTransitionService: WorkspaceAreaTransitionService,
+              private layersRepositoryService: LayersRepositoryService,
               private renderer: Renderer2,
               @Inject(DOCUMENT) private document: Document) {
     this.nativeElement = elementRef.nativeElement;
@@ -70,6 +76,13 @@ export class WorkspaceAreaComponent implements OnInit, OnDestroy {
     this.areaSizeListener();
     this.activeKeyframeListener();
     this.mouseMoveListener();
+
+    this.layersRepositoryService.getLayers()
+      .pipe(takeUntil(this.destroy$))
+      .subscribe((layers) => {
+        this.layers = layers;
+        this.changeDetectorRef.detectChanges();
+      });
   }
 
   ngOnDestroy(): void {
@@ -98,7 +111,7 @@ export class WorkspaceAreaComponent implements OnInit, OnDestroy {
     if (this.typeOfBoxToAdd) {
       this.boxRepository.create(this.typeOfBoxToAdd, y, x, 1 / this.zoom, -this.rotation);
       this.addBoxService.setBoxType(null);
-    } else {
+    } else if (!this.moveInProgress) {
       this.activeBoxService.set(null);
     }
   }
@@ -251,10 +264,18 @@ export class WorkspaceAreaComponent implements OnInit, OnDestroy {
       .pipe(takeUntil(this.destroy$))
       .subscribe(delta$ => {
         const startPosition = this.position;
-        delta$.subscribe((delta: RelativePosition) => {
-          this.storeService.setPosition(
-            new RelativePosition(startPosition.y - delta.y, startPosition.x - delta.x)
-          );
+        this.moveInProgress = true;
+        delta$.subscribe({
+          next: (delta: RelativePosition) => {
+            const y = startPosition.y - delta.y;
+            const x = startPosition.x - delta.x;
+            this.storeService.setPosition(new RelativePosition(y, x));
+          },
+          complete: () => {
+            setTimeout(() => {
+              this.moveInProgress = false;
+            });
+          }
         });
       });
   }

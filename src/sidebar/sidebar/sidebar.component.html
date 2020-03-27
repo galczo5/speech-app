@@ -1,80 +1,86 @@
-<div class="d-flex flex-column bg-light" [style.height.%]="100">
+<div class="d-flex flex-column bg-primary" [style.height.%]="100">
   <div>
-    <div class="bg-light overflow-hidden border-bottom">
-      <button class="btn btn-light btn-block"
+    <div class="mb-4 mt-2 logo">
+      <button class="btn btn-primary btn-block">
+        <i class="fas fa-comment-alt"></i>
+      </button>
+    </div>
+
+    <div class="mb-3">
+      <button class="btn btn-primary btn-block"
               [class.active]="isActive(routes.BOX_CREATE)"
-              [class.btn-light]="!isActive(routes.BOX_CREATE)"
-              [class.text-muted]="!isActive(routes.BOX_CREATE)"
               (click)="navigate(routes.BOX_CREATE)">
         <i class="fas fa-plus"></i>
       </button>
-      <button class="btn btn-block"
+      <button class="btn btn-primary btn-block"
               [class.active]="isActive(routes.BOX_LIST)"
-              [class.btn-light]="!isActive(routes.BOX_LIST)"
-              [class.text-muted]="!isActive(routes.BOX_LIST)"
               (click)="navigate(routes.BOX_LIST)">
         <i class="fas fa-photo-video"></i>
       </button>
+      <div class="px-2">
+        <hr>
+      </div>
     </div>
 
-    <div class="bg-light overflow-hidden border-bottom">
-      <button class="btn btn-block"
+    <div class="mb-3">
+      <button class="btn btn-primary btn-block"
               [class.active]="isActive(routes.BOX_EDIT)"
-              [class.btn-light]="!isActive(routes.BOX_EDIT)"
-              [class.text-muted]="!isActive(routes.BOX_EDIT)"
               (click)="navigate(routes.BOX_EDIT)">
         <i class="fas fa-pencil-ruler"></i>
       </button>
-      <button class="btn btn-block"
+      <button class="btn btn-primary btn-block"
               [class.active]="isActive(routes.LAYERS_LIST)"
-              [class.btn-light]="!isActive(routes.LAYERS_LIST)"
-              [class.text-muted]="!isActive(routes.LAYERS_LIST)"
               (click)="navigate(routes.LAYERS_LIST)">
         <i class="fas fa-layer-group"></i>
       </button>
-      <button class="btn btn-block"
+      <button class="btn btn-primary btn-block"
               [class.active]="isActive(routes.KEYFRAMES_LIST)"
-              [class.btn-light]="!isActive(routes.KEYFRAMES_LIST)"
-              [class.text-muted]="!isActive(routes.KEYFRAMES_LIST)"
               (click)="navigate(routes.KEYFRAMES_LIST)">
         <i class="fas fa-stopwatch"></i>
       </button>
-      <button class="btn btn-block"
+      <button class="btn btn-primary btn-block"
               [class.active]="isActive(routes.DOCUMENT)"
-              [class.btn-light]="!isActive(routes.DOCUMENT)"
-              [class.text-muted]="!isActive(routes.DOCUMENT)"
               (click)="navigate(routes.DOCUMENT)">
         <i class="fas fa-file"></i>
       </button>
+      <div class="px-2">
+        <hr>
+      </div>
     </div>
 
-    <div class="bg-light overflow-hidden border-bottom">
-      <button class="btn btn-light btn-block text-muted">
+    <div class="mb-3">
+      <button class="btn btn-primary btn-block">
         <i class="fas fa-ruler-combined"></i>
       </button>
-      <button class="btn btn-light btn-block text-muted">
+      <button class="btn btn-primary btn-block">
         <i class="fas fa-mouse-pointer"></i>
       </button>
-      <button class="btn btn-light btn-block text-muted">
+      <button class="btn btn-primary btn-block">
         <i class="fas fa-hand-paper"></i>
       </button>
-      <button class="btn btn-light btn-block text-muted"
-      (click)="centerView()">
+      <button class="btn btn-primary btn-block"
+              (click)="centerView()">
         <i class="fas fa-crosshairs"></i>
       </button>
+    </div>
+    <div class="px-2">
+      <hr>
     </div>
   </div>
 
   <div class="flex-fill"></div>
 
-  <div class="bg-light border-top">
-    <button class="btn btn-block btn-light text-muted">
+  <div>
+    <div class="px-2">
+      <hr>
+    </div>
+    <button class="btn btn-primary btn-block">
       <i class="fas fa-play"></i>
     </button>
-    <button class="btn btn-block btn-light text-muted" (click)="nextKeyframe()">
+    <button class="btn btn-primary btn-block" (click)="nextKeyframe()">
       <i class="fas fa-fast-forward"></i>
     </button>
-    <button class="btn btn-block btn-light text-muted" (click)="prevKeyframe()">
+    <button class="btn btn-primary btn-block" (click)="prevKeyframe()">
       <i class="fas fa-fast-backward"></i>
     </button>
   </div>

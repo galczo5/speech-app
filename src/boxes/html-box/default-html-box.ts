@@ -21,6 +21,7 @@ export function defaultHtmlBox(id: string, y: number, x: number, scale: number, 
             <li class="list-group-item">Item 4</li>
         </ul>
       `
-    }
+    },
+    layerId: null
   };
 }

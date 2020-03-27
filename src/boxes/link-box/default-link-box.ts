@@ -20,6 +20,7 @@ export function defaultLinkBox(id: string, y: number, x: number, scale: number, 
       weight: 'normal',
       url: 'http://speach.app',
       text: 'speach.app'
-    }
+    },
+    layerId: null
   };
 }

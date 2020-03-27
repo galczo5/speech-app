@@ -1,4 +1,4 @@
-import {Component, Input, OnInit} from '@angular/core';
+import {Component, Input} from '@angular/core';
 import {BoxComponent} from '../box-component';
 import {ImageBoxData} from './image-box-data';
 import {DomSanitizer, SafeUrl} from '@angular/platform-browser';
@@ -15,6 +15,9 @@ import {BoxRepository} from '../box-repository';
                        [rotation]="rotation"
                        [width]="width"
                        [height]="height"
+                       [zIndex]="zIndex"
+                       [highlighted]="highlighted"
+                       [hidden]="hidden"
                        (positionChanged)="updatePosition($event)"
                        (rotationChanged)="updateRotation($event)"
                        (scaleChanged)="updateScale($event)">
@@ -29,7 +32,16 @@ import {BoxRepository} from '../box-repository';
 export class ImageBoxComponent extends BoxComponent {
 
   @Input()
-  data: ImageBoxData;
+  readonly data: ImageBoxData;
+
+  @Input()
+  readonly zIndex: number;
+
+  @Input()
+  readonly highlighted: boolean;
+
+  @Input()
+  readonly hidden: boolean;
 
   constructor(boxRepository: BoxRepository, private sanitizer: DomSanitizer) {
     super(boxRepository);

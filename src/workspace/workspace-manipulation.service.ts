@@ -1,6 +1,6 @@
 import {Injectable} from '@angular/core';
 import {fromEvent, Observable, Subject} from 'rxjs';
-import {map, take, takeUntil, tap, throttleTime} from 'rxjs/operators';
+import {delay, map, skip, switchMap, take, takeUntil, tap, throttleTime} from 'rxjs/operators';
 import {MouseManipulatorMode} from './mouse-manipulator-mode';
 import {RelativePosition} from '../utils/relative-position';
 import {animationFrame} from 'rxjs/internal/scheduler/animationFrame';
@@ -33,7 +33,7 @@ export class WorkspaceManipulationService {
 
     this.keyboardListener(document);
     this.wheelListener(backgroundElement);
-    this.mouseListener(backgroundElement);
+    this.mouseListener(backgroundElement, document);
   }
 
   destroy(): void {
@@ -56,20 +56,32 @@ export class WorkspaceManipulationService {
     return this.rotateDelta$.asObservable();
   }
 
-  private mouseListener(backgroundElement: HTMLElement): void {
+  private mouseListener(backgroundElement: HTMLElement, document: Document): void {
     fromEvent(backgroundElement, 'mousedown')
-      .pipe(takeUntil(this.destroy$))
+      .pipe(
+        switchMap(() => {
+          return fromEvent(backgroundElement, 'mousemove')
+            .pipe(
+              delay(100),
+              take(1),
+              takeUntil(fromEvent(document, 'mouseup'))
+            );
+        }),
+        takeUntil(this.destroy$)
+      )
       .subscribe((mouseDown: MouseEvent) => {
         mouseDown.preventDefault();
         mouseDown.stopPropagation();
 
-        const mouseMove$ = this.mouseMoveListener(backgroundElement, mouseDown);
+        const mouseMove$ = this.mouseMoveListener(backgroundElement, mouseDown, document);
         this.mouseDown$.next(mouseMove$);
       });
   }
 
-  private mouseMoveListener(backgroundElement: HTMLElement, mouseDown: MouseEvent): Observable<RelativePosition> {
-    const mouseUp$ = fromEvent(backgroundElement, 'mouseup');
+  private mouseMoveListener(backgroundElement: HTMLElement, mouseDown: MouseEvent, document: Document): Observable<RelativePosition> {
+    const mouseUp$ = fromEvent(document, 'mouseup')
+      .pipe(take(1));
+
     return fromEvent(backgroundElement, 'mousemove')
       .pipe(
         takeUntil(mouseUp$),

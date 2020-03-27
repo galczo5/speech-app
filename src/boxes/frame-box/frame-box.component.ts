@@ -15,6 +15,9 @@ import {BoxRepository} from '../box-repository';
                        [rotation]="rotation"
                        [width]="width"
                        [height]="height"
+                       [zIndex]="zIndex"
+                       [highlighted]="highlighted"
+                       [hidden]="hidden"
                        (positionChanged)="updatePosition($event)"
                        (rotationChanged)="updateRotation($event)"
                        (scaleChanged)="updateScale($event)">
@@ -27,10 +30,19 @@ import {BoxRepository} from '../box-repository';
 export class FrameBoxComponent extends BoxComponent implements OnInit {
 
   @ViewChild('frameElement', { read: ElementRef, static: true })
-  frameElement: ElementRef;
+  readonly frameElement: ElementRef;
 
   @Input()
-  data: FrameBoxData;
+  readonly data: FrameBoxData;
+
+  @Input()
+  readonly zIndex: number;
+
+  @Input()
+  readonly highlighted: boolean;
+
+  @Input()
+  readonly hidden: boolean;
 
   safeUrl: SafeUrl;
 

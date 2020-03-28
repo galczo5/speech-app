@@ -14,6 +14,7 @@ import { BoxCommonDataFormComponent } from './box-editor/box-common-data-form.co
 import {BoxEditorsModule} from '../box-editors/box-editors.module';
 import { KeyframesListItemComponent } from './keyframes-list/keyframes-list-item.component';
 import { SidebarHeaderComponent } from './sidebar-header/sidebar-header.component';
+import {TooltipModule} from "../tooltip/tooltip.module";
 
 
 @NgModule({
@@ -40,11 +41,12 @@ import { SidebarHeaderComponent } from './sidebar-header/sidebar-header.componen
     DocumentEditorComponent,
     SidebarComponent
   ],
-  imports: [
-    CommonModule,
-    RouterModule,
-    BoxEditorsModule
-  ]
+    imports: [
+        CommonModule,
+        RouterModule,
+        BoxEditorsModule,
+        TooltipModule
+    ]
 })
 export class SidebarModule {
 }

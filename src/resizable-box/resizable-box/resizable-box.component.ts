@@ -39,7 +39,7 @@ import {takeUntil} from 'rxjs/operators';
         <ng-content></ng-content>
       </div>
 
-      <div class="position-marker text-muted">
+      <div class="position-marker text-muted d-none">
         <span>+</span>
       </div>
     </div>

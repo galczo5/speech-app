@@ -35,7 +35,7 @@ export class WorkspaceAreaComponent implements OnInit, OnDestroy {
   zoom = 1;
   rotation = 0;
 
-  position: RelativePosition = new RelativePosition(0, 0);
+  position: RelativePosition = new RelativePosition(100, 300);
 
   boxes: Box[] = [];
   activeBox: Box;

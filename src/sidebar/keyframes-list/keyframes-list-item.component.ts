@@ -8,36 +8,42 @@ import {KeyframesRepositoryService} from '../../keyframes/keyframes-repository.s
 @Component({
   selector: 'app-keyframes-list-item',
   template: `
-    <div class="mb-2 border rounded p-2"
-         [class.border-primary]="isActive">
-      <div class="row align-items-center ">
-        <div class="col-auto pr-0">
-          <div class="btn-group">
-            <button class="btn btn-light text-muted"
-                    (click)="snipe()">
-              <i class="fas fa-crosshairs"></i>
-            </button>
-            <button class="btn btn-light text-muted" (click)="toggleEditMode()">
-              <i *ngIf="editMode === 'name'" class="fas fa-stopwatch"></i>
-              <i *ngIf="editMode === 'time'" class="fas fa-font"></i>
-            </button>
-          </div>
-        </div>
-        <div class="col">
-          <input type="text" class="form-control"
-                 *ngIf="editMode === 'name'"
-                 [value]="keyframe.name"
-                 (keyup)="updateName($event)">
-
-          <input type="text" class="form-control"
-                 *ngIf="editMode === 'time'"
-                 [value]="keyframe.transitionTime"
-                 (keyup)="updateTransitionTime($event)">
-
+    <div class="row align-items-center ">
+      <div class="col-auto pr-0">
+        <div class="btn-group">
+          <button style="width: 45px;" class="btn btn-light text-center" (click)="snipe()">
+            <i class="fas fa-crosshairs" [class.text-primary]="isActive"></i>
+          </button>
+          <button style="width: 45px;" class="btn btn-light text-center" (click)="toggleEditMode()">
+            <i *ngIf="editMode === 'name'"
+               [class.text-primary]="isActive"
+               class="fas fa-stopwatch"></i>
+            <i *ngIf="editMode === 'time'"
+               [class.text-primary]="isActive"
+               class="fas fa-font"></i>
+          </button>
         </div>
       </div>
-    </div>
+      <div class="col" style="position: relative;">
+        <input type="text" class="form-control"
+               *ngIf="editMode === 'name'"
+               [value]="keyframe.name"
+               [class.text-primary]="isActive"
+               (keyup)="updateName($event)">
 
+        <input type="text" class="form-control"
+               *ngIf="editMode === 'time'"
+               [value]="keyframe.transitionTime"
+               [class.text-primary]="isActive"
+               (keyup)="updateTransitionTime($event)">
+
+        <div class="d-flex align-items-center" style="position: absolute; height: 100%; top: 0; right: 25px;">
+          <i *ngIf="isActive"
+             class="fas fa-arrow-circle-left text-primary"></i>
+        </div>
+
+      </div>
+    </div>
   `
 })
 export class KeyframesListItemComponent {

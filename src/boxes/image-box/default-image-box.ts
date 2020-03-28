@@ -3,7 +3,7 @@ import {BoxType, ImageBox } from '../box';
 export function defaultImageBox(id: string, y: number, x: number, scale: number, rotate: number): ImageBox {
   return {
     id,
-    name: 'Image: ' + id,
+    name: 'Unnamed',
     type: BoxType.IMAGE,
     y,
     x,

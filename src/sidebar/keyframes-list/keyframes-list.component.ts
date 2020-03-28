@@ -10,6 +10,8 @@ import {ActiveKeyframeService} from '../../keyframes/active-keyframe.service';
 @Component({
   selector: 'app-keyframes-list',
   template: `
+    <app-sidebar-header title="Keyframes"
+                        description="List of all slides of your speech app"></app-sidebar-header>
     <div class="d-flex justify-content-between">
       <button class="btn btn-primary" (click)="addKeyframe()">
         <i class="fas fa-plus mr-1"></i> New
@@ -36,6 +38,7 @@ import {ActiveKeyframeService} from '../../keyframes/active-keyframe.service';
         [class.active]="activeKeyframe && keyframe.id === activeKeyframe.id">
       <app-keyframes-list-item [keyframe]="keyframe"
                                [isActive]="activeKeyframe && activeKeyframe.id === keyframe.id"></app-keyframes-list-item>
+      <hr>
     </ng-container>
   `
 })

@@ -3,10 +3,10 @@ import {BoxType, LinkBox, TextBox} from '../box';
 export function defaultLinkBox(id: string, y: number, x: number, scale: number, rotate: number): LinkBox {
   return {
     id,
-    name: 'Link: ' + id,
+    name: 'Unnamed',
     type: BoxType.LINK,
-    y: y,
-    x: x,
+    y,
+    x,
     width: 200,
     height: 50,
     scale,

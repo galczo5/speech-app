@@ -3,7 +3,7 @@ import {BoxType, TextBox} from '../box';
 export function defaultTextBox(id: string, y: number, x: number, scale: number, rotate: number): TextBox {
   return {
     id,
-    name: 'Text: ' + id,
+    name: 'Unnamed',
     type: BoxType.TEXT,
     y,
     x,

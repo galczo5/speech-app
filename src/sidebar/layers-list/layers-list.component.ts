@@ -7,11 +7,13 @@ import {Layer} from '../../layers/layer';
 @Component({
   selector: 'app-layers-list',
   template: `
+    <app-sidebar-header title="Manage layers"
+                        [description]="headerDescription"></app-sidebar-header>
     <div class="d-flex justify-content-between">
       <button class="btn btn-primary" (click)="addLayer()">
         <i class="fas fa-plus mr-1"></i> New
       </button>
-      <div class="d-flex">
+      <div *ngIf="!!activeLayer" class="d-flex">
         <button class="btn btn-light text-muted mr-2">
           <i class="fas fa-trash"></i>
         </button>
@@ -26,30 +28,49 @@ import {Layer} from '../../layers/layer';
       </div>
     </div>
     <hr>
-    <div *ngFor="let layer of layers" class="mb-2 border rounded p-2">
-      <div class="row align-items-center">
+    <ng-container *ngFor="let layer of layers">
+      <div class="row align-items-center" (click)="setActive(layer)">
         <div class="col-auto pr-0">
           <div class="btn-group">
-            <button class="btn btn-light text-muted" (click)="toggleVisibility(layer)">
-              <i *ngIf="!layer.visible" class="fas fa-eye"></i>
-              <i *ngIf="layer.visible" class="fas fa-eye-slash"></i>
+            <button style="width: 45px;" class="btn btn-light text-center" (click)="toggleVisibility(layer)">
+              <i *ngIf="!layer.visible"
+                 [class.text-primary]="activeLayer && activeLayer.id === layer.id"
+                 class="fas fa-eye"></i>
+              <i *ngIf="layer.visible"
+                 [class.text-primary]="activeLayer && activeLayer.id === layer.id"
+                 class="fas fa-eye-slash"></i>
             </button>
-            <button class="btn btn-light text-muted" (click)="toggleHighlight(layer)">
-              <i *ngIf="!layer.highlighted" class="fas fa-lightbulb"></i>
-              <i *ngIf="layer.highlighted" class="far fa-lightbulb"></i>
+            <button style="width: 45px;" class="btn btn-light text-center" (click)="toggleHighlight(layer)">
+              <i *ngIf="!layer.highlighted"
+                 [class.text-primary]="activeLayer && activeLayer.id === layer.id"
+                 class="fas fa-lightbulb"></i>
+              <i *ngIf="layer.highlighted"
+                 [class.text-primary]="activeLayer && activeLayer.id === layer.id"
+                 class="far fa-lightbulb"></i>
             </button>
           </div>
         </div>
         <div class="col">
-          <input type="text" class="form-control" [value]="layer.name">
+          <input type="text"
+                 class="form-control"
+                 [class.text-primary]="activeLayer && activeLayer.id === layer.id"
+                 [value]="layer.name">
         </div>
       </div>
-    </div>
+      <hr>
+    </ng-container>
   `,
   styles: []
 })
 export class LayersListComponent implements OnInit {
+
   layers: Array<Layer> = [];
+  activeLayer: Layer;
+
+  headerDescription = `
+    Layers are optional but very helpful.
+    Add some layers and get control of your content on every level.
+  `;
 
   private readonly destroy$: Subject<void> = new Subject<void>();
 
@@ -75,5 +96,10 @@ export class LayersListComponent implements OnInit {
 
   toggleHighlight(layer: Layer): void {
     this.layersRepositoryService.setHighlighted(layer.id, !layer.highlighted);
+  }
+
+  setActive(layer: Layer): void {
+    this.activeLayer = layer;
+    this.changeDetectorRef.detectChanges();
   }
 }

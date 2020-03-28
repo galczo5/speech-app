@@ -4,17 +4,15 @@ import {BoxType} from '../../boxes/box';
 @Component({
   selector: 'app-box-catalog-item',
   template: `
-    <div class="p-3 border rounded mb-2"
-         [class.border-primary]="activeType === type"
+    <div [class.border-primary]="activeType === type"
          [class.text-primary]="activeType === type"
          (click)="onClick()">
-      <h6>
-        <i class="fas {{ icon }} mr-2"
-           [class.text-secondary]="activeType !== type"
+      <p>
+        <i class="fas {{ icon }} mr-1"
+           [class.text-muted]="activeType !== type"
            [class.text-primary]="activeType === type"></i>
-        <b>{{ header }}</b>
-      </h6>
-      {{ text }}
+        {{ text }}
+      </p>
     </div>
   `,
 })

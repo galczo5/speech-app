@@ -23,8 +23,9 @@ import {takeUntil} from 'rxjs/operators';
   ],
   selector: 'app-resizable-box',
   template: `
-    <div #wrapper class="d-inline-block resizable-box"
+    <div #wrapper class="d-inline-block resizable-box rounded"
          [class.border-primary]="isActive"
+         [class.shadow]="isActive"
          [class.grabbing]="moveInProgress">
 
       <div #handle class="resizable-box-handle text-white bg-primary align-items-center justify-content-center"

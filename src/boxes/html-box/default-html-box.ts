@@ -3,7 +3,7 @@ import {BoxType, HtmlBox} from '../box';
 export function defaultHtmlBox(id: string, y: number, x: number, scale: number, rotate: number): HtmlBox {
   return {
     id,
-    name: 'HTML: ' + id,
+    name: 'Unnamed',
     type: BoxType.HTML,
     y,
     x,

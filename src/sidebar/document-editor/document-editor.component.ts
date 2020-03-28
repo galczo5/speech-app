@@ -3,6 +3,7 @@ import { Component, OnInit } from '@angular/core';
 @Component({
   selector: 'app-document-editor',
   template: `
+    <app-sidebar-header title="Edit document"></app-sidebar-header>
     <div class="form-group">
       <label for="">Document name:</label>
       <input type="text" class="form-control">

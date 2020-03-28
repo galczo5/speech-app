@@ -7,6 +7,7 @@ import {takeUntil} from 'rxjs/operators';
 @Component({
   selector: 'app-box-editor',
   template: `
+    <app-sidebar-header title="Edit selected object"></app-sidebar-header>
     <app-box-common-data-form [activeBox]="activeBox"></app-box-common-data-form>
     <app-text-box-editor *ngIf="activeBox && activeBox.type === BoxType.TEXT" [activeBox]="activeBox"></app-text-box-editor>
     <app-link-box-editor *ngIf="activeBox && activeBox.type === BoxType.LINK" [activeBox]="activeBox"></app-link-box-editor>

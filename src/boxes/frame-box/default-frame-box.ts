@@ -3,7 +3,7 @@ import {BoxType, FrameBox} from '../box';
 export function defaultFrameBox(id: string, y: number, x: number, scale: number, rotate: number): FrameBox {
   return {
     id,
-    name: 'Frame: ' + id,
+    name: 'Unnamed',
     type: BoxType.FRAME,
     y,
     x,

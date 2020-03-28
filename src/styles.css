@@ -1,12 +1,18 @@
-/* You can add global styles to this file, and also import other style files */
+:root {
+  --light-dark: #F0F1F2;
+}
+
+
 html, body {
   padding: 0;
   margin: 0;
 }
 
 * {
-  font-family: 'Open Sans';
+  font-family: 'Roboto';
   box-sizing: border-box;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
 
 app-workspace-background {
@@ -86,13 +92,17 @@ app-sidebar {
 app-sidebar .btn {
   box-shadow: none !important;
   border-radius: 0;
-  width: 44px;
-  height: 44px;
+  width: 45px;
+  height: 45px;
   color: rgba(240, 240, 240, .9);
 }
 
+app-sidebar .btn:hover {
+  color: rgba(240, 240, 240, 1);
+}
+
 app-sidebar .btn.active {
-  background-color: rgba(0, 0, 0, .5);
+  background-color: rgba(0, 0, 0, .2);
 }
 
 app-sidebar .btn + .btn {
@@ -118,3 +128,40 @@ app-resizable-box .hidden {
   display: none !important;
 }
 
+.hover-container .hover-visible {
+  display: none;
+}
+
+.hover-container:hover .hover-visible {
+  display: unset;
+}
+
+.btn-light {
+  color: #6c757d !important;
+}
+
+.form-control {
+  background-color: var(--light);
+  border: none;
+  transition: border-color 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+}
+
+.form-control:active,
+.form-control:focus {
+  box-shadow: 0 0 0 0.2rem rgba(216, 217, 219, 0.5);
+  outline: none;
+  background-color: #e2e6ea;
+}
+
+.form-control:hover {
+  background-color: #e2e6ea;
+}
+
+.form-group label {
+  font-size: 11px;
+  text-transform: uppercase;
+  font-weight: 900;
+  color: #A2A6AA;
+  padding-left: 0.75rem;
+  margin-bottom: 0.2rem;
+}

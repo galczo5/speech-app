@@ -142,7 +142,6 @@ export class ResizableBoxComponent implements OnChanges, OnInit, OnDestroy {
     }
 
     if (changes.hidden) {
-      console.log(this.hidden)
       if (this.hidden) {
         this.renderer2.addClass(this.wrapper.nativeElement, 'hidden');
       } else {

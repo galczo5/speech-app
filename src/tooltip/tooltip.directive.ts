@@ -22,6 +22,10 @@ export class TooltipDirective implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
+    if (!this.text) {
+      return;
+    }
+
     fromEvent(this.nativeElement, 'mouseenter')
       .pipe(takeUntil(this.destroy$))
       .subscribe(() => {

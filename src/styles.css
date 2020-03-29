@@ -165,3 +165,19 @@ app-resizable-box .hidden {
   padding-left: 0.75rem;
   margin-bottom: 0.2rem;
 }
+
+.modal-backdrop {
+  opacity: .5;
+}
+
+.modal.show {
+  display: block;
+}
+
+.modal-header {
+  border-bottom: none;
+}
+
+.modal-footer {
+  border-top: none;
+}

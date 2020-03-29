@@ -15,6 +15,7 @@ import {BoxEditorsModule} from '../box-editors/box-editors.module';
 import { KeyframesListItemComponent } from './keyframes-list/keyframes-list-item.component';
 import { SidebarHeaderComponent } from './sidebar-header/sidebar-header.component';
 import {TooltipModule} from "../tooltip/tooltip.module";
+import {ColorModule} from "../color/color.module";
 
 
 @NgModule({
@@ -45,7 +46,8 @@ import {TooltipModule} from "../tooltip/tooltip.module";
         CommonModule,
         RouterModule,
         BoxEditorsModule,
-        TooltipModule
+        TooltipModule,
+        ColorModule
     ]
 })
 export class SidebarModule {

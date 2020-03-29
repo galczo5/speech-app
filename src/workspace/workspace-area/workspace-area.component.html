@@ -1,7 +1,7 @@
 <div #element (click)="onClickEvent($event)"
      class="workspace-area">
     <ng-content></ng-content>
-    <div class="workspace-area-directions border-dark">
+    <div class="workspace-area-directions border-dark presentation-mode-hide">
       <span>0x0</span>
     </div>
     <ng-container *ngFor="let box of boxes; trackBy: trackFn">

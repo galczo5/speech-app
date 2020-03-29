@@ -59,12 +59,13 @@ export class WorkspaceManipulationService {
   private mouseListener(backgroundElement: HTMLElement, document: Document): void {
     fromEvent(backgroundElement, 'mousedown')
       .pipe(
-        switchMap(() => {
+        switchMap((event: MouseEvent) => {
           return fromEvent(backgroundElement, 'mousemove')
             .pipe(
-              delay(100),
+              delay(50),
               take(1),
-              takeUntil(fromEvent(document, 'mouseup'))
+              takeUntil(fromEvent(document, 'mouseup')),
+              map(() => event)
             );
         }),
         takeUntil(this.destroy$)

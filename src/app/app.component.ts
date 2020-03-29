@@ -1,7 +1,9 @@
-import {ChangeDetectorRef, Component, ElementRef, HostBinding, OnDestroy, OnInit} from '@angular/core';
+import {ChangeDetectorRef, Component, ElementRef, HostBinding, OnDestroy, OnInit, Renderer2} from '@angular/core';
 import {SidebarStateService} from '../sidebar/sidebar-state.service';
 import {fromEvent, Subject} from 'rxjs';
 import {takeUntil} from 'rxjs/operators';
+import {ShowTimeModeService} from './show-time-mode.service';
+import {PresentationModeNavigationService} from "../presentation-mode/presentation-mode-navigation.service";
 
 @Component({
   selector: 'app-root',
@@ -16,6 +18,9 @@ export class AppComponent implements OnInit, OnDestroy {
 
   constructor(private elementRef: ElementRef,
               private sidebarStateService: SidebarStateService,
+              private showTimeModeService: ShowTimeModeService,
+              private presentationModeNavigationService: PresentationModeNavigationService,
+              private renderer: Renderer2,
               private changeDetectorRef: ChangeDetectorRef) {
   }
 
@@ -25,6 +30,18 @@ export class AppComponent implements OnInit, OnDestroy {
       .subscribe(state => {
         this.sidebarOpen = state;
         this.changeDetectorRef.detectChanges();
+      });
+
+    this.showTimeModeService.isItShowTime()
+      .pipe(takeUntil(this.destroy$))
+      .subscribe(isItShowTime => {
+        if (isItShowTime) {
+          this.renderer.addClass(this.elementRef.nativeElement, 'presentation-mode');
+          this.presentationModeNavigationService.open();
+        } else {
+          this.renderer.removeClass(this.elementRef.nativeElement, 'presentation-mode');
+          this.presentationModeNavigationService.close();
+        }
       });
 
     fromEvent(this.elementRef.nativeElement, 'wheel')

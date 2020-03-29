@@ -38,21 +38,15 @@ export class TooltipDirective implements OnInit, OnDestroy {
   }
 
   private hideTooltip(): void {
-    timer(500)
-      .pipe(takeUntil(this.destroy$))
-      .subscribe(() => {
-        this.renderer.removeAttribute(this.nativeElement, 'aria-label');
-        this.renderer.removeAttribute(this.nativeElement, 'data-balloon-pos');
-      });
+    this.renderer.removeAttribute(this.nativeElement, 'aria-label');
+    this.renderer.removeAttribute(this.nativeElement, 'data-balloon-visible', '');
+    this.renderer.removeAttribute(this.nativeElement, 'data-balloon-pos');
   }
 
   private showTooltip(): void {
-    timer(500)
-      .pipe(takeUntil(this.destroy$))
-      .subscribe(() => {
-        this.renderer.setAttribute(this.nativeElement, 'aria-label', this.text);
-        this.renderer.setAttribute(this.nativeElement, 'data-balloon-pos', this.position);
-      });
+    this.renderer.setAttribute(this.nativeElement, 'aria-label', this.text);
+    this.renderer.setAttribute(this.nativeElement, 'data-balloon-visible', '');
+    this.renderer.setAttribute(this.nativeElement, 'data-balloon-pos', this.position);
   }
 
   ngOnDestroy(): void {

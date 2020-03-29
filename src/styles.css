@@ -2,7 +2,6 @@
   --light-dark: #F0F1F2;
 }
 
-
 html, body {
   padding: 0;
   margin: 0;
@@ -65,8 +64,8 @@ app-root {
   display: grid;
   width: 100vw;
   height: 100vh;
-  grid-template-columns: auto 1fr;
-  grid-template-rows: auto 1fr;
+  grid-template-columns: auto auto 1fr;
+  grid-template-rows: 1fr;
 }
 
 .toolbar {
@@ -87,14 +86,21 @@ app-root {
   overflow-x: hidden;
 
   transition-delay: .1s;
-  transition: margin-left .3s ease-in-out;
+  transition: all .3s ease-in-out;
+  transition-property: margin-left, opacity;
 
-  width: 400px;
-  margin-left: -400px;
+  width: 350px;
+  margin-left: -350px;
 }
 
 app-sidebar {
   height: 100%;
+}
+
+app-sidebar > div {
+  transition: all .5s;
+  transition-property: margin-left, opacity;
+  transition-delay: .2s;
 }
 
 app-sidebar .btn {
@@ -174,10 +180,6 @@ app-resizable-box .hidden {
   margin-bottom: 0.2rem;
 }
 
-.modal-backdrop {
-  opacity: .5;
-}
-
 .modal.show {
   display: block;
 }
@@ -192,4 +194,44 @@ app-resizable-box .hidden {
 
 app-color-picker .form-control {
   background-color: var(--light) !important;
+}
+
+.test {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: black;
+  z-index: 100;
+}
+
+.presentation-mode {
+  pointer-events: none;
+}
+
+.presentation-mode .presentation-mode-hide {
+  display: none;
+}
+
+.presentation-mode app-sidebar > div {
+  opacity: 0;
+  margin-left: -45px;
+}
+
+.presentation-mode .toolbar-content {
+  opacity: 0;
+  margin-left: -350px;
+}
+
+app-presentation-mode-navigation {
+  position: fixed;
+  bottom: 40px;
+  right: 50px;
+  opacity: .2;
+  transition: opacity .2s;
+}
+
+app-presentation-mode-navigation:hover {
+  opacity: 1;
 }

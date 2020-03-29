@@ -12,6 +12,7 @@ import {ActiveBoxService} from '../../resizable-box/active-box.service';
 import {Box} from '../../boxes/box';
 import {ActiveKeyframeService} from '../../keyframes/active-keyframe.service';
 import {WorkspaceAreaTransitionService} from '../../workspace/workspace-area-transition.service';
+import {ShowTimeModeService} from '../../app/show-time-mode.service';
 
 @Component({
   selector: 'app-sidebar',
@@ -44,6 +45,7 @@ export class SidebarComponent implements OnInit, OnDestroy {
               private activeBoxService: ActiveBoxService,
               private transitionService: WorkspaceAreaTransitionService,
               private activeKeyframeService: ActiveKeyframeService,
+              private showTimeModeService: ShowTimeModeService,
               private changeDetectorRef: ChangeDetectorRef) {}
 
   private url = '';
@@ -114,5 +116,9 @@ export class SidebarComponent implements OnInit, OnDestroy {
   prevKeyframe(): void {
     this.keyframeIndex = (this.keyframeIndex - 1) % this.keyframes.length;
     this.activeKeyframeService.set(this.keyframes[this.keyframeIndex]);
+  }
+
+  startShow(): void {
+    this.showTimeModeService.itsShowTime();
   }
 }

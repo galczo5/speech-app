@@ -6,8 +6,9 @@ import {Component, Input, OnInit} from '@angular/core';
     <div [style.width.px]="getSize()"
          [style.height.px]="getSize()"
          [style.background]="color"
+         [class.shadow-sm]="shadow"
          [appTooltip]="name"
-         class="d-flex align-items-center justify-content-center rounded border shadow-sm">
+         class="d-flex align-items-center justify-content-center rounded border">
       <ng-content></ng-content>
     </div>
   `,
@@ -24,13 +25,16 @@ export class ColorBoxComponent {
   @Input()
   size: 'sm' | 'lg' | '' = '';
 
+  @Input()
+  shadow: boolean = true;
+
   getSize(): number {
     if (!this.size) {
       return 60;
     }
 
     if (this.size === 'sm') {
-      return 36;
+      return 38;
     }
 
     if (this.size === 'lg') {

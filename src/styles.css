@@ -181,3 +181,7 @@ app-resizable-box .hidden {
 .modal-footer {
   border-top: none;
 }
+
+app-color-picker .form-control {
+  background-color: var(--light) !important;
+}

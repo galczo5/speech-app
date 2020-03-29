@@ -17,7 +17,7 @@ import {Color} from '../../color/color';
     </div>
     <div class="form-group">
       <label for="">Background:</label>
-      <input type="text" class="form-control">
+      <app-color-picker [color]="background" (colorPicked)="setBackground($event)"></app-color-picker>
     </div>
     <div class="d-flex my-3 mt-5 flex-wrap">
       <app-color-box size="sm" class="mr-1 mb-1" (click)="openColorManagementModal()">
@@ -35,6 +35,7 @@ import {Color} from '../../color/color';
 export class DocumentEditorComponent implements OnInit {
 
   colors: Array<Color> = [];
+  background: Color;
 
   constructor(private colorModalService: ColorModalService,
               private colorRepositoryService: ColorRepositoryService,
@@ -45,8 +46,19 @@ export class DocumentEditorComponent implements OnInit {
       .pipe()
       .subscribe(colors => {
         this.colors = colors;
+
+        // TODO
+        if (!this.background) {
+          this.background = this.colors[0];
+        }
+
         this.changeDetectorRef.detectChanges();
       });
+  }
+
+  setBackground(color: Color): void {
+    this.background = color;
+    this.changeDetectorRef.detectChanges();
   }
 
   openColorManagementModal(): void {

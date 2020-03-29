@@ -1,7 +1,7 @@
-import {ChangeDetectorRef, Component, OnInit, ViewChild} from '@angular/core';
+import {ChangeDetectorRef, Component, OnInit} from '@angular/core';
 import {Color} from '../color';
-import {ColorModalService} from "../color-modal.service";
-import {ColorRepositoryService} from "../color-repository.service";
+import {ColorModalService} from '../color-modal.service';
+import {ColorRepositoryService} from '../color-repository.service';
 
 @Component({
   selector: 'app-color-modal',
@@ -25,9 +25,7 @@ import {ColorRepositoryService} from "../color-repository.service";
           <div *ngIf="selectedColor">
             <div class="row align-items-center">
               <div class="col-auto">
-                <app-color-box [color]="newValue || selectedColor.value"
-                               size="lg">
-                </app-color-box>
+                <app-color-box [color]="newValue || selectedColor.value" size="lg"></app-color-box>
               </div>
               <div class="col">
                 <div class="form-group">
@@ -47,7 +45,9 @@ import {ColorRepositoryService} from "../color-repository.service";
             <button class="btn btn-link" (click)="close()">Close</button>
           </ng-container>
           <ng-container *ngIf="selectedColor">
-            <button class="btn btn-success">Use this color</button>
+            <button *ngIf="pickEnabled()"
+                    class="btn btn-success"
+                    (click)="pick()">Use this color</button>
             <button class="btn btn-primary" (click)="saveChanges()">Save changes</button>
             <button class="btn btn-link" (click)="setSelectedColor(null)">Cancel</button>
           </ng-container>
@@ -114,6 +114,15 @@ export class ColorModalComponent implements OnInit {
   setNewValue(event: any): void {
     this.newValue = event.target.value;
     this.changeDetectorRef.detectChanges();
+  }
+
+  pick(): void {
+    this.colorModalService.pick(this.selectedColor);
+    this.changeDetectorRef.detectChanges();
+  }
+
+  pickEnabled(): boolean {
+    return this.colorModalService.pickEnabled() && !!this.selectedColor.id;
   }
 
   close(): void {

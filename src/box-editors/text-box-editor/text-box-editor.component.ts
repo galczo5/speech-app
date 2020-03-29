@@ -2,6 +2,8 @@ import {Component, Input} from '@angular/core';
 import {TextBox} from '../../boxes/box';
 import {BoxRepository} from '../../boxes/box-repository';
 import {TextBoxData} from '../../boxes/text-box/text-box-data';
+import {Color} from '../../color/color';
+import {ColorMapService} from '../../color/color-map.service';
 
 @Component({
   selector: 'app-text-box-editor',
@@ -52,11 +54,11 @@ import {TextBoxData} from '../../boxes/text-box/text-box-data';
       <div class="row">
         <div class="col">
           <label for="">Color:</label>
-          <input type="text" class="form-control" (keyup)="updateColor($event)" [value]="activeBox.data.color">
+          <app-color-picker [color]="getColor(activeBox.data.colorId)" (colorPicked)="updateColor($event)"></app-color-picker>
         </div>
         <div class="col">
           <label for="">Background:</label>
-          <input type="text" class="form-control" (keyup)="updateBackground($event)" [value]="activeBox.data.background">
+          <app-color-picker [color]="getColor(activeBox.data.backgroundColorId)" (colorPicked)="updateBackground($event)"></app-color-picker>
         </div>
       </div>
     </div>
@@ -67,7 +69,8 @@ export class TextBoxEditorComponent {
   @Input()
   activeBox: TextBox;
 
-  constructor(private boxRepository: BoxRepository) {
+  constructor(private boxRepository: BoxRepository,
+              private colorMapService: ColorMapService) {
   }
 
   updateText(event: any): void {
@@ -112,18 +115,22 @@ export class TextBoxEditorComponent {
     });
   }
 
-  updateColor(event: any): void {
+  updateColor(color: Color): void {
     this.boxRepository.updateData<TextBoxData>(this.activeBox.id, this.activeBox.type, {
       ...this.activeBox.data,
-      color: event.target.value
+      colorId: color.id
     });
   }
 
-  updateBackground(event: any): void {
+  updateBackground(color: Color): void {
     this.boxRepository.updateData<TextBoxData>(this.activeBox.id, this.activeBox.type, {
       ...this.activeBox.data,
-      background: event.target.value
+      backgroundColorId: color.id
     });
+  }
+
+  getColor(id: string): Color {
+    return this.colorMapService.getColor(id);
   }
 
 }

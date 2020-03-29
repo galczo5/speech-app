@@ -5,8 +5,8 @@ export interface TextBoxData {
   align: 'left' | 'right' | 'center';
   weight: 'normal' | 'bold';
   style: 'italic' | 'normal';
-  color: string;
-  background: string;
+  colorId: string;
+  backgroundColorId: string;
   padding: string;
 
 }

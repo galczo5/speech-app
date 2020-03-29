@@ -2,6 +2,8 @@ import {Component, Input} from '@angular/core';
 import {BoxComponent} from '../box-component';
 import {TextBoxData} from './text-box-data';
 import {BoxRepository} from '../box-repository';
+import {ColorMapService} from '../../color/color-map.service';
+import {Color} from '../../color/color';
 
 @Component({
   selector: 'app-text-box',
@@ -25,8 +27,8 @@ import {BoxRepository} from '../box-repository';
            [style.fontSize]="data.fontSize"
            [style.fontStyle]="data.style"
            [style.fontWeight]="data.weight"
-           [style.color]="data.color"
-           [style.background]="data.background"
+           [style.color]="getColorValue(data.colorId)"
+           [style.background]="getColorValue(data.backgroundColorId)"
            [style.textAlign]="data.align"
            [style.padding]="data.padding">
         {{ data.text }}
@@ -49,8 +51,14 @@ export class TextBoxComponent extends BoxComponent {
   @Input()
   readonly hidden: boolean;
 
-  constructor(boxRepository: BoxRepository) {
+  constructor(boxRepository: BoxRepository,
+              private colorMapService: ColorMapService) {
     super(boxRepository);
+  }
+
+  getColorValue(id: string): string {
+    const color = this.colorMapService.getColor(id);
+    return color && color.value;
   }
 
 }

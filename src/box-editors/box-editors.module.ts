@@ -5,6 +5,7 @@ import { TextBoxEditorComponent } from './text-box-editor/text-box-editor.compon
 import { ImageBoxEditorComponent } from './image-box-editor/image-box-editor.component';
 import { LinkBoxEditorComponent } from './link-box-editor/link-box-editor.component';
 import { HtmlBoxEditorComponent } from './html-box-editor/html-box-editor.component';
+import {ColorModule} from '../color/color.module';
 
 
 
@@ -17,8 +18,9 @@ import { HtmlBoxEditorComponent } from './html-box-editor/html-box-editor.compon
     HtmlBoxEditorComponent,
     FrameBoxEditorComponent
   ],
-  imports: [
-    CommonModule
-  ]
+    imports: [
+        CommonModule,
+        ColorModule
+    ]
 })
 export class BoxEditorsModule { }

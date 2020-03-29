@@ -7,12 +7,11 @@ import {takeUntil} from 'rxjs/operators';
 @Component({
   selector: 'app-color-picker',
   template: `
-    <div *ngIf="color" class="row">
+    <div *ngIf="color" class="row" (click)="openModal()">
       <div class="col pr-0">
         <input class="form-control"
                readonly
-               [value]="color && color.name"
-               (click)="openModal()">
+               [value]="color && color.name">
       </div>
       <div class="col-auto pl-1">
         <app-color-box [color]="color.value" [shadow]="false" size="sm"></app-color-box>

@@ -10,7 +10,7 @@ import {ActiveBoxService} from '../../resizable-box/active-box.service';
   template: `
     <app-sidebar-header title="Find content"
                         description="Find and navigate to existing content">
-      <div *ngIf="boxes.length" class="form-group">
+      <div *ngIf="boxes.length" class="form-group mt-3">
         <input type="text" placeholder="Search..." class="form-control" (keyup)="changeFilter($event)">
       </div>
     </app-sidebar-header>

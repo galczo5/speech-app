@@ -69,20 +69,28 @@ app-root {
   grid-template-rows: auto 1fr;
 }
 
-.toolbar-open {
-  width: 400px;
-}
-
 .toolbar {
   display: grid;
   grid-template-columns: auto 1fr;
   height: 100%;
-  overflow: auto;
+  overflow-y: auto;
+  overflow-x: hidden;
+}
+
+.toolbar-open .toolbar-content {
+  margin-left: 0;
 }
 
 .toolbar-content {
   height: 100%;
-  overflow: auto;
+  overflow-y: auto;
+  overflow-x: hidden;
+
+  transition-delay: .1s;
+  transition: margin-left .3s ease-in-out;
+
+  width: 400px;
+  margin-left: -400px;
 }
 
 app-sidebar {

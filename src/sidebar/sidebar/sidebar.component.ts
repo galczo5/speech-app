@@ -47,6 +47,7 @@ export class SidebarComponent implements OnInit, OnDestroy {
               private changeDetectorRef: ChangeDetectorRef) {}
 
   private url = '';
+  private sidebarOpen: boolean = false;
 
   ngOnInit(): void {
 
@@ -55,11 +56,11 @@ export class SidebarComponent implements OnInit, OnDestroy {
       .subscribe((event: NavigationEnd) => {
         this.url = event.url;
 
-        const sidebarOpen = Object.keys(this.routes)
+        this.sidebarOpen = Object.keys(this.routes)
           .map(key => this.routes[key])
           .some(route => this.isActive(route));
 
-        this.sidebarStateService.set(sidebarOpen);
+        this.sidebarStateService.set(this.sidebarOpen);
         this.changeDetectorRef.detectChanges();
       });
 
@@ -90,8 +91,9 @@ export class SidebarComponent implements OnInit, OnDestroy {
   }
 
   navigate(url: string): void {
-    const navigateTo = this.isActive(url) ? '' : url;
-    this.router.navigateByUrl(navigateTo);
+    this.sidebarOpen = !this.sidebarOpen;
+    this.sidebarStateService.set(this.sidebarOpen)
+    this.router.navigateByUrl(url);
   }
 
   centerView(): void {

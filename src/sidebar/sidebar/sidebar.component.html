@@ -55,19 +55,17 @@
     </div>
 
     <div class="mb-3">
-      <button class="btn btn-block">
-        <i class="fas fa-ruler-combined"></i>
+      <button class="btn btn-block" appTooltip="Reset rotation" position="right" (click)="resetRotation()">
+        <i class="fas fa-compass"></i>
       </button>
-      <button class="btn btn-block">
-        <i class="fas fa-mouse-pointer"></i>
-      </button>
-      <button class="btn btn-block">
-        <i class="fas fa-hand-paper"></i>
-      </button>
-      <button class="btn btn-block"
-              appTooltip="Center view" position="right"
-              (click)="centerView()">
+      <button class="btn btn-block" appTooltip="Center view" position="right" (click)="centerView()">
         <i class="fas fa-crosshairs"></i>
+      </button>
+      <button class="btn btn-block" appTooltip="Zoom in" position="right" (click)="zoomIn()">
+        <i class="fas fa-search-plus"></i>
+      </button>
+      <button class="btn btn-block" appTooltip="Zoom out" position="right" (click)="zoomOut()">
+        <i class="fas fa-search-minus"></i>
       </button>
     </div>
     <div class="px-2">
@@ -81,14 +79,17 @@
     <div class="px-2">
       <hr>
     </div>
-    <button class="btn btn-block" (click)="startShow()">
+    <button class="btn btn-block" appTooltip="Start presentation" position="right" (click)="startShow()">
       <i class="fas fa-play"></i>
     </button>
-    <button class="btn btn-block" (click)="nextKeyframe()">
-      <i class="fas fa-fast-forward"></i>
+    <button class="btn btn-block" appTooltip="Next keyframe" position="right" (click)="nextKeyframe()">
+      <i class="fas fa-forward"></i>
     </button>
-    <button class="btn btn-block" (click)="prevKeyframe()">
-      <i class="fas fa-fast-backward"></i>
+    <button class="btn btn-block" appTooltip="Previous keyframe" position="right" (click)="prevKeyframe()">
+      <i class="fas fa-backward"></i>
+    </button>
+    <button class="btn btn-block mt-3" appTooltip="Help" position="right">
+      <i class="fas fa-question-circle"></i>
     </button>
   </div>
 </div>

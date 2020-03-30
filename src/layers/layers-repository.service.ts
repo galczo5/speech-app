@@ -40,12 +40,59 @@ export class LayersRepositoryService {
     });
   }
 
+  moveUp(id: string): void {
+    for (let i = 0; i < this.layers.length; i++) {
+      if (this.layers[i].id !== id) {
+        continue;
+      }
+
+      if (i < this.layers.length - 1) {
+        const layer = this.layers[i];
+        this.layers[i] = this.layers[i + 1];
+        this.layers[i + 1] = layer;
+        break;
+      }
+
+    }
+
+    this.regenerateIndexes();
+    this.notifyChanges();
+  }
+
+  moveDown(id: string): void {
+    for (let i = 0; i < this.layers.length; i++) {
+      if (this.layers[i].id !== id) {
+        continue;
+      }
+
+      if (i > 0) {
+        const layer = this.layers[i];
+        this.layers[i] = this.layers[i - 1];
+        this.layers[i - 1] = layer;
+        break;
+      }
+
+    }
+
+    this.regenerateIndexes();
+    this.notifyChanges();
+  }
+
   getLayers(): Observable<Array<Layer>> {
     return this.layers$.asObservable();
   }
 
   notifyChanges(): void {
     this.layers$.next(this.layers);
+  }
+
+  private regenerateIndexes(): void {
+    this.layers = this.layers.map((layer, index) => {
+      return {
+        ...layer,
+        index: index + 1
+      };
+    });
   }
 
   private findLayer(id: string): Layer {

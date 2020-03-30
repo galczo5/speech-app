@@ -4,6 +4,7 @@ import {fromEvent, Subject} from 'rxjs';
 import {takeUntil} from 'rxjs/operators';
 import {ShowTimeModeService} from './show-time-mode.service';
 import {PresentationModeNavigationService} from "../presentation-mode/presentation-mode-navigation.service";
+import {ActiveBoxService} from '../resizable-box/active-box.service';
 
 @Component({
   selector: 'app-root',
@@ -20,6 +21,7 @@ export class AppComponent implements OnInit, OnDestroy {
               private sidebarStateService: SidebarStateService,
               private showTimeModeService: ShowTimeModeService,
               private presentationModeNavigationService: PresentationModeNavigationService,
+              private activeBoxService: ActiveBoxService,
               private renderer: Renderer2,
               private changeDetectorRef: ChangeDetectorRef) {
   }
@@ -36,6 +38,7 @@ export class AppComponent implements OnInit, OnDestroy {
       .pipe(takeUntil(this.destroy$))
       .subscribe(isItShowTime => {
         if (isItShowTime) {
+          this.activeBoxService.set(null);
           this.renderer.addClass(this.elementRef.nativeElement, 'presentation-mode');
           this.presentationModeNavigationService.open();
         } else {

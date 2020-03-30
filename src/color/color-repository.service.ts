@@ -12,11 +12,16 @@ export class ColorRepositoryService {
 
   constructor() {
     this.colors = [
-      {id: '1', name: 'white', value: 'white'},
-      {id: '2', name: 'blue', value: 'blue'},
-      {id: '3', name: 'red', value: 'red'},
-      {id: '4', name: 'yellow', value: 'yellow'},
-      {id: '5', name: 'black', value: 'black'}
+      {id: '1', name: 'Grass in Texas', value: '#ECD078'},
+      {id: '2', name: 'Nevada rocks', value: '#D95B43'},
+      {id: '3', name: 'Hawaiian lava', value: '#C02942'},
+      {id: '4', name: 'Cave in darkness', value: '#542437'},
+      {id: '5', name: 'Ocean green', value: '#53777A'},
+      {id: '6', name: 'Gray', value: '#556270'},
+      {id: '7', name: 'Green pencil', value: '#4ECDC4'},
+      {id: '8', name: 'Vegas neon', value: '#C7F464'},
+      {id: '9', name: 'Black', value: '#000000'},
+      {id: '10', name: 'White', value: '#FFFFFF'}
     ];
 
     this.notifyChanges();

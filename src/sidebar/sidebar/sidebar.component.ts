@@ -35,6 +35,7 @@ export class SidebarComponent implements OnInit, OnDestroy {
   private keyframes: Array<Keyframe> = [];
   private keyframeIndex = 0;
   private activeBox: Box;
+  private zoom: number = 1;
 
   constructor(private router: Router,
               private sidebarStateService: SidebarStateService,
@@ -81,6 +82,10 @@ export class SidebarComponent implements OnInit, OnDestroy {
     this.activeBoxService.get()
       .pipe(takeUntil(this.destroy$))
       .subscribe(activeBox => this.activeBox = activeBox);
+
+    this.areaStoreService.getZoom()
+      .pipe(takeUntil(this.destroy$))
+      .subscribe(zoom => this.zoom = zoom);
   }
 
   ngOnDestroy(): void {
@@ -94,14 +99,13 @@ export class SidebarComponent implements OnInit, OnDestroy {
 
   navigate(url: string): void {
     this.sidebarOpen = !this.sidebarOpen;
-    this.sidebarStateService.set(this.sidebarOpen)
+    this.sidebarStateService.set(this.sidebarOpen);
     this.router.navigateByUrl(url);
   }
 
   centerView(): void {
-    this.transitionService.withTransition(500, () => {
+    this.transitionService.withTransition(200, () => {
       this.areaStoreService.setZoom(1);
-      this.areaStoreService.setRotation(0);
       this.areaStoreService.setPosition(
         new RelativePosition(this.areaSize.height / 2, this.areaSize.width / 2)
       );
@@ -120,5 +124,23 @@ export class SidebarComponent implements OnInit, OnDestroy {
 
   startShow(): void {
     this.showTimeModeService.itsShowTime();
+  }
+
+  zoomIn(): void {
+    this.transitionService.withTransition(200, () => {
+      this.areaStoreService.setZoom(this.zoom + .5);
+    });
+  }
+
+  zoomOut(): void {
+    this.transitionService.withTransition(200, () => {
+      this.areaStoreService.setZoom(this.zoom - .5);
+    });
+  }
+
+  resetRotation(): void {
+    this.transitionService.withTransition(200, () => {
+      this.areaStoreService.setRotation(0);
+    });
   }
 }

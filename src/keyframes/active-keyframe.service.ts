@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import {Observable, ReplaySubject, Subject} from 'rxjs';
+import {BehaviorSubject, Observable, ReplaySubject, Subject} from 'rxjs';
 import {Keyframe} from './keyframe';
 import {KeyframesRepositoryService} from './keyframes-repository.service';
 import {filter} from 'rxjs/operators';
@@ -9,7 +9,7 @@ import {filter} from 'rxjs/operators';
 })
 export class ActiveKeyframeService {
 
-  private activeKeyframe$: ReplaySubject<Keyframe> = new ReplaySubject<Keyframe>();
+  private activeKeyframe$: BehaviorSubject<Keyframe> = new BehaviorSubject<Keyframe>(null);
   private activeKeyframe: Keyframe;
 
   constructor(repositoryService: KeyframesRepositoryService) {

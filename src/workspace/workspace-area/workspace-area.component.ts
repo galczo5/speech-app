@@ -1,6 +1,6 @@
 import {ChangeDetectorRef, Component, ElementRef, Inject, Input, OnDestroy, OnInit, Renderer2, ViewChild} from '@angular/core';
 import {fromEvent, interval, Observable, Subject} from 'rxjs';
-import {distinctUntilChanged, takeUntil} from 'rxjs/operators';
+import {distinctUntilChanged, filter, takeUntil} from 'rxjs/operators';
 import {DOCUMENT} from '@angular/common';
 import {RelativePosition} from '../../utils/relative-position';
 import {WorkspaceManipulationService} from '../workspace-manipulation.service';
@@ -12,13 +12,9 @@ import {AddBoxService} from '../add-box.service';
 import {AreaSize, AreaSizeService} from '../area-size.service';
 import {distanceBetweenTwoPoints, minmax, Point, rotatePoint, roundRad, scalePoint} from '../../utils/math-utils';
 import {ActiveKeyframeService} from '../../keyframes/active-keyframe.service';
-import {TransitionService} from '../../transition/transition.service';
 import {WorkspaceAreaTransitionService} from '../workspace-area-transition.service';
-import {LayersRepositoryService} from "../../layers/layers-repository.service";
-import {Layer} from "../../layers/layer";
-
-const MAX_ZOOM = 5;
-const MIN_ZOOM = 0.5;
+import {LayersRepositoryService} from '../../layers/layers-repository.service';
+import {Layer} from '../../layers/layer';
 
 @Component({
   selector: 'app-workspace-area',
@@ -148,7 +144,10 @@ export class WorkspaceAreaComponent implements OnInit, OnDestroy {
 
   private activeKeyframeListener(): void {
     this.activeKeyframeService.get()
-      .pipe(takeUntil(this.destroy$))
+      .pipe(
+        filter(keyframe => !!keyframe),
+        takeUntil(this.destroy$)
+      )
       .subscribe(frame => {
         this.workspaceAreaTransitionService.withTransition(frame.transitionTime, () => {
           this.storeService.setZoom(frame.scale);
@@ -228,8 +227,7 @@ export class WorkspaceAreaComponent implements OnInit, OnDestroy {
     this.manipulationService.zoom()
       .pipe(takeUntil(this.destroy$))
       .subscribe(delta => {
-        const zoom = minmax(this.zoom + delta, MIN_ZOOM, MAX_ZOOM);
-        this.storeService.setZoom(zoom);
+        this.storeService.setZoom(this.zoom + delta);
       });
 
     this.storeService.getZoom()

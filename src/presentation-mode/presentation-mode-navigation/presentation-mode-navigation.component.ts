@@ -2,8 +2,8 @@ import {ChangeDetectorRef, Component, OnDestroy, OnInit} from '@angular/core';
 import {ShowTimeModeService} from '../../app/show-time-mode.service';
 import {KeyframesRepositoryService} from '../../keyframes/keyframes-repository.service';
 import {Keyframe} from '../../keyframes/keyframe';
-import {Subject} from 'rxjs';
-import {takeUntil} from 'rxjs/operators';
+import {combineLatest, Subject} from 'rxjs';
+import {take, takeUntil} from 'rxjs/operators';
 import {ActiveKeyframeService} from '../../keyframes/active-keyframe.service';
 
 @Component({
@@ -50,15 +50,23 @@ export class PresentationModeNavigationComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
+
+    combineLatest(
+      this.keyframesRepositoryService.getKeyframes(),
+      this.activeKeyframeService.get()
+    ).pipe(
+      take(1),
+      takeUntil(this.destroy$)
+    ).subscribe(([keyframes, activeKeyframe]) => {
+      if (!activeKeyframe && keyframes.length !== 0) {
+        this.activeKeyframeService.set(keyframes[0]);
+      }
+    });
+
     this.keyframesRepositoryService.getKeyframes()
       .pipe(takeUntil(this.destroy$))
       .subscribe(keyframes => {
         this.keyframes = keyframes;
-
-        if (!this.activeKeyframe && this.keyframes.length !== 0) {
-          this.activeKeyframeService.set(this.keyframes[0]);
-        }
-
         this.changeDetectorRef.detectChanges();
       });
 

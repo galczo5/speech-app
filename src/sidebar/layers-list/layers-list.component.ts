@@ -18,10 +18,14 @@ import {Layer} from '../../layers/layer';
           <i class="fas fa-trash"></i>
         </button>
         <div class="btn-group mr-2">
-          <button class="btn btn-light text-muted">
+          <button class="btn btn-light text-muted"
+                  [disabled]="activeLayer.index === 1"
+                  (click)="moveDown()">
             <i class="fas fa-arrow-up"></i>
           </button>
-          <button class="btn btn-light text-muted">
+          <button class="btn btn-light text-muted"
+                  [disabled]="activeLayer.index === layers.length"
+                  (click)="moveUp()">
             <i class="fas fa-arrow-down"></i>
           </button>
         </div>
@@ -82,6 +86,7 @@ export class LayersListComponent implements OnInit {
       .pipe(takeUntil(this.destroy$))
       .subscribe(layers => {
         this.layers = layers;
+        this.activeLayer = this.layers.find(l => !!this.activeLayer && l.id === this.activeLayer.id);
         this.changeDetectorRef.detectChanges();
       });
   }
@@ -96,6 +101,14 @@ export class LayersListComponent implements OnInit {
 
   toggleHighlight(layer: Layer): void {
     this.layersRepositoryService.setHighlighted(layer.id, !layer.highlighted);
+  }
+
+  moveUp(): void {
+    this.layersRepositoryService.moveUp(this.activeLayer.id);
+  }
+
+  moveDown(): void {
+    this.layersRepositoryService.moveDown(this.activeLayer.id);
   }
 
   setActive(layer: Layer): void {

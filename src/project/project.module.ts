@@ -1,26 +1,26 @@
-import {BrowserModule} from '@angular/platform-browser';
 import {NgModule} from '@angular/core';
 
+import {ProjectComponent} from './project.component';
 import {WorkspaceModule} from '../workspace/workspace.module';
 import {SidebarModule} from '../sidebar/sidebar.module';
 import {PresentationModeModule} from '../presentation-mode/presentation-mode.module';
-import { AppRootComponent } from './app-root.component';
-import {ProjectModule} from '../project/project.module';
-import {HomeModule} from '../home/home.module';
+import {CommonModule} from '@angular/common';
+import {ProjectRoutingModule} from './project-routing.module';
 
 @NgModule({
   declarations: [
-    AppRootComponent
+    ProjectComponent
+  ],
+  exports: [
+    ProjectComponent
   ],
   imports: [
-    BrowserModule,
+    CommonModule,
     WorkspaceModule,
     SidebarModule,
-    ProjectModule,
     PresentationModeModule,
-    HomeModule
-  ],
-  bootstrap: [AppRootComponent]
+    ProjectRoutingModule
+  ]
 })
-export class AppModule {
+export class ProjectModule {
 }

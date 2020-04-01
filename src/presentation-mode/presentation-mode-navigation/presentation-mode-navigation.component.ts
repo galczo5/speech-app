@@ -1,5 +1,5 @@
 import {ChangeDetectorRef, Component, OnDestroy, OnInit} from '@angular/core';
-import {ShowTimeModeService} from '../../app/show-time-mode.service';
+import {ShowTimeModeService} from '../../project/show-time-mode.service';
 import {KeyframesRepositoryService} from '../../keyframes/keyframes-repository.service';
 import {Keyframe} from '../../keyframes/keyframe';
 import {combineLatest, Subject} from 'rxjs';

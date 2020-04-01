@@ -3,14 +3,14 @@ import {SidebarStateService} from '../sidebar/sidebar-state.service';
 import {fromEvent, Subject} from 'rxjs';
 import {takeUntil} from 'rxjs/operators';
 import {ShowTimeModeService} from './show-time-mode.service';
-import {PresentationModeNavigationService} from "../presentation-mode/presentation-mode-navigation.service";
+import {PresentationModeNavigationService} from '../presentation-mode/presentation-mode-navigation.service';
 import {ActiveBoxService} from '../resizable-box/active-box.service';
 
 @Component({
-  selector: 'app-root',
-  templateUrl: './app.component.html'
+  selector: 'app-project',
+  templateUrl: './project.component.html'
 })
-export class AppComponent implements OnInit, OnDestroy {
+export class ProjectComponent implements OnInit, OnDestroy {
 
   @HostBinding('class.sidebar-open')
   sidebarOpen = false;

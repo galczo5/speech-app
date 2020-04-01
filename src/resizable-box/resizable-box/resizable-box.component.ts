@@ -155,6 +155,8 @@ export class ResizableBoxComponent implements OnChanges, OnInit, OnDestroy {
     this.listenForResize();
     this.listenForMove();
     this.listenForWorkspaceChanges();
+    this.setPosition(this.y, this.x);
+    this.setTransform(this.scale, this.rotation);
   }
 
   ngOnDestroy(): void {

@@ -12,7 +12,7 @@ import {ActiveBoxService} from '../../resizable-box/active-box.service';
 import {Box} from '../../boxes/box';
 import {ActiveKeyframeService} from '../../keyframes/active-keyframe.service';
 import {WorkspaceAreaTransitionService} from '../../workspace/workspace-area-transition.service';
-import {ShowTimeModeService} from '../../app/show-time-mode.service';
+import {ShowTimeModeService} from '../../project/show-time-mode.service';
 
 @Component({
   selector: 'app-sidebar',

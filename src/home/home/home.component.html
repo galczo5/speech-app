@@ -1,0 +1,256 @@
+<div style="position: fixed; top: 0; width: 100%; z-index: 1; transition: all .2s"
+     class="bg-white shadow-sm p-3 d-flex align-items-center"
+     [class.bg-white]="scrollTop !== 0"
+     [class.shadow-sm]="scrollTop !== 0">
+  <nav class="navbar navbar-expand-lg d-flex align-items-center" style="width: 100%;">
+    <a class="navbar-brand" href="#">
+      <i class="fas fa-comment-alt mr-2"></i>
+      <strong>Speech App</strong>
+    </a>
+
+    <div class="collapse navbar-collapse">
+      <ul class="navbar-nav mr-auto">
+        <li class="nav-item">
+          <a class="nav-link" href="#">About</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="#">Pricing</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="#">Explore</a>
+        </li>
+      </ul>
+    </div>
+    <div>
+      <button class="btn btn-link">
+        Login
+      </button>
+    </div>
+
+  </nav>
+</div>
+
+<div class="d-flex align-items-center justify-content-center flex-column bg-light"
+     style="height: 100vh; background: url('https://www.toptal.com/designers/subtlepatterns/patterns/dot-grid.png')">
+  <div style="position: relative;">
+    <app-home-resizable-box [initialScale]="1" [initialRotation]=".35" [height]="300" [width]="300" [initialX]="-300" [initialY]="-100">
+      <i class="fas fa-comment-alt text-primary"></i>
+    </app-home-resizable-box>
+  </div>
+
+  <div style="position: relative;">
+    <app-home-resizable-box [initialScale]="1" [initialRotation]="-0.4" [width]="200" [height]="200" [initialX]="-100" [initialY]="100">
+      <i class="fas fa-comment-alt text-primary"></i>
+    </app-home-resizable-box>
+  </div>
+
+  <div style="position: relative;">
+    <app-home-resizable-box [initialScale]="1" [initialRotation]="0.4" [width]="100" [height]="100" [initialX]="-270" [initialY]="250">
+      <i class="fas fa-comment-alt text-primary"></i>
+    </app-home-resizable-box>
+  </div>
+
+  <div style="position: relative;">
+    <app-home-resizable-box [initialScale]="1" [initialRotation]="-0.5" [width]="70" [height]="70" [initialX]="-400" [initialY]="100">
+      <i class="fas fa-comment-alt text-primary"></i>
+    </app-home-resizable-box>
+  </div>
+
+  <div style="position: relative;">
+    <app-home-resizable-box [initialScale]="1" [initialRotation]="-0.2" [width]="100" [height]="100" [initialX]="-500" [initialY]="250">
+      <i class="fas fa-comment-alt text-primary"></i>
+    </app-home-resizable-box>
+  </div>
+
+  <div style="position: relative;">
+    <app-home-resizable-box [initialScale]="1" [initialRotation]="0.6" [width]="70" [height]="70" [initialX]="-700" [initialY]="150">
+      <i class="fas fa-comment-alt text-primary"></i>
+    </app-home-resizable-box>
+  </div>
+
+  <div style="position: relative;">
+    <app-home-resizable-box [initialScale]="1" [initialRotation]="-0.1" [width]="400" [height]="150" [initialX]="150" [initialY]="-180">
+      <h1 class="text-primary p-3">
+        <strong>Speech App presentations</strong>
+      </h1>
+    </app-home-resizable-box>
+  </div>
+
+  <div style="position: relative;">
+    <app-home-resizable-box [initialScale]="1" [initialRotation]=".1" [width]="600" [height]="300" [initialX]="300" [initialY]="60">
+      <p class="text-secondary p-3 px-5" style="font-size: 24px;">
+        Impress your audience with beautiful and smooth presentations.
+        <br>
+        <br>
+        Easy to use <strong>Speech</strong> online editor is here for you. Check it out for free or just play with elements in blue frame.
+      </p>
+    </app-home-resizable-box>
+  </div>
+
+  <div style="position: relative;">
+    <app-home-resizable-box [initialScale]="1" [initialRotation]="-0.1" [width]="220" [height]="70" [initialX]="50" [initialY]="250">
+      <button class="btn btn-primary">
+        <i class="fas fa-plus mr-3"></i>
+        Create new project
+      </button>
+    </app-home-resizable-box>
+  </div>
+
+</div>
+
+<div class="shadow-lg">
+  <div class="container py-5">
+    <div class="row my-5">
+      <div class="col">
+        <h1 class="text-primary">
+          <strong>Beautiful and smooth</strong>
+        </h1>
+        <p class="text-muted mt-5" style="font-size: 24px;">
+          Create cool presentations in a minute with Speech.
+          <br>
+          <br>
+          Idea is simple. Treat your workspace as a huge paper sheet.
+          During presentation Speech will move, rotate and zoom your work.
+          <br>
+          <br>
+          <strong>Simple and easy, huh...?</strong>
+          <br>
+          Don't wait and try it, it's free!
+        </p>
+      </div>
+      <div class="col text-muted d-flex align-items-center justify-content-center" style="height: 400px;">
+        <div style="position: relative;">
+          <app-home-resizable-box [initialScale]="1" [initialRotation]=".35" [height]="800" [width]="800" [initialX]="200" [initialY]="0">
+            <i class="fas fa-comment-dots text-primary"></i>
+          </app-home-resizable-box>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="bg-white shadow-lg">
+  <div class="container py-5">
+    <div class="row my-5">
+      <div class="col">
+        <h1 class="text-primary">
+          <strong>Fun and interactive</strong>
+        </h1>
+        <p class="text-muted mt-5" style="font-size: 24px;">
+          Build your presentation with text content, hyperlinks, images, HTML, video content or event other webpages.
+          Injected webpages will be still fully responsive and functional!
+          <br>
+          <br>
+          With all this things you will amaze everyone who is in front of you during your speech.
+        </p>
+      </div>
+      <div class="col">
+        <div style="position: relative;">
+          <app-home-resizable-box [initialScale]="1" [initialRotation]="-0.4" [height]="400" [width]="400" [initialX]="400" [initialY]="100">
+            <i class="fas fa-camera text-primary"></i>
+          </app-home-resizable-box>
+        </div>
+        <div style="position: relative;">
+          <app-home-resizable-box [initialScale]="1" [initialRotation]=".4" [height]="300" [width]="300" [initialX]="600" [initialY]="300">
+            <i class="fas fa-play-circle text-primary"></i>
+          </app-home-resizable-box>
+        </div>
+        <div style="position: relative;">
+          <app-home-resizable-box [initialScale]="1" [initialRotation]="-0.1" [height]="200" [width]="200" [initialX]="400" [initialY]="480">
+            <i class="fas fa-paragraph text-primary"></i>
+          </app-home-resizable-box>
+        </div>
+        <div style="position: relative;">
+          <app-home-resizable-box [initialScale]="1" [initialRotation]="0.5" [height]="150" [width]="150" [initialX]="300" [initialY]="600">
+            <i class="fas fa-link text-primary"></i>
+          </app-home-resizable-box>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="bg-white shadow-lg">
+  <div class="container py-5">
+    <div class="row my-5">
+      <div class="col">
+        <h1 class="text-primary">
+          <strong>Modern and minimalistic</strong>
+        </h1>
+        <p class="text-muted mt-5" style="font-size: 24px;">
+          Use this page as an example. Mostly it's build like Speech project.
+          <br>
+          <br>
+          All boxes with blue border can be moved, rotated or zoomed.
+          <br>
+          <br>
+          <strong>
+            Feel free to check it!
+          </strong>
+          If you like it, share your impressions with us and your friends.
+        </p>
+      </div>
+      <div class="col">
+        <div style="position: relative;">
+          <app-home-resizable-box [initialScale]="1" [initialRotation]="-0.4" [height]="600" [width]="600" [initialX]="600" [initialY]="300" backgroundClass="bg-danger">
+            <i class="fas fa-grin-hearts text-white"></i>
+          </app-home-resizable-box>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="bg-white shadow-lg">
+  <div class="container py-5">
+    <div class="row my-5">
+
+      <div class="col-4">
+        <div class="border rounded p-3 shadow-sm">
+          <h1 class="text-primary pl-3">
+            <strong>
+              Free
+              <br>
+              for all users
+            </strong>
+          </h1>
+          <hr class="bg-primary">
+          <ul class="list-group list-group-flush text-muted" style="font-size: 18px;">
+            <li class="list-group-item">Max. 50 object in project</li>
+            <li class="list-group-item">Limit of 30 keyframes</li>
+            <li class="list-group-item">Public only</li>
+            <li class="list-group-item">Account not needed</li>
+            <li class="list-group-item text-primary">
+              <strong>Create new project</strong>
+            </li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="col-4">
+        <div class="border rounded p-3 shadow-sm">
+          <h1 class="text-muted pl-3">
+            <strong>
+              Premium users
+            </strong>
+          </h1>
+          <hr>
+          <ul class="list-group list-group-flush text-muted" style="font-size: 18px;">
+            <li class="list-group-item">Unlimited object in project</li>
+            <li class="list-group-item">Unlimited keyframes</li>
+            <li class="list-group-item">Private projects</li>
+            <li class="list-group-item">Account needed</li>
+            <li class="list-group-item">Not available yet</li>
+          </ul>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<div class="bg-light px-5 py-4 text-muted font-weight-bold" style="opacity: .5">
+  Speech App
+  <br>
+  Copyright Kamil Gałek 2020
+</div>

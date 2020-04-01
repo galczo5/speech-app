@@ -14,6 +14,11 @@ html, body {
   -moz-osx-font-smoothing: grayscale;
 }
 
+app-home {
+  overflow: hidden;
+  display: block;
+}
+
 app-workspace-background {
   height: 100%;
   width: 100%;
@@ -60,7 +65,7 @@ app-workspace-area {
   left: -1px;
 }
 
-app-root {
+app-project {
   display: grid;
   width: 100vw;
   height: 100vh;

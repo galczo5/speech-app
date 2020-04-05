@@ -3,8 +3,7 @@ import { Component, OnInit } from '@angular/core';
 @Component({
   selector: 'app-root',
   template: `
-<!--    <app-project></app-project>-->
-    <app-home></app-home>
+    <router-outlet></router-outlet>
   `,
   styles: []
 })

@@ -21,12 +21,12 @@ import {ShowTimeModeService} from '../../project/show-time-mode.service';
 export class SidebarComponent implements OnInit, OnDestroy {
 
   routes = {
-    BOX_CREATE: 'box/create',
-    BOX_LIST: 'box/list',
-    BOX_EDIT: 'box/edit',
-    LAYERS_LIST: 'layer/list',
-    KEYFRAMES_LIST: 'keyframe/list',
-    DOCUMENT: 'document'
+    BOX_CREATE: 'project/box/create',
+    BOX_LIST: 'project/box/list',
+    BOX_EDIT: 'project/box/edit',
+    LAYERS_LIST: 'project/layer/list',
+    KEYFRAMES_LIST: 'project/keyframe/list',
+    DOCUMENT: 'project/document'
   };
 
   private destroy$: Subject<void> = new Subject<void>();

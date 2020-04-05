@@ -1,10 +1,20 @@
-import {ChangeDetectorRef, Component, ElementRef, HostBinding, OnDestroy, OnInit, Renderer2} from '@angular/core';
+import {
+  ApplicationRef,
+  ChangeDetectorRef,
+  Component,
+  ElementRef,
+  HostBinding,
+  OnDestroy,
+  OnInit,
+  Renderer2
+} from '@angular/core';
 import {SidebarStateService} from '../sidebar/sidebar-state.service';
 import {fromEvent, Subject} from 'rxjs';
-import {takeUntil} from 'rxjs/operators';
+import {filter, take, takeUntil} from 'rxjs/operators';
 import {ShowTimeModeService} from './show-time-mode.service';
 import {PresentationModeNavigationService} from '../presentation-mode/presentation-mode-navigation.service';
 import {ActiveBoxService} from '../resizable-box/active-box.service';
+import {NavigationEnd, Router} from "@angular/router";
 
 @Component({
   selector: 'app-project',
@@ -23,7 +33,18 @@ export class ProjectComponent implements OnInit, OnDestroy {
               private presentationModeNavigationService: PresentationModeNavigationService,
               private activeBoxService: ActiveBoxService,
               private renderer: Renderer2,
-              private changeDetectorRef: ChangeDetectorRef) {
+              private changeDetectorRef: ChangeDetectorRef,
+              private router: Router,
+              private applicationRef: ApplicationRef) {
+    router.events
+      .pipe(
+        filter(e => e instanceof NavigationEnd),
+        take(1)
+      )
+      .subscribe(() => {
+        changeDetectorRef.markForCheck();
+        applicationRef.tick();
+      });
   }
 
   ngOnInit(): void {

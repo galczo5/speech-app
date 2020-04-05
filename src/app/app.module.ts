@@ -7,6 +7,7 @@ import {PresentationModeModule} from '../presentation-mode/presentation-mode.mod
 import { AppRootComponent } from './app-root.component';
 import {ProjectModule} from '../project/project.module';
 import {HomeModule} from '../home/home.module';
+import {AppRoutingModule} from "./app-routing.module";
 
 @NgModule({
   declarations: [
@@ -18,7 +19,8 @@ import {HomeModule} from '../home/home.module';
     SidebarModule,
     ProjectModule,
     PresentationModeModule,
-    HomeModule
+    HomeModule,
+    AppRoutingModule
   ],
   bootstrap: [AppRootComponent]
 })

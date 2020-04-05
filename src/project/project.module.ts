@@ -5,7 +5,7 @@ import {WorkspaceModule} from '../workspace/workspace.module';
 import {SidebarModule} from '../sidebar/sidebar.module';
 import {PresentationModeModule} from '../presentation-mode/presentation-mode.module';
 import {CommonModule} from '@angular/common';
-import {ProjectRoutingModule} from './project-routing.module';
+import {RouterModule} from '@angular/router';
 
 @NgModule({
   declarations: [
@@ -19,7 +19,7 @@ import {ProjectRoutingModule} from './project-routing.module';
     WorkspaceModule,
     SidebarModule,
     PresentationModeModule,
-    ProjectRoutingModule
+    RouterModule
   ]
 })
 export class ProjectModule {

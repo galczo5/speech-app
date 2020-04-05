@@ -1,7 +1,8 @@
-import {ChangeDetectorRef, Component, OnDestroy, OnInit} from '@angular/core';
+import {ApplicationRef, ChangeDetectorRef, Component, OnDestroy, OnInit} from '@angular/core';
 import {RelativePosition} from '../../utils/relative-position';
 import {fromEvent, Subject} from 'rxjs';
-import {takeUntil} from 'rxjs/operators';
+import {filter, take, takeUntil} from 'rxjs/operators';
+import {NavigationEnd, Router} from '@angular/router';
 
 @Component({
   selector: 'app-home',
@@ -9,12 +10,22 @@ import {takeUntil} from 'rxjs/operators';
 })
 export class HomeComponent implements OnInit, OnDestroy {
 
-  logoPosition: RelativePosition = new RelativePosition(0, 0);
   scrollTop: number = 0;
 
   private destroy$: Subject<void> = new Subject<void>();
 
-  constructor(private changeDetectorRef: ChangeDetectorRef) {
+  constructor(private changeDetectorRef: ChangeDetectorRef,
+              private router: Router,
+              private applicationRef: ApplicationRef) {
+    router.events
+      .pipe(
+        filter(e => e instanceof NavigationEnd),
+        take(1)
+      )
+      .subscribe(() => {
+        changeDetectorRef.markForCheck();
+        applicationRef.tick();
+      });
   }
 
   ngOnInit(): void {
@@ -29,10 +40,5 @@ export class HomeComponent implements OnInit, OnDestroy {
   ngOnDestroy(): void {
     this.destroy$.next();
     this.destroy$.complete();
-  }
-
-  positionChanged(position: RelativePosition): void {
-    this.logoPosition = position;
-    this.changeDetectorRef.detectChanges();
   }
 }

@@ -7,19 +7,28 @@ import {LayersListComponent} from '../sidebar/layers-list/layers-list.component'
 import {KeyframesListComponent} from '../sidebar/keyframes-list/keyframes-list.component';
 import {DocumentEditorComponent} from '../sidebar/document-editor/document-editor.component';
 import {EmptyComponent} from '../sidebar/empty/empty.component';
+import {HomeComponent} from '../home/home/home.component';
+import {ProjectComponent} from '../project/project.component';
 
 const routes: Routes = [
-  { path: 'box/edit', component: BoxEditorComponent },
-  { path: 'box/create', component: BoxCatalogComponent },
-  { path: 'box/list', component: BoxListComponent },
-  { path: 'layer/list', component: LayersListComponent },
-  { path: 'keyframe/list', component: KeyframesListComponent },
-  { path: 'document', component: DocumentEditorComponent },
-  { path: '', component: EmptyComponent }
+  { path: 'home', component: HomeComponent },
+  {
+    path: 'project',
+    component: ProjectComponent,
+    children: [
+      { path: 'box/edit', component: BoxEditorComponent },
+      { path: 'box/create', component: BoxCatalogComponent },
+      { path: 'box/list', component: BoxListComponent },
+      { path: 'layer/list', component: LayersListComponent },
+      { path: 'keyframe/list', component: KeyframesListComponent },
+      { path: 'document', component: DocumentEditorComponent },
+      { path: '', component: EmptyComponent }
+    ]
+  }
 ];
 
 @NgModule({
   imports: [RouterModule.forRoot(routes)],
   exports: [RouterModule]
 })
-export class ProjectRoutingModule { }
+export class AppRoutingModule { }

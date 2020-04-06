@@ -1,5 +1,5 @@
 import {Input} from '@angular/core';
-import {BoxRepository} from './box-repository';
+import {BoxRepositoryService} from './box-repository.service';
 import {RelativePosition} from '../utils/relative-position';
 
 export abstract class BoxComponent {
@@ -28,7 +28,7 @@ export abstract class BoxComponent {
   @Input()
   rotation: number;
 
-  protected constructor(private boxRepository: BoxRepository) {
+  protected constructor(private boxRepository: BoxRepositoryService) {
   }
 
   updatePosition(position: RelativePosition): void {

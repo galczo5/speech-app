@@ -9,22 +9,34 @@ import {DocumentEditorComponent} from '../sidebar/document-editor/document-edito
 import {EmptyComponent} from '../sidebar/empty/empty.component';
 import {HomeComponent} from '../home/home/home.component';
 import {ProjectComponent} from '../project/project.component';
+import {ProjectLoadGuard} from './project-load-guard';
 
 const routes: Routes = [
   { path: 'home', component: HomeComponent },
   {
-    path: 'project',
+    path: 'project/:id',
     component: ProjectComponent,
+    canActivate: [ProjectLoadGuard],
     children: [
-      { path: 'box/edit', component: BoxEditorComponent },
-      { path: 'box/create', component: BoxCatalogComponent },
-      { path: 'box/list', component: BoxListComponent },
-      { path: 'layer/list', component: LayersListComponent },
-      { path: 'keyframe/list', component: KeyframesListComponent },
-      { path: 'document', component: DocumentEditorComponent },
-      { path: '', component: EmptyComponent }
+      {
+        path: '',
+        children: [
+          { path: 'box/edit', component: BoxEditorComponent },
+          { path: 'box/create', component: BoxCatalogComponent },
+          { path: 'box/list', component: BoxListComponent },
+          { path: 'layer/list', component: LayersListComponent },
+          { path: 'keyframe/list', component: KeyframesListComponent },
+          { path: 'document', component: DocumentEditorComponent },
+          { path: '', component: EmptyComponent }
+        ]
+      }
     ]
-  }
+  },
+  {
+    path: '',
+    redirectTo: '/home',
+    pathMatch: 'full',
+  },
 ];
 
 @NgModule({

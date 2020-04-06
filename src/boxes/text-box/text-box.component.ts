@@ -1,7 +1,7 @@
 import {Component, Input} from '@angular/core';
 import {BoxComponent} from '../box-component';
 import {TextBoxData} from './text-box-data';
-import {BoxRepository} from '../box-repository';
+import {BoxRepositoryService} from '../box-repository.service';
 import {ColorMapService} from '../../color/color-map.service';
 import {Color} from '../../color/color';
 
@@ -51,7 +51,7 @@ export class TextBoxComponent extends BoxComponent {
   @Input()
   readonly hidden: boolean;
 
-  constructor(boxRepository: BoxRepository,
+  constructor(boxRepository: BoxRepositoryService,
               private colorMapService: ColorMapService) {
     super(boxRepository);
   }

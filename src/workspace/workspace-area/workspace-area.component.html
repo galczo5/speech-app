@@ -1,9 +1,9 @@
 <div #element (click)="onClickEvent($event)"
      class="workspace-area">
     <ng-content></ng-content>
-    <div class="workspace-area-directions border-dark presentation-mode-hide">
-      <span>0x0</span>
-    </div>
+<!--    <div class="workspace-area-directions border-dark presentation-mode-hide">-->
+<!--      <span>0x0</span>-->
+<!--    </div>-->
     <ng-container *ngFor="let box of boxes; trackBy: trackFn">
       <app-workspace-box [box]="box" [activeBox]="activeBox"></app-workspace-box>
     </ng-container>

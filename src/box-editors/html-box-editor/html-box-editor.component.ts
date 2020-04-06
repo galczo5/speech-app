@@ -1,6 +1,6 @@
 import {Component, Input, OnInit} from '@angular/core';
 import {HtmlBox, TextBox} from '../../boxes/box';
-import {BoxRepository} from '../../boxes/box-repository';
+import {BoxRepositoryService} from '../../boxes/box-repository.service';
 import {HtmlBoxData} from '../../boxes/html-box/html-box-data';
 
 @Component({
@@ -18,7 +18,7 @@ export class HtmlBoxEditorComponent {
   @Input()
   activeBox: HtmlBox;
 
-  constructor(private boxRepository: BoxRepository) {
+  constructor(private boxRepository: BoxRepositoryService) {
   }
 
   updateHtml(event: any): void {

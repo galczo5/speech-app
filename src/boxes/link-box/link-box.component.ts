@@ -1,7 +1,7 @@
 import {Component, Input, OnInit} from '@angular/core';
 import {BoxComponent} from '../box-component';
 import {LinkBoxData} from './link-box-data';
-import {BoxRepository} from '../box-repository';
+import {BoxRepositoryService} from '../box-repository.service';
 
 @Component({
   selector: 'app-link-box',
@@ -49,7 +49,7 @@ export class LinkBoxComponent extends BoxComponent {
   @Input()
   readonly hidden: boolean;
 
-  constructor(boxRepository: BoxRepository) {
+  constructor(boxRepository: BoxRepositoryService) {
     super(boxRepository);
   }
 

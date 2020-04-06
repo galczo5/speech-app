@@ -2,6 +2,9 @@ import {ChangeDetectorRef, Component, OnInit} from '@angular/core';
 import {ColorModalService} from '../../color/color-modal.service';
 import {ColorRepositoryService} from '../../color/color-repository.service';
 import {Color} from '../../color/color';
+import {DocumentRepositoryService} from '../../document/document-repository.service';
+import {Document} from '../../document/document';
+import {ColorMapService} from '../../color/color-map.service';
 
 @Component({
   selector: 'app-document-editor',
@@ -9,15 +12,15 @@ import {Color} from '../../color/color';
     <app-sidebar-header title="Edit document"></app-sidebar-header>
     <div class="form-group">
       <label for="">Document name:</label>
-      <input type="text" class="form-control">
+      <input type="text" class="form-control" [value]="document && document.name" (keyup)="updateName($event)">
     </div>
     <div class="form-group">
       <label for="">Description:</label>
-      <textarea class="form-control" rows="5"></textarea>
+      <textarea class="form-control" rows="5" (keyup)="updateDescription($event)">{{ document && document.description }}</textarea>
     </div>
     <div class="form-group">
       <label for="">Background:</label>
-      <app-color-picker [color]="background" (colorPicked)="setBackground($event)"></app-color-picker>
+      <app-color-picker [color]="getBackgroundColor()" (colorPicked)="updateBackground($event)"></app-color-picker>
     </div>
     <div class="d-flex my-3 mt-5 flex-wrap">
       <app-color-box size="sm" class="mr-1 mb-1" (click)="openColorManagementModal()">
@@ -29,16 +32,17 @@ import {Color} from '../../color/color';
                      size="sm"
                      class="mr-1 mb-1"></app-color-box>
     </div>
-  `,
-  styles: []
+  `
 })
 export class DocumentEditorComponent implements OnInit {
 
   colors: Array<Color> = [];
-  background: Color;
+  document: Document;
 
   constructor(private colorModalService: ColorModalService,
               private colorRepositoryService: ColorRepositoryService,
+              private documentRepositoryService: DocumentRepositoryService,
+              private colorMapService: ColorMapService,
               private changeDetectorRef: ChangeDetectorRef) { }
 
   ngOnInit(): void {
@@ -46,19 +50,35 @@ export class DocumentEditorComponent implements OnInit {
       .pipe()
       .subscribe(colors => {
         this.colors = colors;
+        this.changeDetectorRef.detectChanges();
+      });
 
-        // TODO
-        if (!this.background) {
-          this.background = this.colors[0];
-        }
-
+    this.documentRepositoryService.getDocument()
+      .pipe()
+      .subscribe(document => {
+        this.document = document;
         this.changeDetectorRef.detectChanges();
       });
   }
 
-  setBackground(color: Color): void {
-    this.background = color;
-    this.changeDetectorRef.detectChanges();
+  updateBackground(color: Color): void {
+    this.documentRepositoryService.updateColor(color.id);
+  }
+
+  updateName(event: any): void {
+    this.documentRepositoryService.updateName(event.target.value);
+  }
+
+  updateDescription(event: any): void {
+    this.documentRepositoryService.updateDescription(event.target.value);
+  }
+
+  getBackgroundColor(): Color {
+    if (!this.document) {
+      return null;
+    }
+
+    return this.colorMapService.getColor(this.document.colorId);
   }
 
   openColorManagementModal(): void {

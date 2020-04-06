@@ -6,6 +6,8 @@ import {defaultLinkBox} from './link-box/default-link-box';
 import {defaultImageBox} from './image-box/default-image-box';
 import {defaultHtmlBox} from './html-box/default-html-box';
 import {defaultFrameBox} from './frame-box/default-frame-box';
+import {BoxHttpService} from './box-http.service';
+import {ProjectIdRepositoryService} from '../project/project-id-repository.service';
 
 function randomId(): string {
   const s1 = (((1 + Math.random()) * 0x10000) | 0).toString(16).substring(1);
@@ -19,17 +21,17 @@ function randomId(): string {
 @Injectable({
   providedIn: 'root'
 })
-export class BoxRepository {
+export class BoxRepositoryService {
 
   private boxes$: ReplaySubject<Array<Box>> = new ReplaySubject<Array<Box>>(1);
   private boxes: Array<Box> = [];
 
-  constructor() {
-    this.boxes = [
-      defaultTextBox('text', 100, 0, 1, 0),
-      defaultImageBox('image', 450, 0, 1, 0)
-    ];
+  constructor(private boxHttpService: BoxHttpService,
+              private idRepositoryService: ProjectIdRepositoryService) {
+  }
 
+  set(boxes: Array<Box>): void {
+    this.boxes = boxes;
     this.notifyChanges();
   }
 
@@ -55,58 +57,97 @@ export class BoxRepository {
       throw new Error('unknown box type');
     }
 
-    this.boxes.push(box);
-    this.notifyChanges();
+    this.boxHttpService.addBox(this.idRepositoryService.get(), box)
+      .subscribe(newBox => {
+        this.boxes.push(newBox);
+        this.notifyChanges();
+      });
   }
 
   updateName(id: string, name: string): void {
     const box = this.findBox(id);
-    this.updateBox({
+    const boxToUpdate = {
       ...box,
       name
-    });
+    };
+
+    this.boxHttpService.updateBox(this.idRepositoryService.get(), boxToUpdate)
+      .subscribe(updatedBox => {
+        this.updateBox(updatedBox);
+        this.notifyChanges();
+      });
   }
 
   updateLayer(id: string, layerId: string): void {
     const box = this.findBox(id);
-    this.updateBox({
+    const boxToUpdate = {
       ...box,
       layerId
-    });
+    };
+
+    this.boxHttpService.updateBox(this.idRepositoryService.get(), boxToUpdate)
+      .subscribe(updatedBox => {
+        this.updateBox(updatedBox);
+        this.notifyChanges();
+      });
   }
 
   updatePosition(id: string, y: number, x: number): void {
     const box = this.findBox(id);
-    this.updateBox({
+    const boxToUpdate = {
       ...box,
       y,
       x
-    });
+    };
+
+    this.boxHttpService.updateBox(this.idRepositoryService.get(), boxToUpdate)
+      .subscribe(updatedBox => {
+        this.updateBox(updatedBox);
+        this.notifyChanges();
+      });
   }
 
   updateSize(id: string, height: number, width: number): void {
     const box = this.findBox(id);
-    this.updateBox({
+    const boxToUpdate = {
       ...box,
       height,
       width
-    });
+    };
+
+    this.boxHttpService.updateBox(this.idRepositoryService.get(), boxToUpdate)
+      .subscribe(updatedBox => {
+        this.updateBox(updatedBox);
+        this.notifyChanges();
+      });
   }
 
   updateAngle(id: string, angle: number): void {
     const box = this.findBox(id);
-    this.updateBox({
+    const boxToUpdate = {
       ...box,
       rotate: angle
-    });
+    };
+
+    this.boxHttpService.updateBox(this.idRepositoryService.get(), boxToUpdate)
+      .subscribe(updatedBox => {
+        this.updateBox(updatedBox);
+        this.notifyChanges();
+      });
   }
 
   updateScale(id: string, scale: number): void {
     const box = this.findBox(id);
-    this.updateBox({
+    const boxToUpdate = {
       ...box,
       scale
-    });
+    };
+
+    this.boxHttpService.updateBox(this.idRepositoryService.get(), boxToUpdate)
+      .subscribe(updatedBox => {
+        this.updateBox(updatedBox);
+        this.notifyChanges();
+      });
   }
 
   updateData<T extends BoxData>(id: string, type: BoxType, data: T): void {
@@ -117,10 +158,16 @@ export class BoxRepository {
 
     // Its ok, I'm checking type above
     // @ts-ignore
-    this.updateBox({
+    const boxToUpdate: Box = {
       ...box,
       data
-    });
+    };
+
+    this.boxHttpService.updateBox(this.idRepositoryService.get(), boxToUpdate)
+      .subscribe(updatedBox => {
+        this.updateBox(updatedBox);
+        this.notifyChanges();
+      });
   }
 
   private findBox(id: string): Box {

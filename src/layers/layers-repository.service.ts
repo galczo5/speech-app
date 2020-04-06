@@ -12,6 +12,11 @@ export class LayersRepositoryService {
 
   constructor() { }
 
+  set(layers: Array<Layer>): void {
+    this.layers = layers;
+    this.notifyChanges();
+  }
+
   addLayer(): void {
     this.layers.push({
       id: 'Layer-' + this.layers.length,

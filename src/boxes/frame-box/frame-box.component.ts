@@ -2,7 +2,7 @@ import {Component, ElementRef, Input, OnInit, Renderer2, ViewChild} from '@angul
 import {BoxComponent} from '../box-component';
 import {FrameBoxData} from './frame-box-data';
 import {DomSanitizer, SafeUrl} from '@angular/platform-browser';
-import {BoxRepository} from '../box-repository';
+import {BoxRepositoryService} from '../box-repository.service';
 
 @Component({
   selector: 'app-frame-box',
@@ -46,7 +46,7 @@ export class FrameBoxComponent extends BoxComponent implements OnInit {
 
   safeUrl: SafeUrl;
 
-  constructor(boxRepository: BoxRepository,
+  constructor(boxRepository: BoxRepositoryService,
               private sanitizer: DomSanitizer,
               private renderer: Renderer2) {
     super(boxRepository);

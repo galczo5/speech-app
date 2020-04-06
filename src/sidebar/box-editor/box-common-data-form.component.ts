@@ -1,6 +1,6 @@
 import {ChangeDetectorRef, Component, Input, OnInit} from '@angular/core';
 import {Box} from '../../boxes/box';
-import {BoxRepository} from '../../boxes/box-repository';
+import {BoxRepositoryService} from '../../boxes/box-repository.service';
 import {Subject} from 'rxjs';
 import {debounceTime, takeUntil} from 'rxjs/operators';
 import {degToRad, radToDeg} from '../../utils/math-utils';
@@ -78,7 +78,7 @@ export class BoxCommonDataFormComponent implements OnInit {
   private readonly executor$: Subject<() => void> = new Subject<() => void>();
   private readonly destroy$: Subject<void> = new Subject<void>();
 
-  constructor(private boxRepository: BoxRepository,
+  constructor(private boxRepository: BoxRepositoryService,
               private layersRepositoryService: LayersRepositoryService,
               private changeDetectorRef: ChangeDetectorRef) {
   }

@@ -1,6 +1,6 @@
 import {Component, Input} from '@angular/core';
 import {TextBox} from '../../boxes/box';
-import {BoxRepository} from '../../boxes/box-repository';
+import {BoxRepositoryService} from '../../boxes/box-repository.service';
 import {TextBoxData} from '../../boxes/text-box/text-box-data';
 import {Color} from '../../color/color';
 import {ColorMapService} from '../../color/color-map.service';
@@ -69,7 +69,7 @@ export class TextBoxEditorComponent {
   @Input()
   activeBox: TextBox;
 
-  constructor(private boxRepository: BoxRepository,
+  constructor(private boxRepository: BoxRepositoryService,
               private colorMapService: ColorMapService) {
   }
 

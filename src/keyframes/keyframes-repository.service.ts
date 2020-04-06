@@ -13,6 +13,11 @@ export class KeyframesRepositoryService {
   constructor() {
   }
 
+  set(keyframes: Array<Keyframe>): void {
+    this.keyframes = keyframes;
+    this.notifyChanges();
+  }
+
   create(y: number, x: number, scale: number, rotation: number): void {
     this.keyframes.push({
       id: new Date().getTime().toString(),

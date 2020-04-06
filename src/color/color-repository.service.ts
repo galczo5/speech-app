@@ -10,20 +10,10 @@ export class ColorRepositoryService {
   private colors: Array<Color> = new Array<Color>();
   private colors$: ReplaySubject<Array<Color>> = new ReplaySubject<Array<Color>>();
 
-  constructor() {
-    this.colors = [
-      {id: '1', name: 'Grass in Texas', value: '#ECD078'},
-      {id: '2', name: 'Nevada rocks', value: '#D95B43'},
-      {id: '3', name: 'Hawaiian lava', value: '#C02942'},
-      {id: '4', name: 'Cave in darkness', value: '#542437'},
-      {id: '5', name: 'Ocean green', value: '#53777A'},
-      {id: '6', name: 'Gray', value: '#556270'},
-      {id: '7', name: 'Green pencil', value: '#4ECDC4'},
-      {id: '8', name: 'Vegas neon', value: '#C7F464'},
-      {id: '9', name: 'Black', value: '#000000'},
-      {id: '10', name: 'White', value: '#FFFFFF'}
-    ];
+  constructor() {}
 
+  set(colors: Array<Color>): void {
+    this.colors = colors;
     this.notifyChanges();
   }
 

@@ -89,7 +89,7 @@
 
   <div style="position: relative;">
     <app-home-resizable-box [initialScale]="1" [initialRotation]="-0.1" [width]="220" [height]="70" [initialX]="50" [initialY]="250">
-      <button class="btn btn-primary">
+      <button class="btn btn-primary" (click)="startProject()">
         <i class="fas fa-plus mr-3"></i>
         Create new project
       </button>
@@ -221,7 +221,11 @@
             <li class="list-group-item">Public only</li>
             <li class="list-group-item">Account not needed</li>
             <li class="list-group-item text-primary">
-              <strong>Create new project</strong>
+              <button class="btn btn-link p-0"
+                      style="font-size: 18px;"
+                      (click)="startProject()">
+                Create new project
+              </button>
             </li>
           </ul>
         </div>

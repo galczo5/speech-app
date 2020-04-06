@@ -1,5 +1,5 @@
 import {Component, Input, OnInit} from '@angular/core';
-import {BoxRepository} from '../../boxes/box-repository';
+import {BoxRepositoryService} from '../../boxes/box-repository.service';
 import {ImageBox} from '../../boxes/box';
 import {ImageBoxData} from '../../boxes/image-box/image-box-data';
 
@@ -22,7 +22,7 @@ export class ImageBoxEditorComponent {
   @Input()
   activeBox: ImageBox;
 
-  constructor(private boxRepository: BoxRepository) {
+  constructor(private boxRepository: BoxRepositoryService) {
   }
 
   updateSrc(event: any): void {

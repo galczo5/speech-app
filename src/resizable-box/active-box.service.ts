@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import {Observable, ReplaySubject, Subject} from 'rxjs';
 import {Box} from '../boxes/box';
-import {BoxRepository} from '../boxes/box-repository';
+import {BoxRepositoryService} from '../boxes/box-repository.service';
 
 @Injectable({
   providedIn: 'root'
@@ -11,7 +11,7 @@ export class ActiveBoxService {
   private box$: ReplaySubject<Box> = new ReplaySubject<Box>();
   private box: Box;
 
-  constructor(boxRepository : BoxRepository) {
+  constructor(boxRepository : BoxRepositoryService) {
 
     boxRepository.getBoxes()
       .subscribe(boxes => {

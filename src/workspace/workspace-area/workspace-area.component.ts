@@ -7,7 +7,7 @@ import {WorkspaceManipulationService} from '../workspace-manipulation.service';
 import {WorkspaceAreaStoreService} from '../workspace-area-store.service';
 import {Box, BoxType} from '../../boxes/box';
 import {ActiveBoxService} from '../../resizable-box/active-box.service';
-import {BoxRepository} from '../../boxes/box-repository';
+import {BoxRepositoryService} from '../../boxes/box-repository.service';
 import {AddBoxService} from '../add-box.service';
 import {AreaSize, AreaSizeService} from '../area-size.service';
 import {distanceBetweenTwoPoints, minmax, Point, rotatePoint, roundRad, scalePoint} from '../../utils/math-utils';
@@ -51,7 +51,7 @@ export class WorkspaceAreaComponent implements OnInit, OnDestroy {
               private manipulationService: WorkspaceManipulationService,
               private storeService: WorkspaceAreaStoreService,
               private activeBoxService: ActiveBoxService,
-              private boxRepository: BoxRepository,
+              private boxRepository: BoxRepositoryService,
               private addBoxService: AddBoxService,
               private areaSizeService: AreaSizeService,
               private activeKeyframeService: ActiveKeyframeService,

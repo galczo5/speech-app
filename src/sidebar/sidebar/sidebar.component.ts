@@ -1,5 +1,5 @@
 import {ChangeDetectorRef, Component, ElementRef, OnDestroy, OnInit} from '@angular/core';
-import {NavigationEnd, Router} from '@angular/router';
+import {ActivatedRoute, NavigationEnd, Router} from '@angular/router';
 import {filter, takeUntil} from 'rxjs/operators';
 import {SidebarStateService} from '../sidebar-state.service';
 import {fromEvent, Subject} from 'rxjs';
@@ -21,12 +21,12 @@ import {ShowTimeModeService} from '../../project/show-time-mode.service';
 export class SidebarComponent implements OnInit, OnDestroy {
 
   routes = {
-    BOX_CREATE: 'project/box/create',
-    BOX_LIST: 'project/box/list',
-    BOX_EDIT: 'project/box/edit',
-    LAYERS_LIST: 'project/layer/list',
-    KEYFRAMES_LIST: 'project/keyframe/list',
-    DOCUMENT: 'project/document'
+    BOX_CREATE: 'box/create',
+    BOX_LIST: 'box/list',
+    BOX_EDIT: 'box/edit',
+    LAYERS_LIST: 'layer/list',
+    KEYFRAMES_LIST: 'keyframe/list',
+    DOCUMENT: 'document'
   };
 
   private destroy$: Subject<void> = new Subject<void>();
@@ -38,6 +38,7 @@ export class SidebarComponent implements OnInit, OnDestroy {
   private zoom: number = 1;
 
   constructor(private router: Router,
+              private route: ActivatedRoute,
               private sidebarStateService: SidebarStateService,
               private elementRef: ElementRef,
               private areaStoreService: WorkspaceAreaStoreService,
@@ -100,7 +101,7 @@ export class SidebarComponent implements OnInit, OnDestroy {
   navigate(url: string): void {
     this.sidebarOpen = !this.sidebarOpen;
     this.sidebarStateService.set(this.sidebarOpen);
-    this.router.navigateByUrl(url);
+    this.router.navigate([url], { relativeTo: this.route });
   }
 
   centerView(): void {

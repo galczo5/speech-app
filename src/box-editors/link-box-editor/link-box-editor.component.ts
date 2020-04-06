@@ -1,6 +1,6 @@
 import {Component, Input, OnInit} from '@angular/core';
 import {LinkBox, TextBox} from '../../boxes/box';
-import {BoxRepository} from '../../boxes/box-repository';
+import {BoxRepositoryService} from '../../boxes/box-repository.service';
 import {LinkBoxData} from '../../boxes/link-box/link-box-data';
 
 @Component({
@@ -64,7 +64,7 @@ export class LinkBoxEditorComponent {
   @Input()
   activeBox: LinkBox;
 
-  constructor(private boxRepository: BoxRepository) {
+  constructor(private boxRepository: BoxRepositoryService) {
   }
 
   updateText(event: any): void {

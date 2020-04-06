@@ -2,7 +2,7 @@ import {Component, Input} from '@angular/core';
 import {BoxComponent} from '../box-component';
 import {ImageBoxData} from './image-box-data';
 import {DomSanitizer, SafeUrl} from '@angular/platform-browser';
-import {BoxRepository} from '../box-repository';
+import {BoxRepositoryService} from '../box-repository.service';
 
 @Component({
   selector: 'app-image-box',
@@ -43,7 +43,7 @@ export class ImageBoxComponent extends BoxComponent {
   @Input()
   readonly hidden: boolean;
 
-  constructor(boxRepository: BoxRepository, private sanitizer: DomSanitizer) {
+  constructor(boxRepository: BoxRepositoryService, private sanitizer: DomSanitizer) {
     super(boxRepository);
   }
 

@@ -1,7 +1,7 @@
 import {Component, Input, OnInit} from '@angular/core';
 import {BoxComponent} from '../box-component';
 import {HtmlBoxData} from './html-box-data';
-import {BoxRepository} from '../box-repository';
+import {BoxRepositoryService} from '../box-repository.service';
 
 @Component({
   selector: 'app-html-box',
@@ -42,7 +42,7 @@ export class HtmlBoxComponent extends BoxComponent {
   @Input()
   readonly hidden: boolean;
 
-  constructor(boxRepository: BoxRepository) {
+  constructor(boxRepository: BoxRepositoryService) {
     super(boxRepository);
   }
 

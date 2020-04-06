@@ -1,6 +1,6 @@
 import {Component, Input, OnInit} from '@angular/core';
 import {FrameBox, LinkBox} from '../../boxes/box';
-import {BoxRepository} from '../../boxes/box-repository';
+import {BoxRepositoryService} from '../../boxes/box-repository.service';
 import {FrameBoxData} from '../../boxes/frame-box/frame-box-data';
 
 @Component({
@@ -18,7 +18,7 @@ export class FrameBoxEditorComponent {
   @Input()
   activeBox: FrameBox;
 
-  constructor(private boxRepository: BoxRepository) {
+  constructor(private boxRepository: BoxRepositoryService) {
   }
 
   updateUrl(event: any): void {

@@ -1,5 +1,5 @@
 import {ChangeDetectorRef, Component, OnDestroy, OnInit} from '@angular/core';
-import {BoxRepository} from '../../boxes/box-repository';
+import {BoxRepositoryService} from '../../boxes/box-repository.service';
 import {Box, BoxType} from '../../boxes/box';
 import {Subject} from 'rxjs';
 import {filter, takeUntil} from 'rxjs/operators';
@@ -51,7 +51,7 @@ export class BoxListComponent implements OnInit, OnDestroy {
   private filter: string = '';
   private destroy$: Subject<void> = new Subject<void>();
 
-  constructor(private boxRepository: BoxRepository,
+  constructor(private boxRepository: BoxRepositoryService,
               private activeBoxService: ActiveBoxService,
               private changeDetectorRef: ChangeDetectorRef) { }
 

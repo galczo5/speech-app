@@ -1,11 +1,14 @@
-import { Injectable } from '@angular/core';
+import {Injectable} from '@angular/core';
 import {Project} from './project';
 import {BoxRepositoryService} from '../boxes/box-repository.service';
 import {ColorRepositoryService} from '../color/color-repository.service';
 import {KeyframesRepositoryService} from '../keyframes/keyframes-repository.service';
 import {LayersRepositoryService} from '../layers/layers-repository.service';
 import {DocumentRepositoryService} from '../document/document-repository.service';
-import {Observable, of} from "rxjs";
+import {Observable, of} from 'rxjs';
+import {BoxType, TextBox} from '../boxes/box';
+import {boxes} from './initial-boxes';
+import {keyframes} from './initial-keyframes';
 
 @Injectable({
   providedIn: 'root'
@@ -45,15 +48,17 @@ export class ProjectInitService {
   }
 
   private getNewProject(): Project {
+
     // TODO: Replace with API
     const project = {
       id: new Date().getTime().toString(),
-      boxes: [],
+      boxes,
       colors: [
         {id: '1', name: 'Black', value: '#000000'},
-        {id: '2', name: 'White', value: '#FFFFFF'}
+        {id: '2', name: 'White', value: '#FFFFFF'},
+        {id: '3', name: 'Blue', value: '#007bff'}
       ],
-      keyframes: [],
+      keyframes,
       layers: [],
       document: {
         name: 'Awesome brave new project',

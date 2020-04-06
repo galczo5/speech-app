@@ -2,6 +2,7 @@ import {Component, Input, OnInit} from '@angular/core';
 import {BoxComponent} from '../box-component';
 import {HtmlBoxData} from './html-box-data';
 import {BoxRepositoryService} from '../box-repository.service';
+import {DomSanitizer, SafeHtml} from '@angular/platform-browser';
 
 @Component({
   selector: 'app-html-box',
@@ -22,7 +23,7 @@ import {BoxRepositoryService} from '../box-repository.service';
                        (scaleChanged)="updateScale($event)">
       <div [style.width.px]="width"
            [style.height.px]="height"
-           [innerHTML]="data.html">
+           [innerHTML]="sanitized()">
       </div>
     </app-resizable-box>
   `,
@@ -42,8 +43,13 @@ export class HtmlBoxComponent extends BoxComponent {
   @Input()
   readonly hidden: boolean;
 
-  constructor(boxRepository: BoxRepositoryService) {
+  constructor(boxRepository: BoxRepositoryService,
+              private domSanitizer: DomSanitizer) {
     super(boxRepository);
+  }
+
+  sanitized(): SafeHtml {
+    return this.domSanitizer.bypassSecurityTrustHtml(this.data.html);
   }
 
 }

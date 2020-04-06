@@ -71,11 +71,7 @@ export class BoxRepositoryService {
       name
     };
 
-    this.boxHttpService.updateBox(this.idRepositoryService.get(), boxToUpdate)
-      .subscribe(updatedBox => {
-        this.updateBox(updatedBox);
-        this.notifyChanges();
-      });
+    this.saveBox(boxToUpdate);
   }
 
   updateLayer(id: string, layerId: string): void {
@@ -85,11 +81,7 @@ export class BoxRepositoryService {
       layerId
     };
 
-    this.boxHttpService.updateBox(this.idRepositoryService.get(), boxToUpdate)
-      .subscribe(updatedBox => {
-        this.updateBox(updatedBox);
-        this.notifyChanges();
-      });
+    this.saveBox(boxToUpdate);
   }
 
   updatePosition(id: string, y: number, x: number): void {
@@ -100,11 +92,7 @@ export class BoxRepositoryService {
       x
     };
 
-    this.boxHttpService.updateBox(this.idRepositoryService.get(), boxToUpdate)
-      .subscribe(updatedBox => {
-        this.updateBox(updatedBox);
-        this.notifyChanges();
-      });
+    this.saveBox(boxToUpdate);
   }
 
   updateSize(id: string, height: number, width: number): void {
@@ -115,11 +103,7 @@ export class BoxRepositoryService {
       width
     };
 
-    this.boxHttpService.updateBox(this.idRepositoryService.get(), boxToUpdate)
-      .subscribe(updatedBox => {
-        this.updateBox(updatedBox);
-        this.notifyChanges();
-      });
+    this.saveBox(boxToUpdate);
   }
 
   updateAngle(id: string, angle: number): void {
@@ -129,11 +113,7 @@ export class BoxRepositoryService {
       rotate: angle
     };
 
-    this.boxHttpService.updateBox(this.idRepositoryService.get(), boxToUpdate)
-      .subscribe(updatedBox => {
-        this.updateBox(updatedBox);
-        this.notifyChanges();
-      });
+    this.saveBox(boxToUpdate);
   }
 
   updateScale(id: string, scale: number): void {
@@ -143,11 +123,7 @@ export class BoxRepositoryService {
       scale
     };
 
-    this.boxHttpService.updateBox(this.idRepositoryService.get(), boxToUpdate)
-      .subscribe(updatedBox => {
-        this.updateBox(updatedBox);
-        this.notifyChanges();
-      });
+    this.saveBox(boxToUpdate);
   }
 
   updateData<T extends BoxData>(id: string, type: BoxType, data: T): void {
@@ -172,6 +148,14 @@ export class BoxRepositoryService {
 
   private findBox(id: string): Box {
     return this.boxes.find(b => b.id === id);
+  }
+
+  private saveBox(boxToUpdate: Box): void {
+    this.boxHttpService.updateBox(this.idRepositoryService.get(), boxToUpdate)
+      .subscribe(updatedBox => {
+        this.updateBox(updatedBox);
+        this.notifyChanges();
+      });
   }
 
   private updateBox(box: Box): void {

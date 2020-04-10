@@ -64,6 +64,11 @@ export class BoxRepositoryService {
       });
   }
 
+  remove(id: string): void {
+    this.boxes = this.boxes.filter(b => b.id !== id);
+    this.notifyChanges();
+  }
+
   updateName(id: string, name: string): void {
     const box = this.findBox(id);
     const boxToUpdate = {

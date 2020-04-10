@@ -20,7 +20,7 @@ export function defaultTextBox(id: string, y: number, x: number, scale: number, 
       padding: '0px 0px 0px 0px',
       // tslint:disable-next-line:max-line-length
       text: 'Lorem ipsum dolor sit amet enim. Etiam ullamcorper. Suspendisse a pellentesque dui, non felis. Maecenas malesuada elit lectus felis, malesuada ultricies. Curabitur et ligula.',
-      fontSize: '24px'
+      fontSize: 24
     },
     layerId: null
   };

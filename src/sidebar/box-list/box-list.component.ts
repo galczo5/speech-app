@@ -4,6 +4,10 @@ import {Box, BoxType} from '../../boxes/box';
 import {Subject} from 'rxjs';
 import {filter, takeUntil} from 'rxjs/operators';
 import {ActiveBoxService} from '../../resizable-box/active-box.service';
+import {AreaSize, AreaSizeService} from '../../workspace/area-size.service';
+import {WorkspaceAreaTransitionService} from '../../workspace/workspace-area-transition.service';
+import {WorkspaceAreaStoreService} from '../../workspace/workspace-area-store.service';
+import {RelativePosition} from '../../utils/relative-position';
 
 @Component({
   selector: 'app-box-list',
@@ -20,8 +24,26 @@ import {ActiveBoxService} from '../../resizable-box/active-box.service';
            [class.text-primary]="activeBox && activeBox.id === box.id"
            [class.border-primary]="activeBox && activeBox.id === box.id"
            (click)="setActiveBox(box)">
-        <div class="mb-2">
-          <b>{{ box.name }}</b>
+        <div class="row align-items-center mb-2">
+            <div class="col">
+              <b>{{ box.name }}</b>
+            </div>
+            <div class="col-auto">
+              <button class="btn btn-sm btn-link text-muted"
+                      appTooltip="Edit">
+                <i class="fas fa-pen"></i>
+              </button>
+              <button class="btn btn-sm btn-link text-muted"
+                      appTooltip="Center view"
+                      (click)="center(box)">
+                <i class="fas fa-crosshairs"></i>
+              </button>
+              <button class="btn btn-sm btn-link text-muted"
+                      appTooltip="Delete"
+                      (click)="remove(box.id)">
+                  <i class="fas fa-trash"></i>
+                </button>
+            </div>
         </div>
         <div style="font-size: 10px"
              [class.text-muted]="!activeBox || activeBox.id !== box.id"
@@ -39,8 +61,7 @@ import {ActiveBoxService} from '../../resizable-box/active-box.service';
       </div>
       <hr>
     </ng-container>
-  `,
-  styles: []
+  `
 })
 export class BoxListComponent implements OnInit, OnDestroy {
 
@@ -49,10 +70,15 @@ export class BoxListComponent implements OnInit, OnDestroy {
   activeBox: Box;
 
   private filter: string = '';
+  private areaSize: AreaSize = new AreaSize(0, 0);
   private destroy$: Subject<void> = new Subject<void>();
 
   constructor(private boxRepository: BoxRepositoryService,
               private activeBoxService: ActiveBoxService,
+              private boxRepositoryService: BoxRepositoryService,
+              private areaSizeService: AreaSizeService,
+              private areaTransitionService: WorkspaceAreaTransitionService,
+              private areaStoreService: WorkspaceAreaStoreService,
               private changeDetectorRef: ChangeDetectorRef) { }
 
   ngOnInit(): void {
@@ -70,6 +96,12 @@ export class BoxListComponent implements OnInit, OnDestroy {
         this.activeBox = box;
         this.changeDetectorRef.detectChanges();
       });
+
+    this.areaSizeService.getSize()
+      .pipe(takeUntil(this.destroy$))
+      .subscribe(areaSize => {
+        this.areaSize = areaSize;
+      });
   }
 
   ngOnDestroy(): void {
@@ -78,7 +110,7 @@ export class BoxListComponent implements OnInit, OnDestroy {
   }
 
   rounded(x: number | string): number | string {
-    return Math.round(<number> x) || x;
+    return Math.round(x as number) || x;
   }
 
   getIcon(type: BoxType): string {
@@ -99,6 +131,21 @@ export class BoxListComponent implements OnInit, OnDestroy {
 
   setActiveBox(box: Box): void {
     this.activeBoxService.set(box);
+  }
+
+  remove(id: string): void {
+    this.boxRepositoryService.remove(id);
+  }
+
+  center(box: Box): void {
+    this.areaTransitionService.withTransition(200, () => {
+      const center = this.areaSize.getCenter();
+      this.areaStoreService.setRotation(0);
+      this.areaStoreService.setZoom(1);
+      this.areaStoreService.setPosition(
+        new RelativePosition(-box.y + center.y, -box.x + center.x)
+      );
+    });
   }
 
   changeFilter($event: any): void {

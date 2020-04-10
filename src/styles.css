@@ -94,8 +94,8 @@ app-project {
   transition: all .3s ease-in-out;
   transition-property: margin-left, opacity;
 
-  width: 350px;
-  margin-left: -350px;
+  width: 400px;
+  margin-left: -400px;
 }
 
 app-sidebar {
@@ -113,15 +113,16 @@ app-sidebar .btn {
   border-radius: 0;
   width: 45px;
   height: 45px;
-  color: rgba(240, 240, 240, .9);
+  color: var(--gray);
 }
 
 app-sidebar .btn:hover {
-  color: rgba(240, 240, 240, 1);
+  transition: color .2s;
+  color: var(--primary);
 }
 
 app-sidebar .btn.active {
-  background-color: rgba(0, 0, 0, .2);
+  color: var(--primary);
 }
 
 app-sidebar .btn + .btn {
@@ -226,7 +227,7 @@ app-color-picker .form-control {
 
 .presentation-mode .toolbar-content {
   opacity: 0;
-  margin-left: -350px;
+  margin-left: -400px;
 }
 
 app-presentation-mode-navigation {
@@ -239,4 +240,15 @@ app-presentation-mode-navigation {
 
 app-presentation-mode-navigation:hover {
   opacity: 1;
+}
+
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+/* Firefox */
+input[type=number] {
+  -moz-appearance: textfield;
 }

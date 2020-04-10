@@ -3,7 +3,7 @@ import {Component, Input} from '@angular/core';
 @Component({
   selector: 'app-sidebar-header',
   template: `
-    <h4 class="mt-2">
+    <h4 class="mt-2 text-primary">
       <b>{{ title }}</b>
     </h4>
     <p *ngIf="description"

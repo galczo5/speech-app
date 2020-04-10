@@ -17,7 +17,14 @@ import {takeUntil} from 'rxjs/operators';
         <app-color-box [color]="color.value" [shadow]="false" size="sm"></app-color-box>
       </div>
     </div>
-    <input *ngIf="!color" class="form-control" readonly value="Click to select..." (click)="openModal()">
+    <div *ngIf="!color"
+         appTooltip="Click to select"
+         position="up">
+      <input class="form-control"
+             readonly
+             value="Not selected..."
+             (click)="openModal()">
+    </div>
   `
 })
 export class ColorPickerComponent implements OnDestroy {

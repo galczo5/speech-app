@@ -1,4 +1,4 @@
-<div class="d-flex flex-column bg-primary" [style.height.%]="100">
+<div class="d-flex flex-column bg-white" [style.height.%]="100">
   <div>
     <div class="mb-4 mt-2 logo">
       <button class="btn btn-block" appTooltip="Speech App!" position="right">
@@ -55,9 +55,6 @@
     </div>
 
     <div class="mb-3">
-      <button class="btn btn-block" appTooltip="Reset rotation" position="right" (click)="resetRotation()">
-        <i class="fas fa-compass"></i>
-      </button>
       <button class="btn btn-block" appTooltip="Center view" position="right" (click)="centerView()">
         <i class="fas fa-crosshairs"></i>
       </button>
@@ -68,17 +65,11 @@
         <i class="fas fa-search-minus"></i>
       </button>
     </div>
-    <div class="px-2">
-      <hr>
-    </div>
   </div>
 
   <div class="flex-fill"></div>
 
-  <div>
-    <div class="px-2">
-      <hr>
-    </div>
+  <div class="mb-2">
     <button class="btn btn-block" appTooltip="Start presentation" position="right" (click)="startShow()">
       <i class="fas fa-play"></i>
     </button>
@@ -87,9 +78,6 @@
     </button>
     <button class="btn btn-block" appTooltip="Previous keyframe" position="right" (click)="prevKeyframe()">
       <i class="fas fa-backward"></i>
-    </button>
-    <button class="btn btn-block mt-3" appTooltip="Help" position="right">
-      <i class="fas fa-question-circle"></i>
     </button>
   </div>
 </div>

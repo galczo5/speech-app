@@ -24,13 +24,13 @@ import {Color} from '../../color/color';
                        (scaleChanged)="updateScale($event)">
       <div [style.width.px]="width"
            [style.height.px]="height"
-           [style.fontSize]="data.fontSize"
+           [style.fontSize.px]="data.fontSize"
            [style.fontStyle]="data.style"
            [style.fontWeight]="data.weight"
            [style.color]="getColorValue(data.colorId)"
            [style.background]="getColorValue(data.backgroundColorId)"
            [style.textAlign]="data.align"
-           [style.padding]="data.padding">
+           [style.padding.px]="data.padding">
         {{ data.text }}
       </div>
     </app-resizable-box>

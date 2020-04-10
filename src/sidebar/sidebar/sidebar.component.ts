@@ -129,13 +129,13 @@ export class SidebarComponent implements OnInit, OnDestroy {
 
   zoomIn(): void {
     this.transitionService.withTransition(200, () => {
-      this.areaStoreService.setZoom(this.zoom + .5);
+      this.areaStoreService.setZoom(this.zoom + 1);
     });
   }
 
   zoomOut(): void {
     this.transitionService.withTransition(200, () => {
-      this.areaStoreService.setZoom(this.zoom - .5);
+      this.areaStoreService.setZoom(this.zoom - 1);
     });
   }
 

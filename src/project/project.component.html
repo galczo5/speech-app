@@ -1,7 +1,9 @@
-<div class="shadow" style="z-index: 2">
+<div class="border-right"
+     [class.shadow-sm]="!sidebarOpen"
+     style="z-index: 2">
   <app-sidebar></app-sidebar>
 </div>
-<div class="toolbar shadow" style="z-index: 1;"
+<div class="toolbar shadow-sm" style="z-index: 1;"
      [class.border-right]="sidebarOpen"
      [class.toolbar-open]="sidebarOpen">
   <div class="p-3 toolbar-content">

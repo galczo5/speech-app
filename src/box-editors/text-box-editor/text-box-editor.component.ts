@@ -16,37 +16,27 @@ import {ColorMapService} from '../../color/color-map.service';
       <div class="row">
         <div class="col">
           <label for="">Font size:</label>
-          <input type="text" class="form-control" (keyup)="updateFontSize($event)" [value]="activeBox.data.fontSize">
+          <input class="form-control" type="number" (keyup)="updateFontSize($event)" [value]="activeBox.data.fontSize">
         </div>
         <div class="col">
-          <label for="">Padding:</label>
-          <input type="text" class="form-control" (keyup)="updatePadding($event)" [value]="activeBox.data.padding">
-        </div>
-      </div>
-    </div>
-    <div class="form-group">
-      <div class="row">
-        <div class="col">
-          <label for="">Align:</label>
-          <select class="form-control" (change)="updateAlign($event)" [value]="activeBox.data.fontSize">
-            <option value="left">Left</option>
-            <option value="center">Center</option>
-            <option value="right">Right</option>
-          </select>
-        </div>
-        <div class="col">
-          <label for="">Style:</label>
-          <select class="form-control" (change)="updateStyle($event)" [value]="activeBox.data.style">
-            <option value="normal">Normal</option>
-            <option value="italic">Italic</option>
-          </select>
-        </div>
-        <div class="col">
-          <label for="">Weight:</label>
-          <select class="form-control" (change)="updateWeight($event)" [value]="activeBox.data.weight">
-            <option value="normal">Normal</option>
-            <option value="bold">Bold</option>
-          </select>
+          <label for="">Font style:</label>
+          <div class="btn-group">
+            <button class="btn btn-light">
+              <i class="fas fa-align-left"></i>
+            </button>
+            <button class="btn btn-light">
+              <i class="fas fa-align-center"></i>
+            </button>
+            <button class="btn btn-light">
+              <i class="fas fa-align-right"></i>
+            </button>
+            <button class="btn btn-light">
+              <i class="fas fa-bold"></i>
+            </button>
+            <button class="btn btn-light">
+              <i class="fas fa-italic"></i>
+            </button>
+          </div>
         </div>
       </div>
     </div>
@@ -54,11 +44,21 @@ import {ColorMapService} from '../../color/color-map.service';
       <div class="row">
         <div class="col">
           <label for="">Color:</label>
-          <app-color-picker [color]="getColor(activeBox.data.colorId)" (colorPicked)="updateColor($event)"></app-color-picker>
+          <app-color-picker [color]="getColor(activeBox.data.colorId)"
+                            (colorPicked)="updateColor($event)"></app-color-picker>
         </div>
         <div class="col">
           <label for="">Background:</label>
-          <app-color-picker [color]="getColor(activeBox.data.backgroundColorId)" (colorPicked)="updateBackground($event)"></app-color-picker>
+          <app-color-picker [color]="getColor(activeBox.data.backgroundColorId)"
+                            (colorPicked)="updateBackground($event)"></app-color-picker>
+        </div>
+      </div>
+    </div>
+    <div class="form-group">
+      <div class="row">
+        <div class="col-6">
+          <label for="">Padding:</label>
+          <input class="form-control" type="number" (keyup)="updatePadding($event)" [value]="activeBox.data.padding">
         </div>
       </div>
     </div>

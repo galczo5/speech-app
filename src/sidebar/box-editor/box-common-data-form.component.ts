@@ -15,7 +15,7 @@ import {Layer} from '../../layers/layer';
         <label for="">Name:</label>
         <input class="form-control" type="text" [value]="activeBox.name" (keyup)="updateName($event)">
       </div>
-      <div class="form-group">
+      <div *ngIf="layers.length" class="form-group">
         <label for="">Layer:</label>
         <select class="form-control" (change)="updateLayer($event)">
           <option [value]="null">---</option>
@@ -30,11 +30,11 @@ import {Layer} from '../../layers/layer';
         <div class="row align-items-center">
           <div class="col">
             <label for="">Width:</label>
-            <input class="form-control" type="text" [value]="activeBox.width" (keyup)="updateWidth($event)">
+            <input class="form-control" type="number" [value]="activeBox.width" (keyup)="updateWidth($event)">
           </div>
           <div class="col">
             <label for="">Height:</label>
-            <input class="form-control" type="text" [value]="activeBox.height" (keyup)="updateHeight($event)">
+            <input class="form-control" type="number" [value]="activeBox.height" (keyup)="updateHeight($event)">
           </div>
         </div>
       </div>
@@ -42,11 +42,11 @@ import {Layer} from '../../layers/layer';
         <div class="row align-items-center">
           <div class="col">
             <label for="">Pos. X:</label>
-            <input class="form-control" type="text" [value]="activeBox.x" (keyup)="updateLeft($event)">
+            <input class="form-control" type="number" [value]="activeBox.x" (keyup)="updateLeft($event)">
           </div>
           <div class="col">
             <label for="">Pos. Y:</label>
-            <input class="form-control" type="text" [value]="activeBox.y" (keyup)="updateTop($event)">
+            <input class="form-control" type="number" [value]="activeBox.y" (keyup)="updateTop($event)">
           </div>
         </div>
       </div>
@@ -54,13 +54,13 @@ import {Layer} from '../../layers/layer';
         <div class="col">
           <div class="form-group">
             <label for="">Zoom:</label>
-            <input class="form-control" type="text" [value]="activeBox.scale" (keyup)="updateScale($event)">
+            <input class="form-control" type="number" [value]="activeBox.scale" (keyup)="updateScale($event)">
           </div>
         </div>
         <div class="col">
           <div class="form-group">
             <label for="">Rotation:</label>
-            <input class="form-control" type="text" [value]="toDeg(activeBox.rotate)" (keyup)="updateRotation($event)">
+            <input class="form-control" type="number" [value]="toDeg(activeBox.rotate)" (keyup)="updateRotation($event)">
           </div>
         </div>
       </div>

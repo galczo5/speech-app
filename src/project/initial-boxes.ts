@@ -14,7 +14,7 @@ const titleBox: TextBox = {
   data: {
     colorId: '3',
     align: 'left',
-    fontSize: '24px',
+    fontSize: 24,
     backgroundColorId: null,
     padding: '',
     style: 'normal',
@@ -37,7 +37,7 @@ const subtitleBox: TextBox = {
   data: {
     colorId: null,
     align: 'left',
-    fontSize: '18px',
+    fontSize: 18,
     backgroundColorId: null,
     padding: '',
     style: 'normal',
@@ -142,7 +142,7 @@ const exploreBox: TextBox = {
   data: {
     colorId: null,
     align: 'left',
-    fontSize: '18px',
+    fontSize: 18,
     backgroundColorId: null,
     padding: '',
     style: 'normal',

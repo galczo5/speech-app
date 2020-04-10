@@ -9,6 +9,7 @@
   border-width: 2px;
   border-style: solid;
   cursor: grab;
+  will-change: transform;
 }
 
 .resizable-box .position-marker {

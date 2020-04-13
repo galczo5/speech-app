@@ -15,7 +15,8 @@ import {RelativePosition} from '../../utils/relative-position';
 import {Subject, zip} from 'rxjs';
 import {WorkspaceAreaStoreService} from '../../workspace/workspace-area-store.service';
 import {angle, pythagorean, rotatePoint, roundRad} from '../../utils/math-utils';
-import {takeUntil} from 'rxjs/operators';
+import {debounceTime, takeUntil} from 'rxjs/operators';
+import {TransitionRenderFixService} from '../../transition/transition-render-fix.service';
 
 @Component({
   providers: [
@@ -23,7 +24,7 @@ import {takeUntil} from 'rxjs/operators';
   ],
   selector: 'app-resizable-box',
   template: `
-    <div #wrapper class="d-inline-block resizable-box rounded"
+    <div #wrapper class="d-inline-block resizable-box rounded will-change"
          [class.border-primary]="isActive"
          [class.shadow]="isActive"
          [class.grabbing]="moveInProgress">
@@ -105,6 +106,7 @@ export class ResizableBoxComponent implements OnChanges, OnInit, OnDestroy {
   private workspaceRotation = 0;
   private workspaceZoom = 1;
 
+  private boxChanged$: Subject<void> = new Subject<void>();
   private destroy$: Subject<void> = new Subject<void>();
 
   constructor(@Inject(DOCUMENT) private document: Document,
@@ -112,6 +114,7 @@ export class ResizableBoxComponent implements OnChanges, OnInit, OnDestroy {
               private changeDetectorRef: ChangeDetectorRef,
               private mouseActionsService: ResizableBoxMouseActionsService,
               private workspaceAreaStoreService: WorkspaceAreaStoreService,
+              private transitionRenderFixService: TransitionRenderFixService,
               private renderer2: Renderer2) {
   }
 
@@ -157,6 +160,15 @@ export class ResizableBoxComponent implements OnChanges, OnInit, OnDestroy {
     this.listenForWorkspaceChanges();
     this.setPosition(this.y, this.x);
     this.setTransform(this.scale, this.rotation);
+
+    this.boxChanged$
+      .pipe(
+        debounceTime(100),
+        takeUntil(this.destroy$)
+      )
+      .subscribe(() => {
+        this.transitionRenderFixService.fix();
+      });
   }
 
   ngOnDestroy(): void {
@@ -178,10 +190,13 @@ export class ResizableBoxComponent implements OnChanges, OnInit, OnDestroy {
     const el = this.wrapper.nativeElement;
     this.renderer2.setStyle(el, 'top', (y - this.height / 2) + 'px');
     this.renderer2.setStyle(el, 'left', (x - this.width / 2) + 'px');
+
+    this.boxChanged$.next();
   }
 
   private setTransform(scale: number, rotation: number): void {
     this.renderer2.setStyle(this.wrapper.nativeElement, 'transform', `scale(${scale}) rotate(${rotation}rad)`);
+    this.boxChanged$.next();
   }
 
   private listenForWorkspaceChanges(): void {

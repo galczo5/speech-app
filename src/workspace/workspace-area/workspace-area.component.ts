@@ -1,6 +1,6 @@
 import {ChangeDetectorRef, Component, ElementRef, Inject, Input, OnDestroy, OnInit, Renderer2, ViewChild} from '@angular/core';
 import {fromEvent, interval, Observable, Subject} from 'rxjs';
-import {distinctUntilChanged, filter, takeUntil} from 'rxjs/operators';
+import {debounceTime, distinctUntilChanged, filter, takeUntil} from 'rxjs/operators';
 import {DOCUMENT} from '@angular/common';
 import {RelativePosition} from '../../utils/relative-position';
 import {WorkspaceManipulationService} from '../workspace-manipulation.service';
@@ -15,6 +15,7 @@ import {ActiveKeyframeService} from '../../keyframes/active-keyframe.service';
 import {WorkspaceAreaTransitionService} from '../workspace-area-transition.service';
 import {LayersRepositoryService} from '../../layers/layers-repository.service';
 import {Layer} from '../../layers/layer';
+import {TransitionRenderFixService} from '../../transition/transition-render-fix.service';
 
 @Component({
   selector: 'app-workspace-area',
@@ -41,10 +42,11 @@ export class WorkspaceAreaComponent implements OnInit, OnDestroy {
   layers: Layer[] = [];
 
   private moveInProgress: boolean = true;
-  private readonly nativeElement: HTMLElement;
-  private readonly destroy$: Subject<void> = new Subject<void>();
-
   private areaSize: AreaSize = new AreaSize(0, 0);
+
+  private readonly nativeElement: HTMLElement;
+  private readonly workspaceChanged$: Subject<void> = new Subject<void>();
+  private readonly destroy$: Subject<void> = new Subject<void>();
 
   constructor(elementRef: ElementRef,
               private changeDetectorRef: ChangeDetectorRef,
@@ -56,6 +58,7 @@ export class WorkspaceAreaComponent implements OnInit, OnDestroy {
               private areaSizeService: AreaSizeService,
               private activeKeyframeService: ActiveKeyframeService,
               private workspaceAreaTransitionService: WorkspaceAreaTransitionService,
+              private transitionRenderFixService: TransitionRenderFixService,
               private layersRepositoryService: LayersRepositoryService,
               private renderer: Renderer2,
               @Inject(DOCUMENT) private document: Document) {
@@ -79,6 +82,15 @@ export class WorkspaceAreaComponent implements OnInit, OnDestroy {
         this.layers = layers;
         this.changeDetectorRef.detectChanges();
       });
+
+    this.workspaceChanged$
+      .pipe(
+        debounceTime(100),
+        takeUntil(this.destroy$)
+      )
+      .subscribe(() => {
+        this.transitionRenderFixService.fix();
+      });
   }
 
   ngOnDestroy(): void {
@@ -96,6 +108,7 @@ export class WorkspaceAreaComponent implements OnInit, OnDestroy {
 
   setTransform(): void {
     this.renderer.setStyle(this.element.nativeElement, 'transform', this.getTransform());
+    this.workspaceChanged$.next();
   }
 
   onClickEvent(event: MouseEvent): void {

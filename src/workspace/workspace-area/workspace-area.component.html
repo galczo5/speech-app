@@ -1,5 +1,6 @@
-<div #element (click)="onClickEvent($event)"
-     class="workspace-area">
+<div #element
+     class="workspace-area will-change"
+     (click)="onClickEvent($event)">
     <ng-content></ng-content>
     <div class="workspace-area-directions border-dark presentation-mode-hide">
       <span>0x0</span>

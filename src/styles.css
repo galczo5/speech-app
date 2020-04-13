@@ -252,3 +252,8 @@ input::-webkit-inner-spin-button {
 input[type=number] {
   -moz-appearance: textfield;
 }
+
+
+.fix-transform .will-change {
+  will-change: unset !important;
+}

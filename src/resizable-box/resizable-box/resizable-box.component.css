@@ -9,13 +9,11 @@
   border-width: 2px;
   border-style: solid;
   cursor: grab;
-  transition: border-color .2s;
   will-change: transform;
 }
 
 .resizable-box:hover {
   border-style: dashed;
-  transition-delay: .2s;
   border-color: var(--gray);
 }
 

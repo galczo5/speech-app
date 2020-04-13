@@ -2,7 +2,7 @@ import {Box, BoxType, FrameBox, HtmlBox, TextBox} from '../boxes/box';
 
 const titleBox: TextBox = {
   id: '1',
-  height: 100,
+  height: 35,
   width: 300,
   x: 0,
   y: 0,
@@ -25,7 +25,7 @@ const titleBox: TextBox = {
 
 const subtitleBox: TextBox = {
   id: '2',
-  height: 100,
+  height: 50,
   width: 300,
   x: 0,
   y: 50,
@@ -48,10 +48,10 @@ const subtitleBox: TextBox = {
 
 const legendBox: HtmlBox = {
   id: '3',
-  height: 500,
+  height: 320,
   width: 500,
   x: 100,
-  y: 350,
+  y: 250,
   layerId: null,
   type: BoxType.HTML,
   scale: 1,
@@ -130,10 +130,10 @@ const legendBox: HtmlBox = {
 
 const exploreBox: TextBox = {
   id: '5',
-  height: 100,
+  height: 50,
   width: 300,
   x: 0,
-  y: 500,
+  y: 450,
   layerId: null,
   type: BoxType.TEXT,
   scale: 1,

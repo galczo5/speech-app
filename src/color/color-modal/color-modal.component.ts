@@ -34,7 +34,7 @@ import {ColorRepositoryService} from '../color-repository.service';
                 </div>
                 <div class="form-group">
                   <label>Value:</label>
-                  <input class="form-control" [value]="selectedColor.value" (keyup)="setNewValue($event)">
+                  <app-color-input [value]="newValue || selectedColor.value" (change)="setNewValue($event)"></app-color-input>
                 </div>
               </div>
             </div>

@@ -6,7 +6,7 @@ import {
   HostBinding,
   OnDestroy,
   OnInit,
-  Renderer2
+  Renderer2, ViewChild
 } from '@angular/core';
 import {SidebarStateService} from '../sidebar/sidebar-state.service';
 import {fromEvent, Subject} from 'rxjs';
@@ -21,6 +21,9 @@ import {NavigationEnd, Router} from "@angular/router";
   templateUrl: './project.component.html'
 })
 export class ProjectComponent implements OnInit, OnDestroy {
+
+  @ViewChild('toolbar', { read: ElementRef, static: true })
+  toolbar: ElementRef;
 
   @HostBinding('class.sidebar-open')
   sidebarOpen = false;
@@ -67,6 +70,10 @@ export class ProjectComponent implements OnInit, OnDestroy {
           this.presentationModeNavigationService.close();
         }
       });
+
+    fromEvent(this.toolbar.nativeElement, 'wheel')
+      .pipe(takeUntil(this.destroy$))
+      .subscribe((event: Event) => event.stopPropagation());
 
     fromEvent(this.elementRef.nativeElement, 'wheel')
       .pipe(takeUntil(this.destroy$))

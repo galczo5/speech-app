@@ -68,10 +68,6 @@ export class SidebarComponent implements OnInit, OnDestroy {
         this.changeDetectorRef.detectChanges();
       });
 
-    fromEvent(this.elementRef.nativeElement, 'wheel')
-      .pipe(takeUntil(this.destroy$))
-      .subscribe((event: Event) => event.stopPropagation());
-
     this.areaSizeService.getSize()
       .pipe(takeUntil(this.destroy$))
       .subscribe(size => this.areaSize = size);

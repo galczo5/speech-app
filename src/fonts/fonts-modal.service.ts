@@ -1,19 +1,19 @@
 import {ComponentRef, Injectable, Injector} from '@angular/core';
 import {Overlay, OverlayConfig, OverlayRef} from '@angular/cdk/overlay';
 import {ComponentPortal} from '@angular/cdk/portal';
-import {ColorModalComponent} from './color-modal/color-modal.component';
+import {FontsModalComponent} from './fonts-modal/fonts-modal.component';
 import {Observable, Subject} from 'rxjs';
-import {Color} from './color';
+import {Font} from './fonts-repository.service';
 import {take} from 'rxjs/operators';
 
 @Injectable({
   providedIn: 'root'
 })
-export class ColorModalService {
+export class FontsModalService {
 
-  private selectedColor$: Subject<Color>;
-  private ref: ComponentRef<ColorModalComponent>;
+  private ref: ComponentRef<FontsModalComponent>;
   private overlayRef: OverlayRef;
+  private selectedFont$: Subject<Font>;
 
   private configs = new OverlayConfig({
     hasBackdrop: true,
@@ -31,21 +31,21 @@ export class ColorModalService {
     }
 
     this.overlayRef = this.overlay.create(this.configs);
-    this.ref = this.overlayRef.attach(new ComponentPortal(ColorModalComponent, undefined, this.injector));
+    this.ref = this.overlayRef.attach(new ComponentPortal(FontsModalComponent, undefined, this.injector));
     this.ref.changeDetectorRef.detectChanges();
   }
 
-  getSelectedColor(): Observable<Color> {
-    this.selectedColor$ = new Subject<Color>();
-    return this.selectedColor$.pipe(take(1));
+  getSelectedFont(): Observable<Font> {
+    this.selectedFont$ = new Subject<Font>();
+    return this.selectedFont$.pipe(take(1));
   }
 
   pickEnabled(): boolean {
-    return !!this.selectedColor$;
+    return !!this.selectedFont$;
   }
 
-  pick(color: Color): void {
-    this.selectedColor$.next(color);
+  pick(font: Font): void {
+    this.selectedFont$.next(font);
     this.close();
   }
 
@@ -53,10 +53,5 @@ export class ColorModalService {
     this.overlayRef.dispose();
     this.ref.destroy();
     this.ref = null;
-    if (this.selectedColor$) {
-      this.selectedColor$.complete();
-      this.selectedColor$ = null;
-    }
   }
-
 }

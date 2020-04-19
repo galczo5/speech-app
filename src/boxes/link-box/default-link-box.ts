@@ -14,6 +14,7 @@ export function defaultLinkBox(id: string, y: number, x: number, scale: number, 
     data: {
       background: 'transparent',
       color: 'black',
+      font: null,
       fontSize: '24px',
       padding: '0px 0px 0px 0px',
       style: 'normal',

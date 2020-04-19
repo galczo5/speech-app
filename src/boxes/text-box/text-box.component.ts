@@ -3,7 +3,6 @@ import {BoxComponent} from '../box-component';
 import {TextBoxData} from './text-box-data';
 import {BoxRepositoryService} from '../box-repository.service';
 import {ColorMapService} from '../../color/color-map.service';
-import {Color} from '../../color/color';
 
 @Component({
   selector: 'app-text-box',
@@ -30,7 +29,8 @@ import {Color} from '../../color/color';
            [style.color]="getColorValue(data.colorId)"
            [style.background]="getColorValue(data.backgroundColorId)"
            [style.textAlign]="data.align"
-           [style.padding.px]="data.padding">
+           [style.padding.px]="data.padding"
+           [style.font-family]="data.font">
         {{ data.text }}
       </div>
     </app-resizable-box>

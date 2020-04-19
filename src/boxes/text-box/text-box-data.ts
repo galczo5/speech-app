@@ -1,6 +1,7 @@
 export interface TextBoxData {
 
   text: string;
+  font: string;
   fontSize: number;
   align: 'left' | 'right' | 'center';
   weight: 'normal' | 'bold';

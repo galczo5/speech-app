@@ -13,6 +13,10 @@ import {ColorMapService} from '../../color/color-map.service';
       <textarea rows="5" class="form-control" (keyup)="updateText($event)">{{activeBox.data.text}}</textarea>
     </div>
     <div class="form-group">
+      <label for="">Font:</label>
+      <app-font-picker [font]="activeBox.data.font" (fontPicked)="updateFont($event)"></app-font-picker>
+    </div>
+    <div class="form-group">
       <div class="row">
         <div class="col">
           <label for="">Font size:</label>
@@ -129,8 +133,14 @@ export class TextBoxEditorComponent {
     });
   }
 
+  updateFont(font: string): void {
+    this.boxRepository.updateData<TextBoxData>(this.activeBox.id, this.activeBox.type, {
+      ...this.activeBox.data,
+      font
+    });
+  }
+
   getColor(id: string): Color {
     return this.colorMapService.getColor(id);
   }
-
 }

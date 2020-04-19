@@ -17,7 +17,7 @@ import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
   `,
   styles: []
 })
-export class ColorInputComponent {
+export class ColorValueInputComponent {
 
   @Input()
   value: string;

@@ -15,6 +15,10 @@ import {LinkBoxData} from '../../boxes/link-box/link-box-data';
       <input type="text" class="form-control" (keyup)="updateUrl($event)" [value]="activeBox.data.url">
     </div>
     <div class="form-group">
+      <label for="">Font:</label>
+      <app-font-picker [font]="activeBox.data.font" (fontPicked)="updateFont($event)"></app-font-picker>
+    </div>
+    <div class="form-group">
       <div class="row">
         <div class="col">
           <label for="">Font size:</label>
@@ -123,4 +127,10 @@ export class LinkBoxEditorComponent {
     });
   }
 
+  updateFont(font: string): void {
+    this.boxRepository.updateData<LinkBoxData>(this.activeBox.id, this.activeBox.type, {
+      ...this.activeBox.data,
+      font
+    });
+  }
 }

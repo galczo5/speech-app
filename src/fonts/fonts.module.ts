@@ -7,9 +7,10 @@ import { FontBoxComponent } from './font-box/font-box.component';
 import { FontsModalSearchComponent } from './fonts-modal-search/fonts-modal-search.component';
 import {FontLoaderService} from './font-loader.service';
 import {FontsRepositoryService} from './fonts-repository.service';
+import { FontPickerComponent } from './font-picker/font-picker.component';
 
 @NgModule({
-  declarations: [FontsModalComponent, FontBoxComponent, FontBoxComponent, FontsModalSearchComponent],
+  declarations: [FontsModalComponent, FontBoxComponent, FontBoxComponent, FontsModalSearchComponent, FontPickerComponent],
   providers: [
     {
       provide: APP_INITIALIZER,
@@ -24,7 +25,8 @@ import {FontsRepositoryService} from './fonts-repository.service';
     }
   ],
   exports: [
-    FontBoxComponent
+    FontBoxComponent,
+    FontPickerComponent
   ],
   imports: [
     CommonModule,

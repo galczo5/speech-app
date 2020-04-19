@@ -1,5 +1,6 @@
 export interface LinkBoxData {
 
+  font: string;
   text: string;
   url: string;
   fontSize: string;

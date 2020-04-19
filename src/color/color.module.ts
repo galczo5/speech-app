@@ -5,12 +5,12 @@ import {FullscreenOverlayContainer, OverlayContainer, OverlayModule} from '@angu
 import { ColorBoxComponent } from './color-box/color-box.component';
 import {TooltipModule} from '../tooltip/tooltip.module';
 import { ColorPickerComponent } from './color-picker/color-picker.component';
-import { ColorInputComponent } from './color-input/color-input.component';
+import { ColorValueInputComponent } from './color-value-input/color-value-input.component';
 
 
 
 @NgModule({
-  declarations: [ColorModalComponent, ColorBoxComponent, ColorPickerComponent, ColorInputComponent],
+  declarations: [ColorModalComponent, ColorBoxComponent, ColorPickerComponent, ColorValueInputComponent],
   imports: [
     CommonModule,
     OverlayModule,

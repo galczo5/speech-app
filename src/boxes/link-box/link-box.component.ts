@@ -28,7 +28,8 @@ import {BoxRepositoryService} from '../box-repository.service';
          [style.fontWeight]="data.weight"
          [style.color]="data.color"
          [style.background]="data.background"
-         [style.padding]="data.padding">
+         [style.padding]="data.padding"
+         [style.font-familt]="data.font">
         {{ data.text }}
       </a>
     </app-resizable-box>

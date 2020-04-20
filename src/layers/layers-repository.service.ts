@@ -1,6 +1,8 @@
 import { Injectable } from '@angular/core';
 import {Observable, ReplaySubject} from 'rxjs';
 import {Layer} from './layer';
+import {ProjectIdRepositoryService} from '../project/project-id-repository.service';
+import {LayersHttpService} from './layers-http.service';
 
 @Injectable({
   providedIn: 'root'
@@ -10,7 +12,8 @@ export class LayersRepositoryService {
   private layers$: ReplaySubject<Array<Layer>> = new ReplaySubject<Array<Layer>>(1);
   private layers: Array<Layer> = [];
 
-  constructor() { }
+  constructor(private idRepositoryService: ProjectIdRepositoryService,
+              private layersHttpService: LayersHttpService) { }
 
   set(layers: Array<Layer>): void {
     this.layers = layers;
@@ -18,15 +21,27 @@ export class LayersRepositoryService {
   }
 
   addLayer(): void {
-    this.layers.push({
+    const layerToAdd = {
       id: 'Layer-' + this.layers.length,
       name: 'New layer ' + (this.layers.length + 1),
       index: this.layers.length + 1,
       visible: true,
       highlighted: false
-    });
+    };
 
-    this.notifyChanges();
+    this.layersHttpService.add(this.idRepositoryService.get(), layerToAdd)
+      .subscribe(layer => {
+        this.layers.push(layer);
+        this.notifyChanges();
+      });
+  }
+
+  updateName(layerId: string, name: string): void {
+    const layer = this.findLayer(layerId);
+    this.updateLayer({
+      ...layer,
+      name
+    });
   }
 
   setVisibility(layerId: string, isVisible: boolean): void {
@@ -61,7 +76,11 @@ export class LayersRepositoryService {
     }
 
     this.regenerateIndexes();
-    this.notifyChanges();
+    this.layersHttpService.updateAll(this.idRepositoryService.get(), this.layers)
+      .subscribe(layers => {
+        this.layers = layers;
+        this.notifyChanges();
+      });
   }
 
   moveDown(id: string): void {
@@ -80,7 +99,11 @@ export class LayersRepositoryService {
     }
 
     this.regenerateIndexes();
-    this.notifyChanges();
+    this.layersHttpService.updateAll(this.idRepositoryService.get(), this.layers)
+      .subscribe(layers => {
+        this.layers = layers;
+        this.notifyChanges();
+      });
   }
 
   getLayers(): Observable<Array<Layer>> {
@@ -105,15 +128,16 @@ export class LayersRepositoryService {
   }
 
   private updateLayer(layer: Layer): void {
-    for (let i = 0; i < this.layers.length; i++) {
+    this.layersHttpService.update(this.idRepositoryService.get(), layer)
+      .subscribe(updatedLayer => {
+        for (let i = 0; i < this.layers.length; i++) {
+          if (this.layers[i].id !== updatedLayer.id) {
+            continue;
+          }
+          this.layers[i] = updatedLayer;
+        }
 
-      if (this.layers[i].id !== layer.id) {
-        continue;
-      }
-
-      this.layers[i] = layer;
-    }
-
-    this.notifyChanges();
+        this.notifyChanges();
+      });
   }
 }

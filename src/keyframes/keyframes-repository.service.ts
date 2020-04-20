@@ -1,6 +1,8 @@
 import {Injectable} from '@angular/core';
 import {Keyframe} from './keyframe';
 import {Observable, ReplaySubject} from 'rxjs';
+import {KeyframeHttpService} from './keyframe-http.service';
+import {ProjectIdRepositoryService} from '../project/project-id-repository.service';
 
 @Injectable({
   providedIn: 'root'
@@ -10,7 +12,8 @@ export class KeyframesRepositoryService {
   private keyframes$: ReplaySubject<Array<Keyframe>> = new ReplaySubject<Array<Keyframe>>(1);
   private keyframes: Array<Keyframe> = [];
 
-  constructor() {
+  constructor(private keyframeHttpService: KeyframeHttpService,
+              private idRepositoryService: ProjectIdRepositoryService) {
   }
 
   set(keyframes: Array<Keyframe>): void {
@@ -19,7 +22,7 @@ export class KeyframesRepositoryService {
   }
 
   create(y: number, x: number, scale: number, rotation: number): void {
-    this.keyframes.push({
+    const keyframeToAdd = {
       id: new Date().getTime().toString(),
       name: `Keyframe ${this.keyframes.length + 1}`,
       transitionTime: 500,
@@ -27,9 +30,13 @@ export class KeyframesRepositoryService {
       x,
       scale,
       rotation
-    });
+    };
 
-    this.notifyChanges();
+    this.keyframeHttpService.add(this.idRepositoryService.get(), keyframeToAdd)
+      .subscribe(keyframe => {
+        this.keyframes.push(keyframe);
+        this.notifyChanges();
+      });
   }
 
   updateName(id: string, name: string): void {
@@ -38,8 +45,6 @@ export class KeyframesRepositoryService {
       ...keyframe,
       name
     });
-
-    this.notifyChanges();
   }
 
   updateTransitionTime(id: string, transitionTime: number): void {
@@ -76,7 +81,11 @@ export class KeyframesRepositoryService {
 
     }
 
-    this.notifyChanges();
+    this.keyframeHttpService.updateAll(this.idRepositoryService.get(), this.keyframes)
+      .subscribe(keyframes => {
+        this.keyframes = keyframes;
+        this.notifyChanges();
+      });
   }
 
   moveDown(id: string): void {
@@ -94,12 +103,20 @@ export class KeyframesRepositoryService {
 
     }
 
-    this.notifyChanges();
+    this.keyframeHttpService.updateAll(this.idRepositoryService.get(), this.keyframes)
+      .subscribe(keyframes => {
+        this.keyframes = keyframes;
+        this.notifyChanges();
+      });
   }
 
   remove(id: string): void {
-    this.keyframes = this.keyframes.filter(f => f.id !== id);
-    this.notifyChanges();
+
+    this.keyframeHttpService.remove(this.idRepositoryService.get(), id)
+      .subscribe(() => {
+        this.keyframes = this.keyframes.filter(f => f.id !== id);
+        this.notifyChanges();
+      });
   }
 
 
@@ -108,14 +125,18 @@ export class KeyframesRepositoryService {
   }
 
   private updateKeyframe(keyframe: Keyframe): void {
-    for (let i = 0; i < this.keyframes.length; i++) {
+    this.keyframeHttpService.update(this.idRepositoryService.get(), keyframe)
+      .subscribe((updatedKeyframe) => {
+        for (let i = 0; i < this.keyframes.length; i++) {
 
-      if (this.keyframes[i].id !== keyframe.id) {
-        continue;
-      }
+          if (this.keyframes[i].id !== updatedKeyframe.id) {
+            continue;
+          }
 
-      this.keyframes[i] = keyframe;
-    }
+          this.keyframes[i] = updatedKeyframe;
+        }
+        this.notifyChanges();
+      });
   }
 
   private findKeyframe(id: string): Keyframe {

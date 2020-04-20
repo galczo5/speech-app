@@ -1,7 +1,9 @@
 import {Injectable} from '@angular/core';
 import {HttpClient} from '@angular/common/http';
-import {Observable} from 'rxjs';
+import {Observable, of} from 'rxjs';
 import {map} from 'rxjs/operators';
+import {Document} from '../document/document';
+import {ProjectLocalStorageService} from '../project/project-local-storage.service';
 
 export interface FontResponse {
   family: string;
@@ -14,7 +16,8 @@ export interface FontResponse {
 })
 export class FontsHttpService {
 
-  constructor(private readonly httpClient: HttpClient) {
+  constructor(private readonly httpClient: HttpClient,
+              private readonly localStorageService: ProjectLocalStorageService) {
   }
 
   getAll(): Observable<Array<FontResponse>> {
@@ -22,6 +25,14 @@ export class FontsHttpService {
       .pipe(
         map(x => x.items as Array<FontResponse>)
       );
+  }
+
+  update(id: string, fonts: Array<string>): Observable<Array<string>> {
+    this.localStorageService.updateProject(id, {
+      fonts
+    });
+
+    return of(fonts);
   }
 
 }

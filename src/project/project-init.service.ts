@@ -9,6 +9,7 @@ import {Observable, of} from 'rxjs';
 import {BoxType, TextBox} from '../boxes/box';
 import {boxes} from './initial-boxes';
 import {keyframes} from './initial-keyframes';
+import {FontsRepositoryService} from '../fonts/fonts-repository.service';
 
 @Injectable({
   providedIn: 'root'
@@ -19,7 +20,8 @@ export class ProjectInitService {
               private colorRepository: ColorRepositoryService,
               private keyframesRepository: KeyframesRepositoryService,
               private layersRepository: LayersRepositoryService,
-              private documentRepository: DocumentRepositoryService) {
+              private documentRepository: DocumentRepositoryService,
+              private fontsRepositoryService: FontsRepositoryService) {
   }
 
   create(): Observable<string> {
@@ -40,6 +42,7 @@ export class ProjectInitService {
     this.keyframesRepository.set(project.keyframes);
     this.layersRepository.set(project.layers);
     this.documentRepository.set(project.document);
+    this.fontsRepositoryService.set(project.fonts);
   }
 
   private getProject(id: string): Project {
@@ -61,10 +64,16 @@ export class ProjectInitService {
       keyframes,
       layers: [],
       document: {
-        name: 'Awesome brave new project',
+        name: 'Awesome new project',
         description: '',
         colorId: null
-      }
+      },
+      fonts: [
+        'Roboto',
+        'Patrick Hand SC',
+        'Permanent Marker',
+        'Country Western Script'
+      ]
     };
 
     localStorage.setItem(project.id, JSON.stringify(project));

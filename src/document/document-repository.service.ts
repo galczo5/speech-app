@@ -1,6 +1,8 @@
 import { Injectable } from '@angular/core';
 import {Observable, ReplaySubject} from 'rxjs';
 import {Document} from './document';
+import {DocumentHttpService} from './document-http.service';
+import {ProjectIdRepositoryService} from '../project/project-id-repository.service';
 
 @Injectable({
   providedIn: 'root'
@@ -14,7 +16,8 @@ export class DocumentRepositoryService {
     description: ''
   };
 
-  constructor() {
+  constructor(private documentHttpService: DocumentHttpService,
+              private idRepositoryService: ProjectIdRepositoryService) {
     this.notifyChanges();
   }
 
@@ -24,30 +27,42 @@ export class DocumentRepositoryService {
   }
 
   updateName(name: string): void {
-    this.document = {
+    const documentToUpdate = {
       ...this.document,
       name
     };
 
-    this.notifyChanges();
+    this.documentHttpService.update(this.idRepositoryService.get(), documentToUpdate)
+      .subscribe(updatedDocument => {
+        this.document = updatedDocument;
+        this.notifyChanges();
+      });
   }
 
   updateDescription(description: string): void {
-    this.document = {
+    const documentToUpdate = {
       ...this.document,
       description
     };
 
-    this.notifyChanges();
+    this.documentHttpService.update(this.idRepositoryService.get(), documentToUpdate)
+      .subscribe(updatedDocument => {
+        this.document = updatedDocument;
+        this.notifyChanges();
+      });
   }
 
   updateColor(colorId: string): void {
-    this.document = {
+    const documentToUpdate = {
       ...this.document,
       colorId
     };
 
-    this.notifyChanges();
+    this.documentHttpService.update(this.idRepositoryService.get(), documentToUpdate)
+      .subscribe(updatedDocument => {
+        this.document = updatedDocument;
+        this.notifyChanges();
+      });
   }
 
   getDocument(): Observable<Document> {

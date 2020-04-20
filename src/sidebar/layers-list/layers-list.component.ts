@@ -58,7 +58,8 @@ import {Layer} from '../../layers/layer';
           <input type="text"
                  class="form-control"
                  [class.text-primary]="activeLayer && activeLayer.id === layer.id"
-                 [value]="layer.name">
+                 [value]="layer.name"
+                 (change)="updateName($event)">
         </div>
       </div>
       <hr>
@@ -114,5 +115,9 @@ export class LayersListComponent implements OnInit {
   setActive(layer: Layer): void {
     this.activeLayer = layer;
     this.changeDetectorRef.detectChanges();
+  }
+
+  updateName(event: any): void {
+    this.layersRepositoryService.updateName(this.activeLayer.id, event.target.value);
   }
 }

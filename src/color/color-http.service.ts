@@ -1,50 +1,45 @@
 import { Injectable } from '@angular/core';
-import {Box} from './box';
-import {Observable, of} from 'rxjs';
-import {Project} from '../project/project';
 import {ProjectLocalStorageService} from '../project/project-local-storage.service';
-
-/*
-  This one will be based on http when api ready
- */
+import {Observable, of} from 'rxjs';
+import {Color} from './color';
 
 @Injectable({
   providedIn: 'root'
 })
-export class BoxHttpService {
+export class ColorHttpService {
 
   constructor(private localStorageService: ProjectLocalStorageService) { }
 
-  add(id: string, box: Box): Observable<Box> {
+  add(id: string, color: Color): Observable<Color> {
     const project = this.localStorageService.getProject(id);
     this.localStorageService.updateProject(id, {
-      boxes: [
-        ...project.boxes,
-        box
+      colors: [
+        ...project.colors,
+        color
       ]
     });
 
-    return of(box);
+    return of(color);
   }
 
-  update(id: string, box: Box): Observable<Box> {
+  update(id: string, color: Color): Observable<Color> {
     const project = this.localStorageService.getProject(id);
     this.localStorageService.updateProject(id, {
-      boxes: [
-        ...project.boxes.map(b => {
-          return b.id === box.id ? box : b;
+      colors: [
+        ...project.colors.map(c => {
+          return c.id === color.id ? color : c;
         })
       ]
     });
 
-    return of(box);
+    return of(color);
   }
 
-  remove(id: string, boxId: string): Observable<void> {
+  remove(id: string, colorId: string): Observable<void> {
     const project = this.localStorageService.getProject(id);
     this.localStorageService.updateProject(id, {
-      boxes: [
-        ...project.boxes.filter(b => b.id !== boxId)
+      colors: [
+        ...project.colors.filter(b => b.id !== colorId)
       ]
     });
 

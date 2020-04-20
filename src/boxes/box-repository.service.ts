@@ -9,15 +9,6 @@ import {defaultFrameBox} from './frame-box/default-frame-box';
 import {BoxHttpService} from './box-http.service';
 import {ProjectIdRepositoryService} from '../project/project-id-repository.service';
 
-function randomId(): string {
-  const s1 = (((1 + Math.random()) * 0x10000) | 0).toString(16).substring(1);
-  const s2 = (((1 + Math.random()) * 0x10000) | 0).toString(16).substring(1);
-  const s3 = (((1 + Math.random()) * 0x10000) | 0).toString(16).substring(1);
-  const s4 = (((1 + Math.random()) * 0x10000) | 0).toString(16).substring(1);
-  const s5 = (((1 + Math.random()) * 0x10000) | 0).toString(16).substring(1);
-  return s1 + '-' + s2 + '-' + s3 + '-' + s4 + '-' + s5;
-}
-
 @Injectable({
   providedIn: 'root'
 })
@@ -40,7 +31,7 @@ export class BoxRepositoryService {
   }
 
   create(type: BoxType, y: number, x: number, scale: number, rotation: number): void {
-    const id = randomId();
+    const id = new Date().getTime().toString();
     let box: Box;
 
     if (type === BoxType.TEXT) {
@@ -57,7 +48,7 @@ export class BoxRepositoryService {
       throw new Error('unknown box type');
     }
 
-    this.boxHttpService.addBox(this.idRepositoryService.get(), box)
+    this.boxHttpService.add(this.idRepositoryService.get(), box)
       .subscribe(newBox => {
         this.boxes.push(newBox);
         this.notifyChanges();
@@ -65,8 +56,11 @@ export class BoxRepositoryService {
   }
 
   remove(id: string): void {
-    this.boxes = this.boxes.filter(b => b.id !== id);
-    this.notifyChanges();
+    this.boxHttpService.remove(this.idRepositoryService.get(), id)
+      .subscribe(() => {
+        this.boxes = this.boxes.filter(b => b.id !== id);
+        this.notifyChanges();
+      });
   }
 
   updateName(id: string, name: string): void {
@@ -144,7 +138,7 @@ export class BoxRepositoryService {
       data
     };
 
-    this.boxHttpService.updateBox(this.idRepositoryService.get(), boxToUpdate)
+    this.boxHttpService.update(this.idRepositoryService.get(), boxToUpdate)
       .subscribe(updatedBox => {
         this.updateBox(updatedBox);
         this.notifyChanges();
@@ -156,7 +150,7 @@ export class BoxRepositoryService {
   }
 
   private saveBox(boxToUpdate: Box): void {
-    this.boxHttpService.updateBox(this.idRepositoryService.get(), boxToUpdate)
+    this.boxHttpService.update(this.idRepositoryService.get(), boxToUpdate)
       .subscribe(updatedBox => {
         this.updateBox(updatedBox);
         this.notifyChanges();

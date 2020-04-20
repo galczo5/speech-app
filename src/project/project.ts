@@ -11,4 +11,5 @@ export interface Project {
   readonly keyframes: Array<Keyframe>;
   readonly layers: Array<Layer>;
   readonly colors: Array<Color>;
+  readonly fonts: Array<string>;
 }

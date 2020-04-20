@@ -1,6 +1,8 @@
 import {Injectable} from '@angular/core';
 import {Color} from './color';
 import {Observable, ReplaySubject} from 'rxjs';
+import {ColorHttpService} from './color-http.service';
+import {ProjectIdRepositoryService} from '../project/project-id-repository.service';
 
 @Injectable({
   providedIn: 'root'
@@ -10,7 +12,8 @@ export class ColorRepositoryService {
   private colors: Array<Color> = new Array<Color>();
   private colors$: ReplaySubject<Array<Color>> = new ReplaySubject<Array<Color>>();
 
-  constructor() {}
+  constructor(private colorHttpService: ColorHttpService,
+              private idRepositoryService: ProjectIdRepositoryService) {}
 
   set(colors: Array<Color>): void {
     this.colors = colors;
@@ -18,22 +21,32 @@ export class ColorRepositoryService {
   }
 
   create(name: string, value: string): void {
-    this.colors.push({
+    const color = {
       id: new Date().getTime().toString(),
       name,
       value
-    });
-    this.notifyChanges();
+    };
+
+    this.colorHttpService.add(this.idRepositoryService.get(), color)
+      .subscribe(newColor => {
+        this.colors.push(newColor);
+        this.notifyChanges();
+      });
   }
 
   update(id: string, name: string, value: string): void {
     const color = this.findColor(id);
-    this.updateColor({
+    const colorToUpdate = {
       ...color,
       name,
       value
-    });
-    this.notifyChanges();
+    };
+
+    this.colorHttpService.update(this.idRepositoryService.get(), colorToUpdate)
+      .subscribe(updatedColor => {
+        this.updateColor(updatedColor);
+        this.notifyChanges();
+      });
   }
 
   getColors(): Observable<Array<Color>> {

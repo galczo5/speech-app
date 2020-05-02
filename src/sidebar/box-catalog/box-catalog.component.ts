@@ -1,5 +1,5 @@
 import {ChangeDetectorRef, Component, OnDestroy, OnInit} from '@angular/core';
-import {AddBoxService} from '../../workspace/add-box.service';
+import {WorkspaceBoxTypeStoreService} from '../../workspace/workspace-box-type-store.service';
 import {Box, BoxType} from '../../boxes/box';
 import {Subject} from 'rxjs';
 import {takeUntil} from 'rxjs/operators';
@@ -54,7 +54,7 @@ export class BoxCatalogComponent implements OnInit, OnDestroy {
 
   private destroy$: Subject<void> = new Subject<void>();
 
-  constructor(private addBoxService: AddBoxService,
+  constructor(private addBoxService: WorkspaceBoxTypeStoreService,
               private changeDetectorRef: ChangeDetectorRef) {}
 
   ngOnInit(): void {

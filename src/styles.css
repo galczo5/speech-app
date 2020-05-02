@@ -140,12 +140,12 @@ app-frame-box {
 }
 
 app-resizable-box .highlighted {
-  border: 2px solid var(--warning) !important;
-  box-shadow: 0 0 5px var(--warning);
+  background: rgba(255, 193, 7, .3);
 }
 
 app-resizable-box .hidden {
-  display: none !important;
+  opacity: 0 !important;
+  pointer-events: none;
 }
 
 .hover-container .hover-visible {

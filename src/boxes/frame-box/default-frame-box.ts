@@ -17,6 +17,8 @@ export function defaultFrameBox(id: string, y: number, x: number, scale: number,
         { name: 'allow', value: 'accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture' }
       ]
     },
-    layerId: null
+    layerId: null,
+    fromKeyframe: null,
+    toKeyframe: null
   };
 }

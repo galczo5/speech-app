@@ -7,11 +7,17 @@ import { LinkBoxEditorComponent } from './link-box-editor/link-box-editor.compon
 import { HtmlBoxEditorComponent } from './html-box-editor/html-box-editor.component';
 import {ColorModule} from '../color/color.module';
 import {FontsModule} from '../fonts/fonts.module';
-
-
+import {BoxFontStyleEditorComponent} from './box-font-style-editor/box-font-style-editor.component';
 
 @NgModule({
-  declarations: [FrameBoxEditorComponent, TextBoxEditorComponent, ImageBoxEditorComponent, LinkBoxEditorComponent, HtmlBoxEditorComponent],
+  declarations: [
+    BoxFontStyleEditorComponent,
+    FrameBoxEditorComponent,
+    TextBoxEditorComponent,
+    ImageBoxEditorComponent,
+    LinkBoxEditorComponent,
+    HtmlBoxEditorComponent
+  ],
   exports: [
     TextBoxEditorComponent,
     LinkBoxEditorComponent,

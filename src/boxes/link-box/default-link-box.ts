@@ -23,6 +23,8 @@ export function defaultLinkBox(id: string, y: number, x: number, scale: number, 
       text: 'speach.app',
       align: 'left'
     },
-    layerId: null
+    layerId: null,
+    fromKeyframe: null,
+    toKeyframe: null
   };
 }

@@ -21,7 +21,9 @@ const titleBox: TextBox = {
     style: 'normal',
     weight: 'bold',
     text: 'Welcome to Speech App!'
-  }
+  },
+  fromKeyframe: null,
+  toKeyframe: null
 };
 
 const subtitleBox: TextBox = {
@@ -45,7 +47,9 @@ const subtitleBox: TextBox = {
     style: 'normal',
     weight: 'normal',
     text: 'This is empty workspace. You can edit it with sidebar on right.'
-  }
+  },
+  fromKeyframe: null,
+  toKeyframe: null
 };
 
 const legendBox: HtmlBox = {
@@ -127,7 +131,9 @@ const legendBox: HtmlBox = {
     </div>
 </div>
     `
-  }
+  },
+  fromKeyframe: null,
+  toKeyframe: null
 };
 
 const exploreBox: TextBox = {
@@ -151,7 +157,9 @@ const exploreBox: TextBox = {
     style: 'normal',
     weight: 'normal',
     text: 'Have fun and explore rest of the features of Speech App.'
-  }
+  },
+  fromKeyframe: null,
+  toKeyframe: null
 };
 
 const videoBox: FrameBox = {
@@ -170,7 +178,9 @@ const videoBox: FrameBox = {
     attrs: [
       { name: 'allow', value: 'accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture' }
     ]
-  }
+  },
+  fromKeyframe: null,
+  toKeyframe: null
 };
 
 export const boxes: Array<Box> = [

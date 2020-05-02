@@ -23,6 +23,8 @@ export function defaultTextBox(id: string, y: number, x: number, scale: number, 
       fontSize: 24,
       font: null
     },
-    layerId: null
+    layerId: null,
+    fromKeyframe: null,
+    toKeyframe: null
   };
 }

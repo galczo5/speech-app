@@ -28,6 +28,9 @@ interface BoxBase {
 
   readonly type: BoxType;
   readonly layerId: string | null;
+
+  readonly fromKeyframe: string | null;
+  readonly toKeyframe: string | null;
 }
 
 export interface TextBox extends BoxBase {

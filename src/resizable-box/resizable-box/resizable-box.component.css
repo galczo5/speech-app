@@ -10,6 +10,7 @@
   border-style: solid;
   cursor: grab;
   will-change: transform;
+  transition: opacity .5s;
 }
 
 .resizable-box:hover {

@@ -8,14 +8,17 @@ import {WorkspaceAreaStoreService} from '../workspace-area-store.service';
 import {Box, BoxType} from '../../boxes/box';
 import {ActiveBoxService} from '../../resizable-box/active-box.service';
 import {BoxRepositoryService} from '../../boxes/box-repository.service';
-import {AddBoxService} from '../add-box.service';
-import {AreaSize, AreaSizeService} from '../area-size.service';
-import {distanceBetweenTwoPoints, minmax, Point, rotatePoint, roundRad, scalePoint} from '../../utils/math-utils';
+import {WorkspaceBoxTypeStoreService} from '../workspace-box-type-store.service';
+import {AreaSize, WorkspaceAreaSizeService} from '../workspace-area-size.service';
+import {distanceBetweenTwoPoints, rotatePoint, roundRad, scalePoint} from '../../utils/math-utils';
 import {ActiveKeyframeService} from '../../keyframes/active-keyframe.service';
 import {WorkspaceAreaTransitionService} from '../workspace-area-transition.service';
 import {LayersRepositoryService} from '../../layers/layers-repository.service';
 import {Layer} from '../../layers/layer';
 import {TransitionRenderFixService} from '../../transition/transition-render-fix.service';
+import {WorkspaceCenterService} from '../workspace-center.service';
+import {KeyframeIndexMapService} from '../../keyframes/keyframe-index-map.service';
+import {Keyframe} from '../../keyframes/keyframe';
 
 @Component({
   selector: 'app-workspace-area',
@@ -39,11 +42,12 @@ export class WorkspaceAreaComponent implements OnInit, OnDestroy {
 
   typeOfBoxToAdd: BoxType;
 
+  activeKeyframe: Keyframe;
   layers: Layer[] = [];
 
   private moveInProgress: boolean = true;
-  private areaSize: AreaSize = new AreaSize(0, 0);
 
+  private areaSize: AreaSize = new AreaSize(0, 0);
   private readonly nativeElement: HTMLElement;
   private readonly workspaceChanged$: Subject<void> = new Subject<void>();
   private readonly destroy$: Subject<void> = new Subject<void>();
@@ -54,12 +58,14 @@ export class WorkspaceAreaComponent implements OnInit, OnDestroy {
               private storeService: WorkspaceAreaStoreService,
               private activeBoxService: ActiveBoxService,
               private boxRepository: BoxRepositoryService,
-              private addBoxService: AddBoxService,
-              private areaSizeService: AreaSizeService,
+              private addBoxService: WorkspaceBoxTypeStoreService,
+              private areaSizeService: WorkspaceAreaSizeService,
               private activeKeyframeService: ActiveKeyframeService,
+              private keyframeIndexMapService: KeyframeIndexMapService,
               private workspaceAreaTransitionService: WorkspaceAreaTransitionService,
               private transitionRenderFixService: TransitionRenderFixService,
               private layersRepositoryService: LayersRepositoryService,
+              private workspaceCenterService: WorkspaceCenterService,
               private renderer: Renderer2,
               @Inject(DOCUMENT) private document: Document) {
     this.nativeElement = elementRef.nativeElement;
@@ -96,6 +102,26 @@ export class WorkspaceAreaComponent implements OnInit, OnDestroy {
   ngOnDestroy(): void {
     this.destroy$.next();
     this.destroy$.complete();
+  }
+
+  isVisible(box: Box): boolean {
+
+    if (!this.activeKeyframe) {
+      return true;
+    }
+
+    const fromIndex = this.keyframeIndexMapService.getIndex(box.fromKeyframe);
+    const toIndex = this.keyframeIndexMapService.getIndex(box.toKeyframe);
+
+    if (fromIndex !== null && this.activeKeyframe.index < fromIndex) {
+      return false;
+    }
+
+    if (toIndex !== null && this.activeKeyframe.index > toIndex) {
+      return false;
+    }
+
+    return true;
   }
 
   getTransform(): string {
@@ -162,10 +188,13 @@ export class WorkspaceAreaComponent implements OnInit, OnDestroy {
         takeUntil(this.destroy$)
       )
       .subscribe(frame => {
+        this.activeKeyframe = frame;
+        this.changeDetectorRef.detectChanges();
+
         this.workspaceAreaTransitionService.withTransition(frame.transitionTime, () => {
-          this.storeService.setZoom(frame.scale);
-          this.storeService.setRotation(frame.rotation);
-          this.storeService.setPosition(new RelativePosition(frame.y, frame.x));
+          this.workspaceCenterService.setCenterPosition(
+            new RelativePosition(frame.x, frame.y)
+          );
         });
       });
   }
@@ -218,8 +247,21 @@ export class WorkspaceAreaComponent implements OnInit, OnDestroy {
         this.storeService.setRotation(rotation);
       });
 
+    this.storeService.getForceRotation()
+      .pipe(
+        distinctUntilChanged(),
+        takeUntil(this.destroy$)
+      )
+      .subscribe(rotation => {
+        this.rotation = rotation;
+        this.setTransform();
+      });
+
     this.storeService.getRotation()
-      .pipe(takeUntil(this.destroy$))
+      .pipe(
+        distinctUntilChanged(),
+        takeUntil(this.destroy$)
+      )
       .subscribe(rotation => {
         this.calculateNewRotation(rotation);
         this.setTransform();
@@ -241,6 +283,16 @@ export class WorkspaceAreaComponent implements OnInit, OnDestroy {
       .pipe(takeUntil(this.destroy$))
       .subscribe(delta => {
         this.storeService.setZoom(this.zoom + delta);
+      });
+
+    this.storeService.getForceZoom()
+      .pipe(
+        distinctUntilChanged(),
+        takeUntil(this.destroy$)
+      )
+      .subscribe(zoom => {
+        this.zoom = zoom;
+        this.setTransform();
       });
 
     this.storeService.getZoom()

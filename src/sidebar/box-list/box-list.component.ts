@@ -4,7 +4,7 @@ import {Box, BoxType} from '../../boxes/box';
 import {Subject} from 'rxjs';
 import {filter, takeUntil} from 'rxjs/operators';
 import {ActiveBoxService} from '../../resizable-box/active-box.service';
-import {AreaSize, AreaSizeService} from '../../workspace/area-size.service';
+import {AreaSize, WorkspaceAreaSizeService} from '../../workspace/workspace-area-size.service';
 import {WorkspaceAreaTransitionService} from '../../workspace/workspace-area-transition.service';
 import {WorkspaceAreaStoreService} from '../../workspace/workspace-area-store.service';
 import {RelativePosition} from '../../utils/relative-position';
@@ -76,7 +76,7 @@ export class BoxListComponent implements OnInit, OnDestroy {
   constructor(private boxRepository: BoxRepositoryService,
               private activeBoxService: ActiveBoxService,
               private boxRepositoryService: BoxRepositoryService,
-              private areaSizeService: AreaSizeService,
+              private areaSizeService: WorkspaceAreaSizeService,
               private areaTransitionService: WorkspaceAreaTransitionService,
               private areaStoreService: WorkspaceAreaStoreService,
               private changeDetectorRef: ChangeDetectorRef) { }

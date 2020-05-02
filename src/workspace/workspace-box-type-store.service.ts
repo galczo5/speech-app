@@ -5,7 +5,7 @@ import {BoxType} from '../boxes/box';
 @Injectable({
   providedIn: 'root'
 })
-export class AddBoxService {
+export class WorkspaceBoxTypeStoreService {
 
   private boxType$: Subject<BoxType> = new Subject<BoxType>();
 

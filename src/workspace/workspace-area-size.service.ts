@@ -18,7 +18,7 @@ export class AreaSize implements Size {
 @Injectable({
   providedIn: 'root'
 })
-export class AreaSizeService {
+export class WorkspaceAreaSizeService {
 
   private size$: ReplaySubject<AreaSize> = new ReplaySubject<AreaSize>();
 

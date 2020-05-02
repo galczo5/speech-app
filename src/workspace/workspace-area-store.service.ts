@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import {Observable, ReplaySubject} from 'rxjs';
+import {BehaviorSubject, Observable, ReplaySubject} from 'rxjs';
 import {RelativePosition} from '../utils/relative-position';
 import {minmax} from '../utils/math-utils';
 
@@ -11,9 +11,12 @@ const MIN_ZOOM = 0.5;
 })
 export class WorkspaceAreaStoreService {
 
-  private position$ = new ReplaySubject<RelativePosition>(1);
-  private zoom$ = new ReplaySubject<number>(1);
-  private rotation$ = new ReplaySubject<number>(1);
+  private position$ = new BehaviorSubject<RelativePosition>(RelativePosition.fromPoint({ x: 0, y: 0 }));
+  private zoom$ = new BehaviorSubject<number>(1);
+  private rotation$ = new BehaviorSubject<number>(0);
+
+  private forceZoom$ = new BehaviorSubject<number>(1);
+  private forceRotation$ = new BehaviorSubject<number>(0);
 
   setPosition(position: RelativePosition): void {
     this.position$.next(position);
@@ -40,4 +43,20 @@ export class WorkspaceAreaStoreService {
     return this.rotation$.asObservable();
   }
 
+  forceRotation(rotation: number): void {
+    this.forceRotation$.next(rotation);
+  }
+
+  getForceRotation(): Observable<number> {
+    return this.forceRotation$.asObservable();
+  }
+
+  forceZoom(zoom: number): void {
+    zoom = minmax(zoom, MIN_ZOOM, MAX_ZOOM);
+    this.forceZoom$.next(zoom);
+  }
+
+  getForceZoom(): Observable<number> {
+    return this.forceZoom$.asObservable();
+  }
 }

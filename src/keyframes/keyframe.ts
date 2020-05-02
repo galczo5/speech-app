@@ -5,6 +5,7 @@ export interface Keyframe {
   x: number;
   scale: number;
   rotation: number;
+  index: number;
 
   transitionTime: number;
 }

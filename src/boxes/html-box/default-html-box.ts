@@ -22,6 +22,8 @@ export function defaultHtmlBox(id: string, y: number, x: number, scale: number, 
         </ul>
       `
     },
-    layerId: null
+    layerId: null,
+    fromKeyframe: null,
+    toKeyframe: null
   };
 }

@@ -5,7 +5,7 @@ import {SidebarStateService} from '../sidebar-state.service';
 import {fromEvent, Subject} from 'rxjs';
 import {WorkspaceAreaStoreService} from '../../workspace/workspace-area-store.service';
 import {RelativePosition} from '../../utils/relative-position';
-import {AreaSize, AreaSizeService} from '../../workspace/area-size.service';
+import {AreaSize, WorkspaceAreaSizeService} from '../../workspace/workspace-area-size.service';
 import {KeyframesRepositoryService} from '../../keyframes/keyframes-repository.service';
 import {Keyframe} from '../../keyframes/keyframe';
 import {ActiveBoxService} from '../../resizable-box/active-box.service';
@@ -42,7 +42,7 @@ export class SidebarComponent implements OnInit, OnDestroy {
               private sidebarStateService: SidebarStateService,
               private elementRef: ElementRef,
               private areaStoreService: WorkspaceAreaStoreService,
-              private areaSizeService: AreaSizeService,
+              private areaSizeService: WorkspaceAreaSizeService,
               private keyframesRepositoryService: KeyframesRepositoryService,
               private activeBoxService: ActiveBoxService,
               private transitionService: WorkspaceAreaTransitionService,

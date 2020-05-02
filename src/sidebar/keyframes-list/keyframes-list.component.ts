@@ -6,6 +6,7 @@ import {Keyframe} from '../../keyframes/keyframe';
 import {WorkspaceAreaStoreService} from '../../workspace/workspace-area-store.service';
 import {RelativePosition} from '../../utils/relative-position';
 import {ActiveKeyframeService} from '../../keyframes/active-keyframe.service';
+import {WorkspaceCenterService} from '../../workspace/workspace-center.service';
 
 @Component({
   selector: 'app-keyframes-list',
@@ -52,10 +53,12 @@ export class KeyframesListComponent implements OnInit, OnDestroy {
   private workspaceZoom = 1;
 
   private destroy$: Subject<void> = new Subject<void>();
+  private workspaceCenter: RelativePosition;
 
   constructor(private repositoryService: KeyframesRepositoryService,
               private areaStoreService: WorkspaceAreaStoreService,
               private activeKeyframeService: ActiveKeyframeService,
+              private workspaceCenterService: WorkspaceCenterService,
               private changeDetectorRef: ChangeDetectorRef) {
   }
 
@@ -85,6 +88,16 @@ export class KeyframesListComponent implements OnInit, OnDestroy {
         this.activeKeyframe = keyframe;
         this.changeDetectorRef.detectChanges();
       });
+
+    this.workspaceCenterService.getCenterPosition()
+      .pipe(takeUntil(this.destroy$))
+      .subscribe(center => {
+        this.workspaceCenter = center;
+
+        const element = document.querySelector('.test') as HTMLElement;
+        element.style.top = center.y + 'px';
+        element.style.left = center.x + 'px';
+      });
   }
 
   ngOnDestroy(): void {
@@ -94,8 +107,8 @@ export class KeyframesListComponent implements OnInit, OnDestroy {
 
   addKeyframe(): void {
     this.repositoryService.create(
-      this.workspacePosition.y,
-      this.workspacePosition.x,
+      this.workspaceCenter.y,
+      this.workspaceCenter.x,
       this.workspaceZoom,
       this.workspaceRotation
     );

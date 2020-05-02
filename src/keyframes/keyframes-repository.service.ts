@@ -29,7 +29,8 @@ export class KeyframesRepositoryService {
       y,
       x,
       scale,
-      rotation
+      rotation,
+      index: this.keyframes.length
     };
 
     this.keyframeHttpService.add(this.idRepositoryService.get(), keyframeToAdd)
@@ -81,6 +82,7 @@ export class KeyframesRepositoryService {
 
     }
 
+    this.regenerateIndexes();
     this.keyframeHttpService.updateAll(this.idRepositoryService.get(), this.keyframes)
       .subscribe(keyframes => {
         this.keyframes = keyframes;
@@ -103,6 +105,7 @@ export class KeyframesRepositoryService {
 
     }
 
+    this.regenerateIndexes();
     this.keyframeHttpService.updateAll(this.idRepositoryService.get(), this.keyframes)
       .subscribe(keyframes => {
         this.keyframes = keyframes;
@@ -145,5 +148,12 @@ export class KeyframesRepositoryService {
 
   private notifyChanges(): void {
     this.keyframes$.next(this.keyframes);
+  }
+
+  private regenerateIndexes(): void {
+    this.keyframes = this.keyframes.map((keyframe, index) => ({
+      ...keyframe,
+      index
+    }));
   }
 }

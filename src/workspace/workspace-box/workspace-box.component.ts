@@ -1,7 +1,7 @@
 import {Component, Input, OnDestroy, OnInit} from '@angular/core';
 import {Box, BoxType} from '../../boxes/box';
 import {ActiveBoxService} from '../../resizable-box/active-box.service';
-import {AddBoxService} from '../add-box.service';
+import {WorkspaceBoxTypeStoreService} from '../workspace-box-type-store.service';
 import {Subject} from 'rxjs';
 import {takeUntil} from 'rxjs/operators';
 import {LayerIndexMapService} from "../../layers/layer-index-map.service";
@@ -93,11 +93,14 @@ export class WorkspaceBoxComponent implements OnInit, OnDestroy {
   @Input()
   activeBox: Box;
 
+  @Input()
+  visible: boolean = true;
+
   private destroy$: Subject<void> = new Subject<void>();
   private selectedBoxType: BoxType;
 
   constructor(private activeBoxService: ActiveBoxService,
-              private addBoxService: AddBoxService,
+              private addBoxService: WorkspaceBoxTypeStoreService,
               private indexMapService: LayerIndexMapService,
               private visibilityMapService: LayerVisibilityMapService,
               private highlightMapService: LayerHighlightMapService) {
@@ -126,7 +129,7 @@ export class WorkspaceBoxComponent implements OnInit, OnDestroy {
   }
 
   isVisible(): boolean {
-    return this.visibilityMapService.isVisible(this.box.layerId);
+    return this.visible && this.visibilityMapService.isVisible(this.box.layerId);
   }
 
   isHighlighted(): boolean {

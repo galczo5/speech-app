@@ -145,6 +145,26 @@ export class BoxRepositoryService {
       });
   }
 
+  updateFromKeyframe(id: string, keyframeId: string): void {
+    const box = this.findBox(id);
+    const boxToUpdate = {
+      ...box,
+      fromKeyframe: keyframeId
+    };
+
+    this.saveBox(boxToUpdate);
+  }
+
+  updateToKeyframe(id: string, keyframeId: string): void {
+    const box = this.findBox(id);
+    const boxToUpdate = {
+      ...box,
+      toKeyframe: keyframeId
+    };
+
+    this.saveBox(boxToUpdate);
+  }
+
   private findBox(id: string): Box {
     return this.boxes.find(b => b.id === id);
   }

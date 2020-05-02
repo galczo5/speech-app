@@ -15,6 +15,8 @@ export function defaultImageBox(id: string, y: number, x: number, scale: number,
       src: 'https://via.placeholder.com/400x300',
       alt: ''
     },
-    layerId: null
+    layerId: null,
+    fromKeyframe: null,
+    toKeyframe: null
   };
 }

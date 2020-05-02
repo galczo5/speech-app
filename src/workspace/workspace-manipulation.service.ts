@@ -1,7 +1,7 @@
 import {Injectable} from '@angular/core';
 import {fromEvent, Observable, Subject} from 'rxjs';
 import {delay, map, skip, switchMap, take, takeUntil, tap, throttleTime} from 'rxjs/operators';
-import {MouseManipulatorMode} from './mouse-manipulator-mode';
+import {WorkspaceMouseManipulatorMode} from './workspace-mouse-manipulator-mode';
 import {RelativePosition} from '../utils/relative-position';
 import {animationFrame} from 'rxjs/internal/scheduler/animationFrame';
 
@@ -14,7 +14,7 @@ const ROTATE_FACTOR = 0.003;
 })
 export class WorkspaceManipulationService {
 
-  private mouseMode: MouseManipulatorMode = MouseManipulatorMode.DEFAULT;
+  private mouseMode: WorkspaceMouseManipulatorMode = WorkspaceMouseManipulatorMode.DEFAULT;
   private initialized = false;
 
   private positionDelta$: Subject<RelativePosition> = new Subject<RelativePosition>();
@@ -103,16 +103,16 @@ export class WorkspaceManipulationService {
         this.mouseMode = this.getMouseMode(event);
         fromEvent(document, 'keyup')
           .pipe(take(1))
-          .subscribe(() => this.mouseMode = MouseManipulatorMode.VERTICAL_SCROLL);
+          .subscribe(() => this.mouseMode = WorkspaceMouseManipulatorMode.VERTICAL_SCROLL);
       });
 
   }
 
-  private getMouseMode(event: KeyboardEvent): MouseManipulatorMode {
+  private getMouseMode(event: KeyboardEvent): WorkspaceMouseManipulatorMode {
     switch (event.key) {
-      case 'Control': return MouseManipulatorMode.ZOOM;
-      case 'Alt': return MouseManipulatorMode.ROTATE;
-      case 'Shift': return MouseManipulatorMode.HORIZONTAL_SCROLL;
+      case 'Control': return WorkspaceMouseManipulatorMode.ZOOM;
+      case 'Alt': return WorkspaceMouseManipulatorMode.ROTATE;
+      case 'Shift': return WorkspaceMouseManipulatorMode.HORIZONTAL_SCROLL;
     }
   }
 
@@ -136,16 +136,16 @@ export class WorkspaceManipulationService {
     const zoom = Math.round(e.deltaY * ZOOM_FACTOR * 100) / 100;
 
     switch (this.mouseMode) {
-      case MouseManipulatorMode.DEFAULT:
+      case WorkspaceMouseManipulatorMode.DEFAULT:
         this.positionDelta$.next(new RelativePosition(-scrollDeltaY, -scrollDeltaX));
         break;
-      case MouseManipulatorMode.HORIZONTAL_SCROLL:
+      case WorkspaceMouseManipulatorMode.HORIZONTAL_SCROLL:
         this.positionDelta$.next(new RelativePosition(0, -scrollDeltaY));
         break;
-      case MouseManipulatorMode.ROTATE:
+      case WorkspaceMouseManipulatorMode.ROTATE:
         this.rotateDelta$.next(rotation);
         break;
-      case MouseManipulatorMode.ZOOM:
+      case WorkspaceMouseManipulatorMode.ZOOM:
         this.zoomDelta$.next(zoom);
         break;
     }

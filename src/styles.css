@@ -160,6 +160,10 @@ app-resizable-box .hidden {
   color: #6c757d !important;
 }
 
+.btn-light.text-primary {
+  color: var(--primary) !important;
+}
+
 .form-control {
   background-color: var(--light);
   border: none;

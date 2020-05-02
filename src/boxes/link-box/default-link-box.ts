@@ -1,4 +1,4 @@
-import {BoxType, LinkBox, TextBox} from '../box';
+import {BoxType, LinkBox} from '../box';
 
 export function defaultLinkBox(id: string, y: number, x: number, scale: number, rotate: number): LinkBox {
   return {
@@ -12,15 +12,16 @@ export function defaultLinkBox(id: string, y: number, x: number, scale: number, 
     scale,
     rotate,
     data: {
-      background: 'transparent',
-      color: 'black',
+      backgroundColorId: null,
+      colorId: null,
       font: null,
-      fontSize: '24px',
-      padding: '0px 0px 0px 0px',
+      fontSize: 24,
+      padding: 0,
       style: 'normal',
       weight: 'normal',
       url: 'http://speach.app',
-      text: 'speach.app'
+      text: 'speach.app',
+      align: 'left'
     },
     layerId: null
   };

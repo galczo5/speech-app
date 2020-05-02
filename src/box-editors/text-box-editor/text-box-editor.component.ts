@@ -16,34 +16,14 @@ import {ColorMapService} from '../../color/color-map.service';
       <label for="">Font:</label>
       <app-font-picker [font]="activeBox.data.font" (fontPicked)="updateFont($event)"></app-font-picker>
     </div>
-    <div class="form-group">
-      <div class="row">
-        <div class="col">
-          <label for="">Font size:</label>
-          <input class="form-control" type="number" (keyup)="updateFontSize($event)" [value]="activeBox.data.fontSize">
-        </div>
-        <div class="col">
-          <label for="">Font style:</label>
-          <div class="btn-group">
-            <button class="btn btn-light">
-              <i class="fas fa-align-left"></i>
-            </button>
-            <button class="btn btn-light">
-              <i class="fas fa-align-center"></i>
-            </button>
-            <button class="btn btn-light">
-              <i class="fas fa-align-right"></i>
-            </button>
-            <button class="btn btn-light">
-              <i class="fas fa-bold"></i>
-            </button>
-            <button class="btn btn-light">
-              <i class="fas fa-italic"></i>
-            </button>
-          </div>
-        </div>
-      </div>
-    </div>
+    <app-box-font-style-editor [style]="activeBox.data.style"
+                               [weight]="activeBox.data.weight"
+                               [align]="activeBox.data.align"
+                               [fontSize]="activeBox.data.fontSize"
+                               (alignChanged)="updateAlign($event)"
+                               (fontSizeChanged)="updateFontSize($event)"
+                               (styleChanged)="updateStyle($event)"
+                               (weightChanged)="updateWeight($event)"></app-box-font-style-editor>
     <div class="form-group">
       <div class="row">
         <div class="col">
@@ -84,10 +64,10 @@ export class TextBoxEditorComponent {
     });
   }
 
-  updateFontSize(event: any): void {
+  updateFontSize(fontSize: number): void {
     this.boxRepository.updateData<TextBoxData>(this.activeBox.id, this.activeBox.type, {
       ...this.activeBox.data,
-      fontSize: event.target.value
+      fontSize
     });
   }
 
@@ -98,24 +78,24 @@ export class TextBoxEditorComponent {
     });
   }
 
-  updateAlign(event: any): void {
+  updateAlign(align: 'left' | 'right' | 'center'): void {
     this.boxRepository.updateData<TextBoxData>(this.activeBox.id, this.activeBox.type, {
       ...this.activeBox.data,
-      align: event.target.value
+      align
     });
   }
 
-  updateStyle(event: any): void {
+  updateStyle(style: 'normal' | 'italic'): void {
     this.boxRepository.updateData<TextBoxData>(this.activeBox.id, this.activeBox.type, {
       ...this.activeBox.data,
-      style: event.target.value
+      style
     });
   }
 
-  updateWeight(event: any): void {
+  updateWeight(weight: 'normal' | 'bold'): void {
     this.boxRepository.updateData<TextBoxData>(this.activeBox.id, this.activeBox.type, {
       ...this.activeBox.data,
-      weight: event.target.value
+      weight
     });
   }
 

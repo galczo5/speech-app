@@ -2,6 +2,8 @@ import {Component, Input, OnInit} from '@angular/core';
 import {LinkBox, TextBox} from '../../boxes/box';
 import {BoxRepositoryService} from '../../boxes/box-repository.service';
 import {LinkBoxData} from '../../boxes/link-box/link-box-data';
+import {ColorMapService} from '../../color/color-map.service';
+import {Color} from '../../color/color';
 
 @Component({
   selector: 'app-link-box-editor',
@@ -18,57 +20,51 @@ import {LinkBoxData} from '../../boxes/link-box/link-box-data';
       <label for="">Font:</label>
       <app-font-picker [font]="activeBox.data.font" (fontPicked)="updateFont($event)"></app-font-picker>
     </div>
-    <div class="form-group">
-      <div class="row">
-        <div class="col">
-          <label for="">Font size:</label>
-          <input type="text" class="form-control" (keyup)="updateFontSize($event)" [value]="activeBox.data.fontSize">
-        </div>
-        <div class="col">
-          <label for="">Padding:</label>
-          <input type="text" class="form-control" (keyup)="updatePadding($event)" [value]="activeBox.data.padding">
-        </div>
-      </div>
-    </div>
-    <div class="form-group">
-      <div class="row">
-        <div class="col">
-          <label for="">Style:</label>
-          <select class="form-control" (change)="updateStyle($event)" [value]="activeBox.data.style">
-            <option value="normal">Normal</option>
-            <option value="italic">Italic</option>
-          </select>
-        </div>
-        <div class="col">
-          <label for="">Weight:</label>
-          <select class="form-control" (change)="updateWeight($event)" [value]="activeBox.data.weight">
-            <option value="normal">Normal</option>
-            <option value="bold">Bold</option>
-          </select>
-        </div>
-      </div>
-    </div>
+    <app-box-font-style-editor [style]="activeBox.data.style"
+                               [weight]="activeBox.data.weight"
+                               [align]="activeBox.data.align"
+                               [fontSize]="activeBox.data.fontSize"
+                               (alignChanged)="updateAlign($event)"
+                               (fontSizeChanged)="updateFontSize($event)"
+                               (styleChanged)="updateStyle($event)"
+                               (weightChanged)="updateWeight($event)"></app-box-font-style-editor>
     <div class="form-group">
       <div class="row">
         <div class="col">
           <label for="">Color:</label>
-          <input type="text" class="form-control" (keyup)="updateColor($event)" [value]="activeBox.data.color">
+          <app-color-picker [color]="getColor()" (colorPicked)="updateColor($event)"></app-color-picker>
         </div>
         <div class="col">
           <label for="">Background:</label>
-          <input type="text" class="form-control" (keyup)="updateBackground($event)" [value]="activeBox.data.background">
+          <app-color-picker [color]="getBackgroundColor()" (colorPicked)="updateBackground($event)"></app-color-picker>
         </div>
       </div>
     </div>
-  `,
-  styles: []
+    <div class="form-group">
+      <div class="row">
+        <div class="col-6">
+          <label for="">Padding:</label>
+          <input type="number" class="form-control" (keyup)="updatePadding($event)" [value]="activeBox.data.padding">
+        </div>
+      </div>
+    </div>
+  `
 })
 export class LinkBoxEditorComponent {
 
   @Input()
   activeBox: LinkBox;
 
-  constructor(private boxRepository: BoxRepositoryService) {
+  constructor(private boxRepository: BoxRepositoryService,
+              private colorMapService: ColorMapService) {
+  }
+
+  getColor(): Color {
+    return this.colorMapService.getColor(this.activeBox.data.colorId);
+  }
+
+  getBackgroundColor(): Color {
+    return this.colorMapService.getColor(this.activeBox.data.backgroundColorId);
   }
 
   updateText(event: any): void {
@@ -85,10 +81,10 @@ export class LinkBoxEditorComponent {
     });
   }
 
-  updateFontSize(event: any): void {
+  updateFontSize(fontSize: number): void {
     this.boxRepository.updateData<LinkBoxData>(this.activeBox.id, this.activeBox.type, {
       ...this.activeBox.data,
-      fontSize: event.target.value
+      fontSize
     });
   }
 
@@ -99,31 +95,31 @@ export class LinkBoxEditorComponent {
     });
   }
 
-  updateStyle(event: any): void {
+  updateStyle(style: 'normal' | 'italic'): void {
     this.boxRepository.updateData<LinkBoxData>(this.activeBox.id, this.activeBox.type, {
       ...this.activeBox.data,
-      style: event.target.value
+      style
     });
   }
 
-  updateWeight(event: any): void {
+  updateWeight(weight: 'normal' | 'bold'): void {
     this.boxRepository.updateData<LinkBoxData>(this.activeBox.id, this.activeBox.type, {
       ...this.activeBox.data,
-      weight: event.target.value
+      weight
     });
   }
 
-  updateColor(event: any): void {
+  updateColor(color: Color): void {
     this.boxRepository.updateData<LinkBoxData>(this.activeBox.id, this.activeBox.type, {
       ...this.activeBox.data,
-      color: event.target.value
+      colorId: color.id
     });
   }
 
-  updateBackground(event: any): void {
+  updateBackground(color: Color): void {
     this.boxRepository.updateData<LinkBoxData>(this.activeBox.id, this.activeBox.type, {
       ...this.activeBox.data,
-      background: event.target.value
+      backgroundColorId: color.id
     });
   }
 
@@ -131,6 +127,13 @@ export class LinkBoxEditorComponent {
     this.boxRepository.updateData<LinkBoxData>(this.activeBox.id, this.activeBox.type, {
       ...this.activeBox.data,
       font
+    });
+  }
+
+  updateAlign(align: 'left' | 'center' | 'right'): void {
+    this.boxRepository.updateData<LinkBoxData>(this.activeBox.id, this.activeBox.type, {
+      ...this.activeBox.data,
+      align
     });
   }
 }

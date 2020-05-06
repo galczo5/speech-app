@@ -1,5 +1,5 @@
 import {ChangeDetectorRef, Component, ElementRef, Inject, Input, OnDestroy, OnInit, Renderer2, ViewChild} from '@angular/core';
-import {fromEvent, interval, Observable, Subject} from 'rxjs';
+import {fromEvent, interval, Subject} from 'rxjs';
 import {debounceTime, distinctUntilChanged, filter, takeUntil} from 'rxjs/operators';
 import {DOCUMENT} from '@angular/common';
 import {RelativePosition} from '../../utils/relative-position';
@@ -134,7 +134,6 @@ export class WorkspaceAreaComponent implements OnInit, OnDestroy {
 
   setTransform(): void {
     this.renderer.setStyle(this.element.nativeElement, 'transform', this.getTransform());
-    this.workspaceChanged$.next();
   }
 
   onClickEvent(event: MouseEvent): void {
@@ -189,13 +188,20 @@ export class WorkspaceAreaComponent implements OnInit, OnDestroy {
       )
       .subscribe(frame => {
         this.activeKeyframe = frame;
-        this.changeDetectorRef.detectChanges();
 
         this.workspaceAreaTransitionService.withTransition(frame.transitionTime, () => {
-          this.workspaceCenterService.setCenterPosition(
-            new RelativePosition(frame.x, frame.y)
-          );
+
+          // Don't know why, but I have to set zero on both rotation and zoom first
+          this.storeService.setRotation(0);
+          this.storeService.setZoom(1);
+
+          this.workspaceCenterService.setCenterPosition(new RelativePosition(frame.y, frame.x));
+
+          this.storeService.setRotation(frame.rotation);
+          this.storeService.setZoom(frame.scale);
         });
+
+        this.changeDetectorRef.detectChanges();
       });
   }
 
@@ -245,6 +251,7 @@ export class WorkspaceAreaComponent implements OnInit, OnDestroy {
       .subscribe(delta => {
         const rotation = roundRad(this.rotation + delta);
         this.storeService.setRotation(rotation);
+        this.workspaceChanged$.next();
       });
 
     this.storeService.getForceRotation()
@@ -283,6 +290,7 @@ export class WorkspaceAreaComponent implements OnInit, OnDestroy {
       .pipe(takeUntil(this.destroy$))
       .subscribe(delta => {
         this.storeService.setZoom(this.zoom + delta);
+        this.workspaceChanged$.next();
       });
 
     this.storeService.getForceZoom()

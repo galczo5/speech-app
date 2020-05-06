@@ -93,10 +93,6 @@ export class KeyframesListComponent implements OnInit, OnDestroy {
       .pipe(takeUntil(this.destroy$))
       .subscribe(center => {
         this.workspaceCenter = center;
-
-        const element = document.querySelector('.test') as HTMLElement;
-        element.style.top = center.y + 'px';
-        element.style.left = center.x + 'px';
       });
   }
 

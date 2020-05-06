@@ -28,7 +28,7 @@ export class WorkspaceCenterService {
     const y = (center.y - position.y);
     const x = (center.x - position.x);
 
-    // TODO
+    this.areaStoreService.setPosition(new RelativePosition(y, x));
   }
 
   getCenterPosition(): Observable<RelativePosition> {

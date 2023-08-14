@@ -21,7 +21,7 @@ export class FontsHttpService {
   }
 
   getAll(): Observable<Array<FontResponse>> {
-    return this.httpClient.get<any>('https://www.googleapis.com/webfonts/v1/webfonts?sort=popularity&key=AIzaSyCI8m5eFX2BDqq8ZPLi0yjp9nczX6Gr-g4')
+    return this.httpClient.get<any>('https://www.googleapis.com/webfonts/v1/webfonts?sort=popularity&key=')
       .pipe(
         map(x => x.items as Array<FontResponse>)
       );
